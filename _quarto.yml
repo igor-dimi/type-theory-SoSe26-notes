@@ -2,24 +2,35 @@ project:
   type: book
 
 book:
+  downloads: pdf
   title: "SoSe 26 Type Theory & Logic & Functional Programming Notes"
   author: "Igor Dimitrov"
   date: "4/21/2026"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
+    # - intro.qmd
+    # - summary.qmd
+    - 00-notation.qmd
+    - part: Logic
+      chapters: 
+        - 01.qmd
     - references.qmd
 
 bibliography: references.bib
+crossref: 
+  chapters: true
+number-depth: 1
 
 format:
   html:
     theme:
       - cosmo
       - brand
+    include-in-header: 
+      - mathjax-macros.html
   pdf:
     documentclass: scrreprt
+    include-in-header: preamble.tex
 
 
 

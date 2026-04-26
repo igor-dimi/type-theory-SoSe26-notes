@@ -1,0 +1,63 @@
+# Notation and Conventions
+
+## Basic Sets
+
+- $\mathbb{N}$ denotes the set of natural numbers.
+- $\mathrm{WFF}$ denotes the set of well-formed formulas.
+
+
+
+## Propositional Variables
+
+We assume a countable family of propositional variables given by
+
+$$
+P : \mathbb{N} \to \mathrm{WFF}, \quad i \mapsto P_i.
+$$
+
+
+
+## Metavariables
+
+We use the following metavariables:
+
+- $\varphi, \psi, \chi$ for formulas
+- $i, j, k \in \mathbb{N}$ for indices
+
+
+
+## Logical Connectives
+
+We use the following symbols:
+
+- Negation: $\neg \varphi$
+- Conjunction: $\varphi \land \psi$
+- Disjunction: $\varphi \lor \psi$
+
+
+
+## Parentheses Convention
+
+We omit outer parentheses when there is no ambiguity.
+
+
+
+## Inductive Definitions
+
+When defining syntax, we use inductive (recursive) definitions of the form
+
+$$
+\varphi ::= \cdots
+$$
+
+to describe the formation of well-formed formulas.
+
+
+
+## Remarks on Style
+
+::: {.callout-note appearance="minimal"}
+- $\mathrm{WFF}$ is typeset using $\mathrm{...}$ to distinguish it from variables.
+- Logical symbols $\land, \lor, \neg$ are used instead of textual operators.
+- We follow a type-theoretic perspective where constructors generate formulas.
+:::

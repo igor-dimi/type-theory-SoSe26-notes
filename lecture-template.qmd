@@ -1,0 +1,61 @@
+---
+title: "Lecture X - Title"
+---
+
+## Overview
+
+Short summary of the lecture (2–4 lines).
+
+
+## Main Definitions
+
+::: {#def-placeholder}
+## Definition (Name)
+
+Write the definition here.
+
+$$
+% math here
+$$
+
+:::
+
+
+
+## Additional Constructions / Remarks
+
+::: {#rem-placeholder}
+## Remark (Optional title)
+
+Write a remark here.
+
+:::
+
+
+
+## Examples
+
+::: {#exm-placeholder}
+## Example (Optional title)
+
+$$
+% example here
+$$
+
+:::
+
+
+
+## Intuition
+
+::: {.callout-note appearance="minimal"}
+Add intuition or informal explanation here.
+:::
+
+
+
+## Summary
+
+- Key idea 1  
+- Key idea 2  
+- Key idea 3  
