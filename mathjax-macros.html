@@ -2,9 +2,21 @@
 window.MathJax = {
   tex: {
     macros: {
-      FA: "\\mathcal{F}(\\mathcal{A})",
+      Nat: "\\mathbb{N}",
       WFF: "\\mathrm{WFF}",
-      Nat: "\\mathbb{N}"
+
+      F: ["\\mathcal{F}_{#1}", 1],
+      Fof: ["\\mathcal{F}(#1)", 1],
+
+      Set: ["\\{\\, #1 \\;\\mid\\; #2 \\,\\}", 2],
+
+      ht: ["\\mathrm{ht}(#1)", 1],
+      sf: ["\\mathrm{sf}_{#1}", 1],
+      sfn: ["\\mathrm{sf}(#1)", 1],
+
+      Pow: ["\\mathcal{P{}(#1)}", 1],
+
+      concat: "\\mathbin{+\\!\\!+}"
     }
   }
 };
