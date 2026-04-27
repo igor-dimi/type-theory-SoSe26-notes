@@ -71,11 +71,11 @@ To conclude the proof we need to show that $\F{A} \subseteq \mathcal{F}$
 ::: {#def-height-formula-set}
 ## Height of Formula - Set Approach
 
-For all $\varphi\in\mathcal{F}$, there is a well defined natural number $\ht{\varphi}\in\Nat$:
+For all $\varphi\in\mathcal{F}$, there is a well defined natural number $\Height{\varphi}\in\Nat$:
 
 
 $$
-\ht{\varphi} := \mathrm{min}\Set{n\in\Nat}{\varphi\in\F{n}}
+\Height{\varphi} := \mathrm{min}\Set{n\in\Nat}{\varphi\in\F{n}}
 $$
 
 called the **height** of $\varphi$
@@ -87,13 +87,13 @@ We give another, a more computational definition for the height.
 ::: {#def-height-formula-computational}
 ## Height of a Formula - Computational Approach
 
-We define $\ht{\cdot}$ recursively on the structure of a formula $\phi$ as follows:
+We define $\Height{\cdot}$ recursively on the structure of a formula $\phi$ as follows:
 
 $$
 \begin{aligned}
-&\ht{P_i} = 0 &&\text{($P_i\in \mathcal{A}$)}\\
-&\ht{\neg\varphi} = 1 + \ht{\varphi} \\
-&\ht{\varphi\diamond\psi} = 1 + \mathrm{max}(\ht{\varphi}, \ht{\psi}) &&\text{($\diamond\in\mathcal{C}$)}
+&\Height{P_i} = 0 &&\text{($P_i\in \mathcal{A}$)}\\
+&\Height{\neg\varphi} = 1 + \Height{\varphi} \\
+&\Height{\varphi\diamond\psi} = 1 + \mathrm{max}(\Height{\varphi}, \Height{\psi}) &&\text{($\diamond\in\mathcal{C}$)}
 \end{aligned}
 $$
 
@@ -111,9 +111,9 @@ Such inductive (recursive) definitions are also called **pattern matching**
 
 $$
 \begin{aligned}
-\ht{\neg\neg(P_1 \Rightarrow P_2)} &= 1 + \ht{\neg(P_1 \Rightarrow P_2)} \\
-                                   &= 1 + 1 + \ht{P_1 \Rightarrow P_2} \\
-                                   &= 1 + 1 + \mathrm{max}(\ht{P_1}, \ht{P_2}) \\
+\Height{\neg\neg(P_1 \Rightarrow P_2)} &= 1 + \Height{\neg(P_1 \Rightarrow P_2)} \\
+                                   &= 1 + 1 + \Height{P_1 \Rightarrow P_2} \\
+                                   &= 1 + 1 + \mathrm{max}(\Height{P_1}, \Height{P_2}) \\
                                    &= 1 + 1 + \mathrm{max}(1, 1) \\
                                    &= 1 + 1 + 1 \\
                                    &= 3
@@ -134,16 +134,16 @@ $$
 \mathrm{sf}: \Fof{\mathcal{A}} \to \mathcal{P}(\Fof{\mathcal{A}})
 $$
 
-mapping a formula to its set of subformulas. For this we are going to define functions $\sf{i}: \F{i} \to \Pow{\mathcal{F}}$ as follows:
+mapping a formula to its set of subformulas. For this we are going to define functions $\Subf{i}: \F{i} \to \Pow{\mathcal{F}}$ as follows:
 
 ::: {#def-sf-set-construction}
 ## Set Construction of $\mathrm{sf}$
 
 $$
 \begin{aligned}
-&\sf{0}(P_i) := \{P_i\} \\
-&\sf{n}(\neg\varphi) := \{\neg\varphi\} \cup \sf{n-1}(\varphi) \\
-&\sf{n}(\varphi\diamond\psi) := \{\varphi\diamond\psi\} \cup \sf{n-1}(\varphi) \cup \sf{n-1}(\psi)
+&\Subf{0}(P_i) := \{P_i\} \\
+&\Subf{n}(\neg\varphi) := \{\neg\varphi\} \cup \Subf{n-1}(\varphi) \\
+&\Subf{n}(\varphi\diamond\psi) := \{\varphi\diamond\psi\} \cup \Subf{n-1}(\varphi) \cup \Subf{n-1}(\psi)
 \end{aligned}
 $$
 
@@ -152,7 +152,7 @@ Then $\mathrm{sf}$ can be defined as
 $$
 \begin{aligned}
 \mathrm{sf}&:\mathcal{F} \to \Pow{\mathcal{F}} \\
-           &:\varphi\mapsto\sf{\ht{\varphi}}(\varphi)
+           &:\varphi\mapsto\Subf{\Height{\varphi}}(\varphi)
 \end{aligned}
 $$
 
