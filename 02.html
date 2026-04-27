@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1&nbsp; Notation and Conventions – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
+<title>2&nbsp; Lecture 2 - Height and Subformulas – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./01.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./01.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -73,9 +73,21 @@ ul.task-list li input[type="checkbox"] {
 window.MathJax = {
   tex: {
     macros: {
-      FA: "\\mathcal{F}(\\mathcal{A})",
+      Nat: "\\mathbb{N}",
       WFF: "\\mathrm{WFF}",
-      Nat: "\\mathbb{N}"
+
+      F: ["\\mathcal{F}_{#1}", 1],
+      Fof: ["\\mathcal{F}(#1)", 1],
+
+      Set: ["\\{\\, #1 \\;\\mid\\; #2 \\,\\}", 2],
+
+      Height: ["\\mathrm{ht}(#1)", 1],
+      Subf: ["\\mathrm{sf}_{#1}", 1],
+      sfn: ["\\mathrm{sf}(#1)", 1],
+
+      Pow: ["\\mathcal{P{}(#1)}", 1],
+
+      concat: "\\mathbin{+\\!\\!+}"
     }
   }
 };
@@ -122,7 +134,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./00-notation.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Notation and Conventions</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./02.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 2 - Height and Subformulas</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -156,12 +168,6 @@ window.Quarto = {
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./00-notation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Notation and Conventions</span></span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
@@ -174,7 +180,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1 - Propositional Logic: Syntax</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 1 - Propositional Logic: Syntax</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 2 - Height and Subformulas</span></span></a>
   </div>
 </li>
       </ul>
@@ -195,22 +207,17 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#basic-sets" id="toc-basic-sets" class="nav-link active" data-scroll-target="#basic-sets">Basic Sets</a></li>
-  <li><a href="#propositional-variables" id="toc-propositional-variables" class="nav-link" data-scroll-target="#propositional-variables">Propositional Variables</a></li>
-  <li><a href="#metavariables" id="toc-metavariables" class="nav-link" data-scroll-target="#metavariables">Metavariables</a></li>
-  <li><a href="#logical-connectives" id="toc-logical-connectives" class="nav-link" data-scroll-target="#logical-connectives">Logical Connectives</a></li>
-  <li><a href="#parentheses-convention" id="toc-parentheses-convention" class="nav-link" data-scroll-target="#parentheses-convention">Parentheses Convention</a></li>
-  <li><a href="#inductive-definitions" id="toc-inductive-definitions" class="nav-link" data-scroll-target="#inductive-definitions">Inductive Definitions</a></li>
-  <li><a href="#remarks-on-style" id="toc-remarks-on-style" class="nav-link" data-scroll-target="#remarks-on-style">Remarks on Style</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#recurisve-set-construction" id="toc-recurisve-set-construction" class="nav-link" data-scroll-target="#recurisve-set-construction">Recurisve Set Construction</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./02.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 2 - Height and Subformulas</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Notation and Conventions</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 2 - Height and Subformulas</span></h1>
 </div>
 
 
@@ -227,67 +234,142 @@ window.Quarto = {
 </header>
 
 
-<section id="basic-sets" class="level2">
-<h2 class="anchored" data-anchor-id="basic-sets">Basic Sets</h2>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <ul>
-<li><span class="math inline">\(\mathbb{N}\)</span> denotes the set of natural numbers.</li>
-<li><span class="math inline">\(\mathrm{WFF}\)</span> denotes the set of well-formed formulas.</li>
+<li>We provide a fourth, iterative set construction for the language of propositional logic.</li>
+<li>We give two equivalent definitions for the height of a formula.</li>
+<li>We give two equivalent definitions of a function that gives the list of subformulas of a formula</li>
 </ul>
 </section>
-<section id="propositional-variables" class="level2">
-<h2 class="anchored" data-anchor-id="propositional-variables">Propositional Variables</h2>
-<p>We assume a countable family of propositional variables given by</p>
+<section id="recurisve-set-construction" class="level2">
+<h2 class="anchored" data-anchor-id="recurisve-set-construction">Recurisve Set Construction</h2>
+<p>We define <span class="math inline">\(\F{0}\)</span> iteratively as follows:</p>
 <p><span class="math display">\[
-P : \mathbb{N} \to \mathrm{WFF}, \quad i \mapsto P_i.
+\begin{aligned}
+&amp;\F{0} := \mathcal{A} \\
+&amp;\F{1} := \F{0} \cup \Set{\neg\varphi}{\varphi \in \F{0}} \cup \Set{\varphi\diamond\psi}{\varphi,\psi \in \F{0}} &amp;&amp;\text{($\diamond\in\mathcal{C}$)} \\
+&amp;\F{n} := \F{n-1} \cup \Set{\neg\varphi}{\varphi \in \F{n-1} \setminus \F{n-2}} \cup \Set{\varphi\diamond\psi}{\varphi, \psi \in \F{n-1}} &amp;&amp;\text{($n\geq 2$)}
+\end{aligned}
 \]</span></p>
-</section>
-<section id="metavariables" class="level2">
-<h2 class="anchored" data-anchor-id="metavariables">Metavariables</h2>
-<p>We use the following metavariables:</p>
-<ul>
-<li><span class="math inline">\(\varphi, \psi, \chi\)</span> for formulas</li>
-<li><span class="math inline">\(i, j, k \in \mathbb{N}\)</span> for indices</li>
-</ul>
-</section>
-<section id="logical-connectives" class="level2">
-<h2 class="anchored" data-anchor-id="logical-connectives">Logical Connectives</h2>
-<p>We use the following symbols:</p>
-<ul>
-<li>Negation: <span class="math inline">\(\neg \varphi\)</span></li>
-<li>Conjunction: <span class="math inline">\(\varphi \land \psi\)</span></li>
-<li>Disjunction: <span class="math inline">\(\varphi \lor \psi\)</span></li>
-</ul>
-</section>
-<section id="parentheses-convention" class="level2">
-<h2 class="anchored" data-anchor-id="parentheses-convention">Parentheses Convention</h2>
-<p>We omit outer parentheses when there is no ambiguity.</p>
-</section>
-<section id="inductive-definitions" class="level2">
-<h2 class="anchored" data-anchor-id="inductive-definitions">Inductive Definitions</h2>
-<p>When defining syntax, we use inductive (recursive) definitions of the form</p>
+<p>With this construction it follows that:</p>
 <p><span class="math display">\[
-\varphi ::= \cdots
+\F{n} \subseteq \F{n + 1}
 \]</span></p>
-<p>to describe the formation of well-formed formulas.</p>
-</section>
-<section id="remarks-on-style" class="level2">
-<h2 class="anchored" data-anchor-id="remarks-on-style">Remarks on Style</h2>
-<div class="callout callout-style-simple callout-note no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
+<div id="exm-formulas-in-Fn" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.1</strong></span> <span class="math inline">\(\neg\neg P_4 \in \F{2} \subseteq \F{3} \subseteq\dots\)</span></p>
+<p>but <span class="math inline">\(\neg\neg P_4 \notin \F{1}\)</span>, because <span class="math inline">\(\neg{P_4} \notin \F{0}\)</span></p>
 </div>
-<div class="callout-body-container">
+<p>Now we make the following definition:</p>
+<div id="def-iterative-F" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.1</strong></span> <span class="math display">\[
+\mathcal{F} := \bigcup_{n \in \Nat}\F{n}% math here
+\]</span></p>
+</div>
+<p>and we claim:</p>
+<div id="lem-equivalence-F-FV" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 2.1</strong></span> <span class="math display">\[\mathcal{F} = \Fof{\mathcal{A}}\]</span></p>
+</div>
+<p>Where <span class="math inline">\(\Fof{\mathcal{A}}\)</span> is defined in <a href="01.html#def-pl-def-set-theoretic-intersection" class="quarto-xref">Definition&nbsp;<span>1.5</span></a></p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>To prove <span class="math inline">\(\mathcal{F} \subseteq \Fof{\mathcal{A}}\)</span>, it suffices to show that</p>
+<p><span class="math display">\[
+\F{n} \subseteq \Fof{\mathcal{A}}, \quad \forall n, \, \text{by induction on $n$}
+\]</span></p>
+<p>To conclude the proof we need to show that <span class="math inline">\(\F{A} \subseteq \mathcal{F}\)</span></p>
+</div>
+<div id="def-height-formula-set" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.2 (Height of Formula - Set Approach)</strong></span> For all <span class="math inline">\(\varphi\in\mathcal{F}\)</span>, there is a well defined natural number <span class="math inline">\(\Height{\varphi}\in\Nat\)</span>:</p>
+<p><span class="math display">\[
+\Height{\varphi} := \mathrm{min}\Set{n\in\Nat}{\varphi\in\F{n}}
+\]</span></p>
+<p>called the <strong>height</strong> of <span class="math inline">\(\varphi\)</span></p>
+</div>
+<p>We give another, a more computational definition for the height.</p>
+<div id="def-height-formula-computational" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.3 (Height of a Formula - Computational Approach)</strong></span> We define <span class="math inline">\(\Height{\cdot}\)</span> recursively on the structure of a formula <span class="math inline">\(\phi\)</span> as follows:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\Height{P_i} = 0 &amp;&amp;\text{($P_i\in \mathcal{A}$)}\\
+&amp;\Height{\neg\varphi} = 1 + \Height{\varphi} \\
+&amp;\Height{\varphi\diamond\psi} = 1 + \mathrm{max}(\Height{\varphi}, \Height{\psi}) &amp;&amp;\text{($\diamond\in\mathcal{C}$)}
+\end{aligned}
+\]</span></p>
+</div>
+<div id="rem-pattern-matching" class="proof remark">
+<p><span class="proof-title"><em>Remark 2.1</em> (Pattern Matching). </span>Such inductive (recursive) definitions are also called <strong>pattern matching</strong></p>
+</div>
+<div id="exm-height-derivation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.2 (Derivation of Height)</strong></span> <span class="math display">\[
+\begin{aligned}
+\Height{\neg\neg(P_1 \Rightarrow P_2)} &amp;= 1 + \Height{\neg(P_1 \Rightarrow P_2)} \\
+                                   &amp;= 1 + 1 + \Height{P_1 \Rightarrow P_2} \\
+                                   &amp;= 1 + 1 + \mathrm{max}(\Height{P_1}, \Height{P_2}) \\
+                                   &amp;= 1 + 1 + \mathrm{max}(1, 1) \\
+                                   &amp;= 1 + 1 + 1 \\
+                                   &amp;= 3
+\end{aligned}
+\]</span></p>
+</div>
+<p><strong>Obervation</strong>:</p>
+<p>We observe that the height of a formula is the height of its syntax tree</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imgs/ch02/tree-height.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>height of the syntax tree</figcaption>
+</figure>
+</div>
+<p>We want to define a function</p>
+<p><span class="math display">\[
+\mathrm{sf}: \Fof{\mathcal{A}} \to \mathcal{P}(\Fof{\mathcal{A}})
+\]</span></p>
+<p>mapping a formula to its set of subformulas. For this we are going to define functions <span class="math inline">\(\Subf{i}: \F{i} \to \Pow{\mathcal{F}}\)</span> as follows:</p>
+<div id="def-sf-set-construction" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.4 (Set Construction of <span class="math inline">\(\mathrm{sf}\)</span>)</strong></span> <span class="math display">\[
+\begin{aligned}
+&amp;\Subf{0}(P_i) := \{P_i\} \\
+&amp;\Subf{n}(\neg\varphi) := \{\neg\varphi\} \cup \Subf{n-1}(\varphi) \\
+&amp;\Subf{n}(\varphi\diamond\psi) := \{\varphi\diamond\psi\} \cup \Subf{n-1}(\varphi) \cup \Subf{n-1}(\psi)
+\end{aligned}
+\]</span></p>
+<p>Then <span class="math inline">\(\mathrm{sf}\)</span> can be defined as</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathrm{sf}&amp;:\mathcal{F} \to \Pow{\mathcal{F}} \\
+           &amp;:\varphi\mapsto\Subf{\Height{\varphi}}(\varphi)
+\end{aligned}
+\]</span></p>
+</div>
+<p>We give another, more computational approach, by defining <span class="math inline">\(\mathrm{sf}\)</span> recursively on the structure of wffs as a function <span class="math inline">\(\mathrm{sf}:\WFF \to [\WFF]\)</span></p>
+<div id="def-sf-list-construction" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.5 (List Construction of <span class="math inline">\(\mathrm{sf}\)</span>)</strong></span> <span class="math display">\[
+\begin{aligned}
+&amp;\mathrm{sf}(P_i) := [P_i] \\
+&amp;\mathrm{sf}(\neg\varphi) := [\neg\varphi] \concat \mathrm{sf}(\varphi) \\
+&amp;\mathrm{sf}(\varphi\diamond\psi):= [\varphi\diamond\psi] \concat \mathrm{sf}(\varphi) \concat \mathrm{sf}(\psi)
+\end{aligned}
+\]</span></p>
+<div id="exm-sf-list-derivation" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.3 (Derivation of the List of Subformulas with <span class="math inline">\(\mathrm{sf}\)</span>)</strong></span> <span class="math display">\[
+\begin{aligned}
+\sfn{P_1 \lor \neg P_2} &amp;= [P_1 \lor \neg P_2] \concat \sfn{P_1} \concat \sfn{\neg P_2} \\
+                        &amp;= [P_1 \lor \neg P_2] \concat [P_1] \concat [\neg P_2] \concat \sfn{P_2} \\
+                        &amp;= [P_1 \lor \neg P_2] \concat [P_1] \concat [\neg P_2] \concat [P_2] \\
+                        &amp;= [P_1 \lor \neg P_2, P_1, \neg P_2, P_2]
+\end{aligned}
+\]</span></p>
+</div>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
 <ul>
-<li><span class="math inline">\(\mathrm{WFF}\)</span> is typeset using <span class="math inline">\(\mathrm{...}\)</span> to distinguish it from variables.</li>
-<li>Logical symbols <span class="math inline">\(\land, \lor, \neg\)</span> are used instead of textual operators.</li>
-<li>We follow a type-theoretic perspective where constructors generate formulas.</li>
+<li>iterative set construction <span class="math inline">\(\F{i}\)</span> - the language of propositional logic as infinite union of such</li>
+<li>two definitions for <span class="math inline">\(\mathrm{ht}\)</span> - height of a formula</li>
+<li>two definitions for <span class="math inline">\(\mathrm{sf}\)</span> - list or set of subformulas of a formula</li>
 </ul>
-</div>
-</div>
-</div>
 
 
+</section>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -692,13 +774,13 @@ P : \mathbb{N} \to \mathrm{WFF}, \quad i \mapsto P_i.
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Preface">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      <a href="./01.html" class="pagination-link" aria-label="Lecture 1 - Propositional Logic: Syntax">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 1 - Propositional Logic: Syntax</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01.html" class="pagination-link" aria-label="Lecture 1 - Propositional Logic: Syntax">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1 - Propositional Logic: Syntax</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

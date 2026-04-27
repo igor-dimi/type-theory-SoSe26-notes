@@ -32,7 +32,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./00-notation.html" rel="next">
+<link href="./01.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -74,9 +74,21 @@ ul.task-list li input[type="checkbox"] {
 window.MathJax = {
   tex: {
     macros: {
-      FA: "\\mathcal{F}(\\mathcal{A})",
+      Nat: "\\mathbb{N}",
       WFF: "\\mathrm{WFF}",
-      Nat: "\\mathbb{N}"
+
+      F: ["\\mathcal{F}_{#1}", 1],
+      Fof: ["\\mathcal{F}(#1)", 1],
+
+      Set: ["\\{\\, #1 \\;\\mid\\; #2 \\,\\}", 2],
+
+      Height: ["\\mathrm{ht}(#1)", 1],
+      Subf: ["\\mathrm{sf}_{#1}", 1],
+      sfn: ["\\mathrm{sf}(#1)", 1],
+
+      Pow: ["\\mathcal{P{}(#1)}", 1],
+
+      concat: "\\mathbin{+\\!\\!+}"
     }
   }
 };
@@ -128,12 +140,6 @@ window.MathJax = {
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./00-notation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Notation and Conventions</span></span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
@@ -146,7 +152,13 @@ window.MathJax = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 1 - Propositional Logic: Syntax</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 1 - Propositional Logic: Syntax</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 2 - Height and Subformulas</span></span></a>
   </div>
 </li>
       </ul>
@@ -617,8 +629,8 @@ window.MathJax = {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./00-notation.html" class="pagination-link" aria-label="Notation and Conventions">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Notation and Conventions</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./01.html" class="pagination-link" aria-label="Lecture 1 - Propositional Logic: Syntax">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 1 - Propositional Logic: Syntax</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -10,138 +10,102 @@
     ]
   },
   {
-    "objectID": "00-notation.html",
-    "href": "00-notation.html",
-    "title": "1  Notation and Conventions",
-    "section": "",
-    "text": "Basic Sets",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Notation and Conventions</span>"
-    ]
-  },
-  {
-    "objectID": "00-notation.html#basic-sets",
-    "href": "00-notation.html#basic-sets",
-    "title": "1  Notation and Conventions",
-    "section": "",
-    "text": "\\(\\mathbb{N}\\) denotes the set of natural numbers.\n\\(\\mathrm{WFF}\\) denotes the set of well-formed formulas.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Notation and Conventions</span>"
-    ]
-  },
-  {
-    "objectID": "00-notation.html#propositional-variables",
-    "href": "00-notation.html#propositional-variables",
-    "title": "1  Notation and Conventions",
-    "section": "Propositional Variables",
-    "text": "Propositional Variables\nWe assume a countable family of propositional variables given by\n\\[\nP : \\mathbb{N} \\to \\mathrm{WFF}, \\quad i \\mapsto P_i.\n\\]",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Notation and Conventions</span>"
-    ]
-  },
-  {
-    "objectID": "00-notation.html#metavariables",
-    "href": "00-notation.html#metavariables",
-    "title": "1  Notation and Conventions",
-    "section": "Metavariables",
-    "text": "Metavariables\nWe use the following metavariables:\n\n\\(\\varphi, \\psi, \\chi\\) for formulas\n\\(i, j, k \\in \\mathbb{N}\\) for indices",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Notation and Conventions</span>"
-    ]
-  },
-  {
-    "objectID": "00-notation.html#logical-connectives",
-    "href": "00-notation.html#logical-connectives",
-    "title": "1  Notation and Conventions",
-    "section": "Logical Connectives",
-    "text": "Logical Connectives\nWe use the following symbols:\n\nNegation: \\(\\neg \\varphi\\)\nConjunction: \\(\\varphi \\land \\psi\\)\nDisjunction: \\(\\varphi \\lor \\psi\\)",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Notation and Conventions</span>"
-    ]
-  },
-  {
-    "objectID": "00-notation.html#parentheses-convention",
-    "href": "00-notation.html#parentheses-convention",
-    "title": "1  Notation and Conventions",
-    "section": "Parentheses Convention",
-    "text": "Parentheses Convention\nWe omit outer parentheses when there is no ambiguity.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Notation and Conventions</span>"
-    ]
-  },
-  {
-    "objectID": "00-notation.html#inductive-definitions",
-    "href": "00-notation.html#inductive-definitions",
-    "title": "1  Notation and Conventions",
-    "section": "Inductive Definitions",
-    "text": "Inductive Definitions\nWhen defining syntax, we use inductive (recursive) definitions of the form\n\\[\n\\varphi ::= \\cdots\n\\]\nto describe the formation of well-formed formulas.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Notation and Conventions</span>"
-    ]
-  },
-  {
-    "objectID": "00-notation.html#remarks-on-style",
-    "href": "00-notation.html#remarks-on-style",
-    "title": "1  Notation and Conventions",
-    "section": "Remarks on Style",
-    "text": "Remarks on Style\n\n\n\n\n\n\n\n\\(\\mathrm{WFF}\\) is typeset using \\(\\mathrm{...}\\) to distinguish it from variables.\nLogical symbols \\(\\land, \\lor, \\neg\\) are used instead of textual operators.\nWe follow a type-theoretic perspective where constructors generate formulas.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Notation and Conventions</span>"
-    ]
-  },
-  {
     "objectID": "01.html",
     "href": "01.html",
-    "title": "2  Lecture 1 - Propositional Logic: Syntax",
+    "title": "1  Lecture 1 - Propositional Logic: Syntax",
     "section": "",
     "text": "Overview\nBrief summary of what this lecture does (2–4 lines).\nGoal: Define the expression we can write, these are called well-formed-formulas, or wffs.\nThere are various ways of defining what counts as a wff. One of them is the inductive approach.",
     "crumbs": [
       "Logic",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
     ]
   },
   {
     "objectID": "01.html#inductive-approach",
     "href": "01.html#inductive-approach",
-    "title": "2  Lecture 1 - Propositional Logic: Syntax",
+    "title": "1  Lecture 1 - Propositional Logic: Syntax",
     "section": "Inductive Approach",
     "text": "Inductive Approach\nFirst we start with atomic formulas:\n\\[\n\\begin{aligned}\n&P_0, P_1, P_2, \\dots \\\\\n&(P_i)_{i \\in \\mathbb{N}}\n\\end{aligned}\n\\]\nare atomic propositions.\nWe give some rules to inductively define new formulas from old ones.\n\nif \\(\\varphi\\), \\(\\psi\\) are wff then \\(\\varphi \\Rightarrow \\psi\\) is a wff\nif \\(\\varphi\\), \\(\\psi\\) are wff then \\(\\varphi \\wedge \\psi\\) is a wff\nif \\(\\varphi\\), \\(\\psi\\) are wff then \\(\\varphi \\vee \\psi\\) is a wff\nif \\(\\varphi\\) is a wff then \\(\\neg \\varphi\\) is a wff",
     "crumbs": [
       "Logic",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
     ]
   },
   {
     "objectID": "01.html#constructor-approach",
     "href": "01.html#constructor-approach",
-    "title": "2  Lecture 1 - Propositional Logic: Syntax",
+    "title": "1  Lecture 1 - Propositional Logic: Syntax",
     "section": "Constructor Approach",
-    "text": "Constructor Approach\nIt is useful to express these rules with constructors, which define wffs as values of some functions (with codomain \\(\\mathrm{WFF}\\))\nIn this approach atomic formulas are values of functions:\n\nDefinition 2.1 (Atomic formulas) Atomic formulas are values of functions like:\n\\[\nP:\\mathbb{N} \\to \\mathrm{WFF}, \\quad :i \\mapsto P_i\n\\]\nor\n\\[\n''\\cdot'': \\mathrm{String} \\to \\mathrm{WFF}, \\quad :x \\mapsto \"x\"\n\\]\n\n\nExample 2.1 (String Constructor) with the latter we can construct arbitrary propositions like:\n“today\\(\\sqcup\\)is\\(\\sqcup\\)sunny”\n\nWe also have constructors for the logical connectives:\n\nDefinition 2.2 (Constructors for Logical Connectives) \\[\n\\begin{aligned}\n&(\\neg):\\mathrm{WFF} \\to \\mathrm{WFF}, \\quad :\\varphi \\mapsto \\neg\\varphi \\\\\n&(\\land) : \\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{WFF}, \\quad :(\\varphi, \\psi) \\mapsto \\varphi \\land \\psi \\\\\n&(\\lor) : \\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{WFF}, \\quad :(\\varphi, \\psi) \\mapsto \\varphi \\lor \\psi \\\\\n&(\\Rightarrow) : \\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{WFF}, \\quad :(\\varphi, \\psi) \\mapsto \\varphi \\Rightarrow \\psi \\\\\n\\end{aligned}\n\\]\n\n\nRemark 2.1 (Constructor vs Symbol View of Logical Connectives). Earlier we wrote \\(\\varphi \\Rightarrow \\psi\\) and then we denoted \\(\\Rightarrow\\) symbol as a function of type \\(\\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{WFF}\\) , we use \\((\\Rightarrow)\\) to distinguish between the two concepts.\n\nA different but related question that arises si the ambiguity of \\(P_1 \\Rightarrow P_2 \\Rightarrow P_3\\). According to the inductive definition there are two ways this formula could have been constructed which corresponds to the different formulas:\n\n\\((P_1 \\Rightarrow P_2) \\Rightarrow P_3\\)\n\\(P_1 \\Rightarrow (P_2 \\Rightarrow P_3)\\)\n\nTo resolve this ambiguity we define the associativity rule:\n\nDefinition 2.6 (Associativity Rule for \\(\\Rightarrow\\)) \\[\nP_1 \\Rightarrow P_2 \\Rightarrow P_3 := (P_1 \\Rightarrow P_2) \\Rightarrow P_3\n\\]\n\nRemark 2.2 (Wffs as Trees). Wffs can be viewed as trees. Trees encode the derivation structure and resolve the ambiguity\n\n\n\n\n\n\n\n\ntree 1\n\n\n\n\n\n\n\ntree 2\n\n\n\n\n\n\n\ntree 3\n\n\n\n\n\n\nFigure 2.1\n\n\n\n\nour collection of wffs can be further enriched with another binary constructor:\n\\[\n\\begin{aligned}\n(\\Leftrightarrow)&:\\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{{WFF}} \\\\\n      &: (\\varphi, \\psi) \\mapsto \\varphi \\Leftrightarrow \\psi\n\\end{aligned}\n\\]\n\nRemark 2.3 (Meaning of \\(\\Leftrightarrow\\)). At this stage there is no relation between\n\\[\n\\varphi \\Leftrightarrow \\psi \\quad \\text{and} \\quad (\\varphi \\Rightarrow \\psi) \\land (\\psi \\Rightarrow \\varphi)\n\\]\n\nLet is give another ‘set-theoretic’ approach\n\nSet Theoretic Approach\nFirst we define the alphabets:\n\nDefinition 2.3 (Set Theoeretic Approach to Defining Wffs) We start with the alphabets:\n\\[\n\\begin{aligned}\n\\mathcal{A} &:= \\{P_i\\}_{i \\in \\mathbb{N}} && \\text{(sub-alphabet of atomic formulas)} \\\\\n\\mathcal{C} &:= \\{\\Rightarrow, \\land, \\lor, \\neg, \\Leftrightarrow\\} && \\text{(sub-alphabet of logical connectives)} \\\\\n\\mathcal{V} &:= \\mathcal{A} \\cup \\mathcal{C} \\cup \\{(, )\\} && \\text{(alphabet of propositional logic, including punctuation marks)}\n\\end{aligned}\n\\]\n\nThen we define the so-called Kleene Closure of \\(\\mathcal{V}\\):\n\nDefinition 2.4 (Kleene Closure of \\(\\mathcal{V}\\)) \\[\n\\mathcal{V}^* := \\bigcup_{i = 0}^\\infty \\mathcal{V}_{i}\n\\]\n\n\\(\\mathcal{V}^*\\) is the language containing all sorts of strings that can be constructed from the alphabet \\(\\mathcal{V}\\), also senseless ones.\nTo define the language propositional logic that contains only the formulas that we want and nothing else, we take the usual set-theoretic approach of taking the infinite union of all sets \\(\\mathcal{W} \\subseteq \\mathcal{V}\\) that satisfy the following properties:\n\n\\(\\mathcal{A} \\subseteq \\mathcal{W}\\)\nif \\(\\varphi, \\psi \\in \\mathcal{W}\\) then \\(\\varphi \\diamond \\psi \\in \\mathcal{W}\\), where \\(\\diamond \\in \\{\\Rightarrow, \\land, \\lor, \\Leftrightarrow\\}\\)\nif \\(\\varphi \\in \\mathcal{W}\\) then \\(\\neg\\varphi\\in\\mathcal{W}\\)\n\nThen the language of propositinal logic is defined as:\n\nDefinition 2.5 (Language Propositional Logic as Infinite Intersection) \\[\n\\mathcal{F}(\\mathcal{A}) := \\bigcap\\{\\mathcal{W} \\subseteq \\mathcal{V}^* | \\mathcal{W} \\text{ satisfies (1), (2), and (3)}\\}\n\\]\n\n\nTheorem 2.1  \n\nWith this construction \\(\\mathcal{F}(\\mathcal{A})\\) is the smallest set that satisfies the properties (1), (2) and (3), i.e.\n\n\\(\\mathcal{F}(\\mathcal{A})\\) satisfies the properties (1), (2) and (3)\nFor any set \\(\\mathcal{W}\\) that satisfies the properties (1), (2) and (3) we have \\(\\mathcal{W} \\subseteq \\mathcal{F}(\\mathcal{A})\\)\n\n\n\n\nSummary\n\nWFF is defined inductively\n\nConstructors that generate WFFs\nSet theoretic construction of WFFs",
+    "text": "Constructor Approach\nIt is useful to express these rules with constructors, which define wffs as values of some functions (with codomain \\(\\mathrm{WFF}\\))\nIn this approach atomic formulas are values of functions:\n\nDefinition 1.1 (Atomic formulas) Atomic formulas are values of functions like:\n\\[\nP:\\mathbb{N} \\to \\mathrm{WFF}, \\quad :i \\mapsto P_i\n\\]\nor\n\\[\n''\\cdot'': \\mathrm{String} \\to \\mathrm{WFF}, \\quad :x \\mapsto \"x\"\n\\]\n\n\nExample 1.1 (String Constructor) with the latter we can construct arbitrary propositions like:\n“today\\(\\sqcup\\)is\\(\\sqcup\\)sunny”\n\nWe also have constructors for the logical connectives:\n\nDefinition 1.2 (Constructors for Logical Connectives) \\[\n\\begin{aligned}\n&(\\neg):\\mathrm{WFF} \\to \\mathrm{WFF}, \\quad :\\varphi \\mapsto \\neg\\varphi \\\\\n&(\\land) : \\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{WFF}, \\quad :(\\varphi, \\psi) \\mapsto \\varphi \\land \\psi \\\\\n&(\\lor) : \\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{WFF}, \\quad :(\\varphi, \\psi) \\mapsto \\varphi \\lor \\psi \\\\\n&(\\Rightarrow) : \\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{WFF}, \\quad :(\\varphi, \\psi) \\mapsto \\varphi \\Rightarrow \\psi \\\\\n\\end{aligned}\n\\]\n\n\nRemark 1.1 (Constructor vs Symbol View of Logical Connectives). Earlier we wrote \\(\\varphi \\Rightarrow \\psi\\) and then we denoted \\(\\Rightarrow\\) symbol as a function of type \\(\\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{WFF}\\) , we use \\((\\Rightarrow)\\) to distinguish between the two concepts.\n\nA different but related question that arises si the ambiguity of \\(P_1 \\Rightarrow P_2 \\Rightarrow P_3\\). According to the inductive definition there are two ways this formula could have been constructed which corresponds to the different formulas:\n\n\\((P_1 \\Rightarrow P_2) \\Rightarrow P_3\\)\n\\(P_1 \\Rightarrow (P_2 \\Rightarrow P_3)\\)\n\nTo resolve this ambiguity we define the associativity rule:\n\nDefinition 1.6 (Associativity Rule for \\(\\Rightarrow\\)) \\[\nP_1 \\Rightarrow P_2 \\Rightarrow P_3 := (P_1 \\Rightarrow P_2) \\Rightarrow P_3\n\\]\n\nRemark 1.2 (Wffs as Trees). Wffs can be viewed as trees. Trees encode the derivation structure and resolve the ambiguity\n\n\n\n\n\n\n\n\ntree 1\n\n\n\n\n\n\n\ntree 2\n\n\n\n\n\n\n\ntree 3\n\n\n\n\n\n\nFigure 1.1\n\n\n\n\nour collection of wffs can be further enriched with another binary constructor:\n\\[\n\\begin{aligned}\n(\\Leftrightarrow)&:\\mathrm{WFF} \\times \\mathrm{WFF} \\to \\mathrm{{WFF}} \\\\\n      &: (\\varphi, \\psi) \\mapsto \\varphi \\Leftrightarrow \\psi\n\\end{aligned}\n\\]\n\nRemark 1.3 (Meaning of \\(\\Leftrightarrow\\)). At this stage there is no relation between\n\\[\n\\varphi \\Leftrightarrow \\psi \\quad \\text{and} \\quad (\\varphi \\Rightarrow \\psi) \\land (\\psi \\Rightarrow \\varphi)\n\\]\n\nLet is give another ‘set-theoretic’ approach\n\nSet Theoretic Approach\nFirst we define the alphabets:\n\nDefinition 1.3 (Set Theoeretic Approach to Defining Wffs) We start with the alphabets:\n\\[\n\\begin{aligned}\n\\mathcal{A} &:= \\{P_i\\}_{i \\in \\mathbb{N}} && \\text{(sub-alphabet of atomic formulas)} \\\\\n\\mathcal{C} &:= \\{\\Rightarrow, \\land, \\lor, \\neg, \\Leftrightarrow\\} && \\text{(sub-alphabet of logical connectives)} \\\\\n\\mathcal{V} &:= \\mathcal{A} \\cup \\mathcal{C} \\cup \\{(, )\\} && \\text{(alphabet of propositional logic, including punctuation marks)}\n\\end{aligned}\n\\]\n\nThen we define the so-called Kleene Closure of \\(\\mathcal{V}\\):\n\nDefinition 1.4 (Kleene Closure of \\(\\mathcal{V}\\)) \\[\n\\mathcal{V}^* := \\bigcup_{i = 0}^\\infty \\mathcal{V}_{i}\n\\]\n\n\\(\\mathcal{V}^*\\) is the language containing all sorts of strings that can be constructed from the alphabet \\(\\mathcal{V}\\), also senseless ones.\nTo define the language propositional logic that contains only the formulas that we want and nothing else, we take the usual set-theoretic approach of taking the infinite union of all sets \\(\\mathcal{W} \\subseteq \\mathcal{V}\\) that satisfy the following properties:\n\n\\(\\mathcal{A} \\subseteq \\mathcal{W}\\)\nif \\(\\varphi, \\psi \\in \\mathcal{W}\\) then \\(\\varphi \\diamond \\psi \\in \\mathcal{W}\\), where \\(\\diamond \\in \\{\\Rightarrow, \\land, \\lor, \\Leftrightarrow\\}\\)\nif \\(\\varphi \\in \\mathcal{W}\\) then \\(\\neg\\varphi\\in\\mathcal{W}\\)\n\nThen the language of propositinal logic is defined as:\n\nDefinition 1.5 (Language Propositional Logic as Infinite Intersection) \\[\n\\mathcal{F}(\\mathcal{A}) := \\bigcap\\{\\mathcal{W} \\subseteq \\mathcal{V}^* | \\mathcal{W} \\text{ satisfies (1), (2), and (3)}\\}\n\\]\n\n\nTheorem 1.1  \n\nWith this construction \\(\\mathcal{F}(\\mathcal{A})\\) is the smallest set that satisfies the properties (1), (2) and (3), i.e.\n\n\\(\\mathcal{F}(\\mathcal{A})\\) satisfies the properties (1), (2) and (3)\nFor any set \\(\\mathcal{W}\\) that satisfies the properties (1), (2) and (3) we have \\(\\mathcal{W} \\subseteq \\mathcal{F}(\\mathcal{A})\\)\n\n\n\n\nSummary\n\nWFF is defined inductively\n\nConstructors that generate WFFs\nSet theoretic construction of WFFs",
     "crumbs": [
       "Logic",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
     ]
   },
   {
     "objectID": "01.html#set-theoretic-approach",
     "href": "01.html#set-theoretic-approach",
-    "title": "2  Lecture 1 - Propositional Logic: Syntax",
+    "title": "1  Lecture 1 - Propositional Logic: Syntax",
     "section": "Set Theoretic Approach",
-    "text": "Set Theoretic Approach\nFirst we define the alphabets:\n\nDefinition 2.3 (Set Theoeretic Approach to Defining Wffs) We start with the alphabets:\n\\[\n\\begin{aligned}\n\\mathcal{A} &:= \\{P_i\\}_{i \\in \\mathbb{N}} && \\text{(sub-alphabet of atomic formulas)} \\\\\n\\mathcal{C} &:= \\{\\Rightarrow, \\land, \\lor, \\neg, \\Leftrightarrow\\} && \\text{(sub-alphabet of logical connectives)} \\\\\n\\mathcal{V} &:= \\mathcal{A} \\cup \\mathcal{C} \\cup \\{(, )\\} && \\text{(alphabet of propositional logic, including punctuation marks)}\n\\end{aligned}\n\\]\n\nThen we define the so-called Kleene Closure of \\(\\mathcal{V}\\):\n\nDefinition 2.4 (Kleene Closure of \\(\\mathcal{V}\\)) \\[\n\\mathcal{V}^* := \\bigcup_{i = 0}^\\infty \\mathcal{V}_{i}\n\\]\n\n\\(\\mathcal{V}^*\\) is the language containing all sorts of strings that can be constructed from the alphabet \\(\\mathcal{V}\\), also senseless ones.\nTo define the language propositional logic that contains only the formulas that we want and nothing else, we take the usual set-theoretic approach of taking the infinite union of all sets \\(\\mathcal{W} \\subseteq \\mathcal{V}\\) that satisfy the following properties:\n\n\\(\\mathcal{A} \\subseteq \\mathcal{W}\\)\nif \\(\\varphi, \\psi \\in \\mathcal{W}\\) then \\(\\varphi \\diamond \\psi \\in \\mathcal{W}\\), where \\(\\diamond \\in \\{\\Rightarrow, \\land, \\lor, \\Leftrightarrow\\}\\)\nif \\(\\varphi \\in \\mathcal{W}\\) then \\(\\neg\\varphi\\in\\mathcal{W}\\)\n\nThen the language of propositinal logic is defined as:\n\nDefinition 2.5 (Language Propositional Logic as Infinite Intersection) \\[\n\\mathcal{F}(\\mathcal{A}) := \\bigcap\\{\\mathcal{W} \\subseteq \\mathcal{V}^* | \\mathcal{W} \\text{ satisfies (1), (2), and (3)}\\}\n\\]\n\n\nTheorem 2.1  \n\nWith this construction \\(\\mathcal{F}(\\mathcal{A})\\) is the smallest set that satisfies the properties (1), (2) and (3), i.e.\n\n\\(\\mathcal{F}(\\mathcal{A})\\) satisfies the properties (1), (2) and (3)\nFor any set \\(\\mathcal{W}\\) that satisfies the properties (1), (2) and (3) we have \\(\\mathcal{W} \\subseteq \\mathcal{F}(\\mathcal{A})\\)",
+    "text": "Set Theoretic Approach\nFirst we define the alphabets:\n\nDefinition 1.3 (Set Theoeretic Approach to Defining Wffs) We start with the alphabets:\n\\[\n\\begin{aligned}\n\\mathcal{A} &:= \\{P_i\\}_{i \\in \\mathbb{N}} && \\text{(sub-alphabet of atomic formulas)} \\\\\n\\mathcal{C} &:= \\{\\Rightarrow, \\land, \\lor, \\neg, \\Leftrightarrow\\} && \\text{(sub-alphabet of logical connectives)} \\\\\n\\mathcal{V} &:= \\mathcal{A} \\cup \\mathcal{C} \\cup \\{(, )\\} && \\text{(alphabet of propositional logic, including punctuation marks)}\n\\end{aligned}\n\\]\n\nThen we define the so-called Kleene Closure of \\(\\mathcal{V}\\):\n\nDefinition 1.4 (Kleene Closure of \\(\\mathcal{V}\\)) \\[\n\\mathcal{V}^* := \\bigcup_{i = 0}^\\infty \\mathcal{V}_{i}\n\\]\n\n\\(\\mathcal{V}^*\\) is the language containing all sorts of strings that can be constructed from the alphabet \\(\\mathcal{V}\\), also senseless ones.\nTo define the language propositional logic that contains only the formulas that we want and nothing else, we take the usual set-theoretic approach of taking the infinite union of all sets \\(\\mathcal{W} \\subseteq \\mathcal{V}\\) that satisfy the following properties:\n\n\\(\\mathcal{A} \\subseteq \\mathcal{W}\\)\nif \\(\\varphi, \\psi \\in \\mathcal{W}\\) then \\(\\varphi \\diamond \\psi \\in \\mathcal{W}\\), where \\(\\diamond \\in \\{\\Rightarrow, \\land, \\lor, \\Leftrightarrow\\}\\)\nif \\(\\varphi \\in \\mathcal{W}\\) then \\(\\neg\\varphi\\in\\mathcal{W}\\)\n\nThen the language of propositinal logic is defined as:\n\nDefinition 1.5 (Language Propositional Logic as Infinite Intersection) \\[\n\\mathcal{F}(\\mathcal{A}) := \\bigcap\\{\\mathcal{W} \\subseteq \\mathcal{V}^* | \\mathcal{W} \\text{ satisfies (1), (2), and (3)}\\}\n\\]\n\n\nTheorem 1.1  \n\nWith this construction \\(\\mathcal{F}(\\mathcal{A})\\) is the smallest set that satisfies the properties (1), (2) and (3), i.e.\n\n\\(\\mathcal{F}(\\mathcal{A})\\) satisfies the properties (1), (2) and (3)\nFor any set \\(\\mathcal{W}\\) that satisfies the properties (1), (2) and (3) we have \\(\\mathcal{W} \\subseteq \\mathcal{F}(\\mathcal{A})\\)",
     "crumbs": [
       "Logic",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
     ]
   },
   {
     "objectID": "01.html#summary",
     "href": "01.html#summary",
-    "title": "2  Lecture 1 - Propositional Logic: Syntax",
+    "title": "1  Lecture 1 - Propositional Logic: Syntax",
     "section": "Summary",
     "text": "Summary\n\nWFF is defined inductively\n\nConstructors that generate WFFs\nSet theoretic construction of WFFs",
     "crumbs": [
       "Logic",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Lecture 1 - Propositional Logic: Syntax</span>"
+    ]
+  },
+  {
+    "objectID": "02.html",
+    "href": "02.html",
+    "title": "2  Lecture 2 - Height and Subformulas",
+    "section": "",
+    "text": "Overview",
+    "crumbs": [
+      "Logic",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 2 - Height and Subformulas</span>"
+    ]
+  },
+  {
+    "objectID": "02.html#overview",
+    "href": "02.html#overview",
+    "title": "2  Lecture 2 - Height and Subformulas",
+    "section": "",
+    "text": "We provide a fourth, iterative set construction for the language of propositional logic.\nWe give two equivalent definitions for the height of a formula.\nWe give two equivalent definitions of a function that gives the list of subformulas of a formula",
+    "crumbs": [
+      "Logic",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 2 - Height and Subformulas</span>"
+    ]
+  },
+  {
+    "objectID": "02.html#recurisve-set-construction",
+    "href": "02.html#recurisve-set-construction",
+    "title": "2  Lecture 2 - Height and Subformulas",
+    "section": "Recurisve Set Construction",
+    "text": "Recurisve Set Construction\nWe define \\(\\F{0}\\) iteratively as follows:\n\\[\n\\begin{aligned}\n&\\F{0} := \\mathcal{A} \\\\\n&\\F{1} := \\F{0} \\cup \\Set{\\neg\\varphi}{\\varphi \\in \\F{0}} \\cup \\Set{\\varphi\\diamond\\psi}{\\varphi,\\psi \\in \\F{0}} &&\\text{($\\diamond\\in\\mathcal{C}$)} \\\\\n&\\F{n} := \\F{n-1} \\cup \\Set{\\neg\\varphi}{\\varphi \\in \\F{n-1} \\setminus \\F{n-2}} \\cup \\Set{\\varphi\\diamond\\psi}{\\varphi, \\psi \\in \\F{n-1}} &&\\text{($n\\geq 2$)}\n\\end{aligned}\n\\]\nWith this construction it follows that:\n\\[\n\\F{n} \\subseteq \\F{n + 1}\n\\]\n\nExample 2.1 \\(\\neg\\neg P_4 \\in \\F{2} \\subseteq \\F{3} \\subseteq\\dots\\)\nbut \\(\\neg\\neg P_4 \\notin \\F{1}\\), because \\(\\neg{P_4} \\notin \\F{0}\\)\n\nNow we make the following definition:\n\nDefinition 2.1 \\[\n\\mathcal{F} := \\bigcup_{n \\in \\Nat}\\F{n}% math here\n\\]\n\nand we claim:\n\nLemma 2.1 \\[\\mathcal{F} = \\Fof{\\mathcal{A}}\\]\n\nWhere \\(\\Fof{\\mathcal{A}}\\) is defined in Definition 1.5\n\nProof. To prove \\(\\mathcal{F} \\subseteq \\Fof{\\mathcal{A}}\\), it suffices to show that\n\\[\n\\F{n} \\subseteq \\Fof{\\mathcal{A}}, \\quad \\forall n, \\, \\text{by induction on $n$}\n\\]\nTo conclude the proof we need to show that \\(\\F{A} \\subseteq \\mathcal{F}\\)\n\n\nDefinition 2.2 (Height of Formula - Set Approach) For all \\(\\varphi\\in\\mathcal{F}\\), there is a well defined natural number \\(\\Height{\\varphi}\\in\\Nat\\):\n\\[\n\\Height{\\varphi} := \\mathrm{min}\\Set{n\\in\\Nat}{\\varphi\\in\\F{n}}\n\\]\ncalled the height of \\(\\varphi\\)\n\nWe give another, a more computational definition for the height.\n\nDefinition 2.3 (Height of a Formula - Computational Approach) We define \\(\\Height{\\cdot}\\) recursively on the structure of a formula \\(\\phi\\) as follows:\n\\[\n\\begin{aligned}\n&\\Height{P_i} = 0 &&\\text{($P_i\\in \\mathcal{A}$)}\\\\\n&\\Height{\\neg\\varphi} = 1 + \\Height{\\varphi} \\\\\n&\\Height{\\varphi\\diamond\\psi} = 1 + \\mathrm{max}(\\Height{\\varphi}, \\Height{\\psi}) &&\\text{($\\diamond\\in\\mathcal{C}$)}\n\\end{aligned}\n\\]\n\n\nRemark 2.1 (Pattern Matching). Such inductive (recursive) definitions are also called pattern matching\n\n\nExample 2.2 (Derivation of Height) \\[\n\\begin{aligned}\n\\Height{\\neg\\neg(P_1 \\Rightarrow P_2)} &= 1 + \\Height{\\neg(P_1 \\Rightarrow P_2)} \\\\\n                                   &= 1 + 1 + \\Height{P_1 \\Rightarrow P_2} \\\\\n                                   &= 1 + 1 + \\mathrm{max}(\\Height{P_1}, \\Height{P_2}) \\\\\n                                   &= 1 + 1 + \\mathrm{max}(1, 1) \\\\\n                                   &= 1 + 1 + 1 \\\\\n                                   &= 3\n\\end{aligned}\n\\]\n\nObervation:\nWe observe that the height of a formula is the height of its syntax tree\n\n\n\nheight of the syntax tree\n\n\nWe want to define a function\n\\[\n\\mathrm{sf}: \\Fof{\\mathcal{A}} \\to \\mathcal{P}(\\Fof{\\mathcal{A}})\n\\]\nmapping a formula to its set of subformulas. For this we are going to define functions \\(\\Subf{i}: \\F{i} \\to \\Pow{\\mathcal{F}}\\) as follows:\n\nDefinition 2.4 (Set Construction of \\(\\mathrm{sf}\\)) \\[\n\\begin{aligned}\n&\\Subf{0}(P_i) := \\{P_i\\} \\\\\n&\\Subf{n}(\\neg\\varphi) := \\{\\neg\\varphi\\} \\cup \\Subf{n-1}(\\varphi) \\\\\n&\\Subf{n}(\\varphi\\diamond\\psi) := \\{\\varphi\\diamond\\psi\\} \\cup \\Subf{n-1}(\\varphi) \\cup \\Subf{n-1}(\\psi)\n\\end{aligned}\n\\]\nThen \\(\\mathrm{sf}\\) can be defined as\n\\[\n\\begin{aligned}\n\\mathrm{sf}&:\\mathcal{F} \\to \\Pow{\\mathcal{F}} \\\\\n           &:\\varphi\\mapsto\\Subf{\\Height{\\varphi}}(\\varphi)\n\\end{aligned}\n\\]\n\nWe give another, more computational approach, by defining \\(\\mathrm{sf}\\) recursively on the structure of wffs as a function \\(\\mathrm{sf}:\\WFF \\to [\\WFF]\\)\n\nDefinition 2.5 (List Construction of \\(\\mathrm{sf}\\)) \\[\n\\begin{aligned}\n&\\mathrm{sf}(P_i) := [P_i] \\\\\n&\\mathrm{sf}(\\neg\\varphi) := [\\neg\\varphi] \\concat \\mathrm{sf}(\\varphi) \\\\\n&\\mathrm{sf}(\\varphi\\diamond\\psi):= [\\varphi\\diamond\\psi] \\concat \\mathrm{sf}(\\varphi) \\concat \\mathrm{sf}(\\psi)\n\\end{aligned}\n\\]\n\nExample 2.3 (Derivation of the List of Subformulas with \\(\\mathrm{sf}\\)) \\[\n\\begin{aligned}\n\\sfn{P_1 \\lor \\neg P_2} &= [P_1 \\lor \\neg P_2] \\concat \\sfn{P_1} \\concat \\sfn{\\neg P_2} \\\\\n                        &= [P_1 \\lor \\neg P_2] \\concat [P_1] \\concat [\\neg P_2] \\concat \\sfn{P_2} \\\\\n                        &= [P_1 \\lor \\neg P_2] \\concat [P_1] \\concat [\\neg P_2] \\concat [P_2] \\\\\n                        &= [P_1 \\lor \\neg P_2, P_1, \\neg P_2, P_2]\n\\end{aligned}\n\\]\n\n\nSummary\n\niterative set construction \\(\\F{i}\\) - the language of propositional logic as infinite union of such\ntwo definitions for \\(\\mathrm{ht}\\) - height of a formula\ntwo definitions for \\(\\mathrm{sf}\\) - list or set of subformulas of a formula",
+    "crumbs": [
+      "Logic",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 2 - Height and Subformulas</span>"
+    ]
+  },
+  {
+    "objectID": "02.html#summary",
+    "href": "02.html#summary",
+    "title": "2  Lecture 2 - Height and Subformulas",
+    "section": "Summary",
+    "text": "Summary\n\niterative set construction \\(\\F{i}\\) - the language of propositional logic as infinite union of such\ntwo definitions for \\(\\mathrm{ht}\\) - height of a formula\ntwo definitions for \\(\\mathrm{sf}\\) - list or set of subformulas of a formula",
+    "crumbs": [
+      "Logic",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 2 - Height and Subformulas</span>"
     ]
   }
 ]
