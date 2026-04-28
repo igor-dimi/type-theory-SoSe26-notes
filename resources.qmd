@@ -1,0 +1,36 @@
+---
+title: Resources
+---
+
+Books & other resources
+
+## SML
+
+* Elements of Functional Programming. Reade
+* Introduction to Programming Using SML. Hansel, Rischel
+* Programming in SML. Harper
+* Programmierung: Eine Einfuehrung in Standard ML. Gert Smolka
+
+## Haskell
+
+* Functional Programming with Gofer. Fokker
+* Introduction to Computation, Haskell, Logic, and Automata. Wadler
+* Introduction to Functional Programming using Haskell. Bird
+* Introduction to Functional Programming Systems Using Haskell
+* Thinking Functionally with Haskell. Bird
+* Programming in Haskell. Graham Hutton
+* Haskell - The Craft of Functional Programming. Thompson
+
+## OCAML
+
+* OCaml from the very beginning. Whitington
+* More OCaml. Whitingnton
+* OCaml - Functional Programming for the Masses. Madhavapeddy
+
+## Rocq / Coq
+
+* Mathematical Components. Assia Mahboubi, Enrico Tassi.
+* Software Foundations. Benjamin C. Pierce
+* Programs and Proofs - Mechanizing Mathematics with Dependent Types. Ilya Sergey
+* Certified Programming with Dependent Types. Adam Chipala
+* Interactive Theorem Proving and Program Development - Coq'Art: The Calculus of Inductive Constructions. Bertot, Casteran
