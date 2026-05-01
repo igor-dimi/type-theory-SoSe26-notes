@@ -16,6 +16,7 @@ book:
         - 01.qmd
         - 02.qmd
     - references.qmd
+    - resources.qmd
 
 bibliography: references.bib
 crossref: 
