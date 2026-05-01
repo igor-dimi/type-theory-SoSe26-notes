@@ -107,5 +107,55 @@
       "Logic",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Lecture 2 - Height and Subformulas</span>"
     ]
+  },
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "3  Resources",
+    "section": "",
+    "text": "SML\nBooks & other resources",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Resources</span>"
+    ]
+  },
+  {
+    "objectID": "resources.html#sml",
+    "href": "resources.html#sml",
+    "title": "3  Resources",
+    "section": "",
+    "text": "Elements of Functional Programming. Reade\nIntroduction to Programming Using SML. Hansel, Rischel\nProgramming in SML. Harper\nProgrammierung: Eine Einfuehrung in Standard ML. Gert Smolka",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Resources</span>"
+    ]
+  },
+  {
+    "objectID": "resources.html#haskell",
+    "href": "resources.html#haskell",
+    "title": "3  Resources",
+    "section": "Haskell",
+    "text": "Haskell\n\nFunctional Programming with Gofer. Fokker\nIntroduction to Computation, Haskell, Logic, and Automata. Wadler\nIntroduction to Functional Programming using Haskell. Bird\nIntroduction to Functional Programming Systems Using Haskell\nThinking Functionally with Haskell. Bird\nProgramming in Haskell. Graham Hutton\nHaskell - The Craft of Functional Programming. Thompson",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Resources</span>"
+    ]
+  },
+  {
+    "objectID": "resources.html#ocaml",
+    "href": "resources.html#ocaml",
+    "title": "3  Resources",
+    "section": "OCAML",
+    "text": "OCAML\n\nOCaml from the very beginning. Whitington\nMore OCaml. Whitingnton\nOCaml - Functional Programming for the Masses. Madhavapeddy",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Resources</span>"
+    ]
+  },
+  {
+    "objectID": "resources.html#rocq-coq",
+    "href": "resources.html#rocq-coq",
+    "title": "3  Resources",
+    "section": "Rocq / Coq",
+    "text": "Rocq / Coq\n\nMathematical Components. Assia Mahboubi, Enrico Tassi.\nSoftware Foundations. Benjamin C. Pierce\nPrograms and Proofs - Mechanizing Mathematics with Dependent Types. Ilya Sergey\nCertified Programming with Dependent Types. Adam Chipala\nInteractive Theorem Proving and Program Development - Coq’Art: The Calculus of Inductive Constructions. Bertot, Casteran",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Resources</span>"
+    ]
   }
 ]
