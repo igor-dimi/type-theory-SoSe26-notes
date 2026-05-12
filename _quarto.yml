@@ -1,6 +1,7 @@
 project:
   type: book
 
+jupyter: coq
 book:
   downloads: pdf
   title: "SoSe 26 Type Theory & Logic & Functional Programming Notes"
@@ -15,6 +16,7 @@ book:
       chapters: 
         - 01.qmd
         - 02.qmd
+        - 03.qmd
     - references.qmd
     - resources.qmd
 

@@ -1,0 +1,24 @@
+---
+title: lecture 3
+---
+
+```{coq}
+Check nat.
+```
+
+```{coq}
+Theorem test : forall n : nat, n = n.
+Proof.
+  intro n.
+  reflexivity.
+Qed.
+```
+
+```{python}
+print(1)
+```
+
+
+```{coq}
+Check 1 + 1.
+```

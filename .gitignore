@@ -1,2 +1,10 @@
 /.quarto/
 /_book/
+
+# ignore the files generate by rocq compiler
+*.vo
+*.glob
+*.vok
+*.vos
+*.aux
+
