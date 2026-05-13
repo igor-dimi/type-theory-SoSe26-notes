@@ -1,0 +1,600 @@
+# Boolean Values and Pattern Matching
+
+*Logic and Functional Programming*  
+*Florent Schaffhauser*  
+*Heidelberg University*  
+*(Summer 2026)*
+
+This note introduces Boolean values in Rocq, basic pattern matching, curried functions, and the first small proofs about Boolean functions. The original lecture file was a Rocq source file; here the surrounding comments have been turned into prose, and Rocq commands are placed in executable Quarto code blocks.
+
+## Booleans in Rocq's Core Library
+
+Boolean values are available without any imports in Rocq. There are two canonical Boolean values:
+
+- `true`
+- `false`
+
+Both are values of type `bool`.
+
+```{coq}
+Check true.
+Check false.
+```
+
+In Rocq, every expression has a type. The expressions `true` and `false` have type `bool`. The type `bool` itself also has a type: Rocq classifies it as `Set`.
+
+Roughly speaking, `Set` is the universe of computational data types, such as Booleans, natural numbers, lists, and other datatypes. More generally, `Set` itself lives in a larger universe called `Type`.
+
+```{coq}
+Check bool.
+About bool.
+Check Set.
+Check Type.
+```
+
+A useful first picture is:
+
+```text
+true  : bool
+false : bool
+bool  : Set
+Set   : Type
+```
+
+So the hierarchy starts with ordinary values, then their types, and then universes classifying those types.
+
+::: {.callout-note}
+In type theory, types are themselves objects that can be checked and classified. This is why commands like `Check bool`, `Check Set`, and `Check Type` are meaningful.
+:::
+
+Certain pre-defined functions are also available out of the box and can be used to compute expressions. For example, `negb` is Boolean negation.
+
+```{coq}
+Check negb.
+About negb.
+
+Check negb false.
+Compute negb false.
+```
+
+### Curried Notation
+
+A function of two variables like `orb` is written in curried notation. This means that the value of `orb` on two Boolean arguments is written as
+
+```coq
+orb true false
+```
+
+not as
+
+```coq
+orb (true, false)
+```
+
+The second expression would suggest that `orb` takes a pair as input. But Rocq's `orb` takes one Boolean argument first, and then returns a new function waiting for the second Boolean argument.
+
+```{coq}
+Check orb true false.
+Check orb.
+Check bool -> (bool -> bool).
+Check orb true.
+```
+
+The type
+
+```coq
+bool -> bool -> bool
+```
+
+should be read as
+
+```coq
+bool -> (bool -> bool)
+```
+
+because arrow types associate to the right. Therefore, `orb true` is a function of type `bool -> bool`.
+
+::: {.callout-note}
+A function type `A -> B -> C` means `A -> (B -> C)`. A function of two arguments is therefore a function that takes one argument and returns another function.
+:::
+
+We can compute using this syntax.
+
+```{coq}
+Compute negb (orb true false).
+```
+
+In the rest of the file, we construct basic functions from `bool` to `bool` and from `bool` to `bool -> bool`. Most of them are already contained in Rocq's core library, but redefining them is a good way to learn pattern matching.
+
+## Basic Pattern Matching
+
+To avoid conflicts with Rocq's core library, we wrap everything in a module called `BooleanValues`. This is optional here, since we do not intend to use the current file as a library later on.
+
+```{coq}
+Module BooleanValues.
+```
+
+Inside the module, our own definitions can have the same names as functions from Rocq's core library. For example, when we define our own `negb`, it shadows the library function of the same name inside this module. The original library function still exists, but the unqualified name `negb` will refer to our local definition.
+
+::: {.callout-note}
+A module gives us a local namespace. This lets us experiment with names like `negb`, `andb`, and `orb` without permanently overwriting Rocq's library definitions.
+:::
+
+### Boolean Negation
+
+Let us start with the definition of the `negb` function, which sends `true` to `false` and `false` to `true`. We define it by pattern matching on Boolean values.
+
+```{coq}
+Definition negb (b : bool) : bool :=
+  match b with
+  | true  => false
+  | false => true
+  end.
+
+Check negb.
+```
+
+The definition says: to compute `negb b`, inspect the possible forms of `b`.
+
+- If `b` is `true`, return `false`.
+- If `b` is `false`, return `true`.
+
+Since `bool` has exactly two constructors, `true` and `false`, these two cases are exhaustive.
+
+```{coq}
+About negb.
+Compute negb false.
+```
+
+We can also give expressions a name and then use that name in later computations.
+
+```{coq}
+Compute negb (negb false).
+
+Definition example_bool := negb false.
+
+Compute negb example_bool.
+```
+
+::: {.callout-note}
+Pattern matching is Rocq's way of defining functions by cases. For `bool`, there are exactly two cases: `true` and `false`.
+:::
+
+### Boolean Conjunction
+
+Now we define an `andb` function. It takes two Booleans `b` and `b'`, and returns their Boolean conjunction.
+
+The truth table for Boolean conjunction is:
+
+| `b` | `b'` | `andb b b'` |
+|---|---|---|
+| `true` | `true` | `true` |
+| `true` | `false` | `false` |
+| `false` | `true` | `false` |
+| `false` | `false` | `false` |
+
+This truth table can be translated directly into a pattern match with four cases.
+
+```{coq}
+Definition andb (b b' : bool) : bool :=
+  match b, b' with
+  | true,  true  => true
+  | true,  false => false
+  | false, true  => false
+  | false, false => false
+  end.
+```
+
+In fact, some simplifications are possible. If the first Boolean is `true`, then the result is just the second Boolean. If the first Boolean is `false`, then the result is always `false`, regardless of the second Boolean.
+
+```coq
+match b, b' with
+| true,  b' => b'
+| false, _  => false
+end
+```
+
+The symbol `_` is a wildcard pattern. It means: there is some value here, but we do not need to name it because the result does not depend on it.
+
+Another possible, but less readable, way is to pattern match first on `b` and then on `b'`. This produces a nested program. It typechecks, but it is more verbose. Note that only the final `end` is followed by a period.
+
+```coq
+match b with
+| true =>
+  match b' with
+  | true  => true
+  | false => false
+  end
+| false =>
+  match b' with
+  | true  => false
+  | false => false
+  end
+end.
+```
+
+As with `negb`, we can use `andb` to compute Boolean values.
+
+```{coq}
+Compute andb true false.
+Compute andb true (negb example_bool).
+```
+
+Recall that `andb` is a function of two variables, but it is written in curried notation. If we ask Rocq to check its type, we get `bool -> bool -> bool`, not a function type from pairs.
+
+```{coq}
+Check andb.
+Check andb true.
+Compute andb true.
+```
+
+The expression `andb true` is a partially applied function. It is the function that takes a Boolean `b'` and returns `andb true b'`, which is just `b'`.
+
+We see in particular that arrow types associate to the right:
+
+```text
+bool -> bool -> bool
+=
+bool -> (bool -> bool)
+```
+
+This means that an expression like
+
+```coq
+andb b b'
+```
+
+is parsed as
+
+```coq
+(andb b) b'
+```
+
+In contrast, the arrow type `(bool -> bool) -> bool` describes a function which takes a Boolean function as input and returns a Boolean value. We can define an example by evaluating a function `f : bool -> bool` at a given Boolean value.
+
+```{coq}
+Definition eval_at_true : (bool -> bool) -> bool :=
+  fun f => f true.
+
+Compute eval_at_true negb.
+Compute eval_at_true (andb true).
+
+Definition eval_at (b : bool) : (bool -> bool) -> bool :=
+  fun f => f b.
+
+Compute eval_at false negb.
+Compute eval_at false (andb true).
+```
+
+### Boolean Disjunction
+
+Let us define an `orb` function on Booleans.
+
+The truth table for Boolean disjunction is:
+
+| `b` | `b'` | `orb b b'` |
+|---|---|---|
+| `true` | `true` | `true` |
+| `true` | `false` | `true` |
+| `false` | `true` | `true` |
+| `false` | `false` | `false` |
+
+If the first Boolean is `true`, then the result is always `true`. If the first Boolean is `false`, then the result is the second Boolean.
+
+```{coq}
+Definition orb (b b' : bool) : bool :=
+  match b, b' with
+  | true,  _  => true
+  | false, b' => b'
+  end.
+```
+
+Since the first branch does not actually use `b'`, and the second branch only returns `b'`, we can also write the same idea as a match on `b` alone.
+
+```coq
+match b with
+| true  => true
+| false => b'
+end
+```
+
+```{coq}
+Compute orb false false.
+Compute orb false (negb false).
+```
+
+### Boolean Implication
+
+Let us define Boolean implication. The intended truth table is:
+
+| `b` | `b'` | `implb b b'` |
+|---|---|---|
+| `true` | `true` | `true` |
+| `true` | `false` | `false` |
+| `false` | `true` | `true` |
+| `false` | `false` | `true` |
+
+This corresponds to the classical idea that `P -> Q` is false only when `P` is true and `Q` is false.
+
+For this one, we use Rocq's `if ... then ... else ...` syntax.
+
+```{coq}
+Definition implb (b b' : bool) : bool :=
+  if b then b' else true.
+```
+
+Here
+
+```coq
+if b then b' else true
+```
+
+is essentially shorthand for the following pattern match:
+
+```coq
+match b with
+| true  => b'
+| false => true
+end
+```
+
+So `if ... then ... else ...` is not a separate mysterious mechanism. For Booleans, it is a convenient notation for pattern matching on a Boolean condition.
+
+Exercise: implement the function `implb` using pattern matching. The result of the following computation should be the Boolean `true`.
+
+```{coq}
+Compute implb false true.
+```
+
+Exercise: implement the Boolean if-then-else function as a function with type signature
+
+```coq
+bool -> bool -> bool -> bool
+```
+
+It should take three Boolean arguments:
+
+```text
+condition -> then_branch -> else_branch -> result
+```
+
+One possible implementation is:
+
+```coq
+Definition ifb (b x y : bool) : bool :=
+  match b with
+  | true  => x
+  | false => y
+  end.
+```
+
+## Theorem Proving
+
+Next, we start using Rocq as a tool for proving properties of the functions we have defined. The syntax looks different at first, but in type theory stating a theorem is closely related to declaring a type, and proving a theorem is closely related to constructing a term of that type.
+
+For example, the statement
+
+```coq
+negb (negb true) = true
+```
+
+is an equality proposition. To prove it means to construct a proof object inhabiting that proposition.
+
+::: {.callout-note}
+In Rocq, a theorem statement is a type. Proving the theorem means constructing a term whose type is the theorem statement.
+:::
+
+### Negation Is Involutive
+
+The first property that we prove is that, for every Boolean value `b`, we have
+
+```coq
+negb (negb b) = b
+```
+
+In ordinary language: applying Boolean negation twice gives us back the original Boolean value.
+
+Let us start with some special cases, in which we prove our equality by direct computation. When using an interactive Rocq editor, the tactic state shows the current goal and helps guide the proof.
+
+```{coq}
+Theorem negb_negb_true_eq_true : negb (negb true) = true.
+Proof.
+  simpl.
+```
+
+The `simpl` tactic simplifies the goal by computation. In this case, `negb (negb true)` computes to `true`.
+
+```{coq}
+  reflexivity.
+```
+
+The `reflexivity` tactic proves goals where the two sides of an equality reduce to the same expression. It is stronger than a purely textual check: it can unfold definitions and compute enough to see that both sides are definitionally equal.
+
+```{coq}
+Qed.
+```
+
+If you are just getting started with theorem provers, focus here on the block that starts with `Proof` and ends with `Qed`. This is a Rocq proof script. It is written in the tactic language, while function definitions like `negb` and `andb` are written in the core term language, called Gallina.
+
+In this simple example, `simpl` is not actually necessary, because `reflexivity` can perform the needed computation itself.
+
+```{coq}
+Theorem negb_negb_false_eq_false : negb (negb false) = false.
+Proof.
+  reflexivity.
+Qed.
+```
+
+Here is the same proof written directly as a Gallina term. Note that we use `Definition` rather than `Theorem`.
+
+```{coq}
+Definition negb_negb_false_eq_false' :
+    negb (negb false) = false :=
+  eq_refl.
+```
+
+The term `eq_refl` is the canonical proof that an expression is equal to itself. Since both sides reduce to the same Boolean, `eq_refl` is accepted.
+
+You can check that the theorem and the definition produce essentially the same proof object using the `Print` command.
+
+```{coq}
+Print negb_negb_false_eq_false.
+Print negb_negb_false_eq_false'.
+```
+
+If you try to prove something incorrect, the prover will let you know.
+
+```{coq}
+Theorem fail_to_unify : negb (negb false) = true.
+Proof.
+  Fail reflexivity.
+Admitted.
+```
+
+The command `Fail reflexivity.` asks Rocq to check that `reflexivity` fails. This is useful for experimentation. The theorem is then closed with `Admitted`, which means that the statement is accepted without proof.
+
+::: {.callout-warning}
+`Admitted` is not a real proof. It is useful while experimenting or developing a file, but admitted theorems should not be treated as established results in finished work.
+:::
+
+Now let us prove the general theorem. We need to prove the statement for an arbitrary Boolean `b`. Since `b` can only be `true` or `false`, it is natural to split the proof into two cases.
+
+The `destruct` tactic plays the same role in proofs that the `match` keyword plays in function definitions.
+
+- In a function definition, `match b with ... end` defines a result by considering all possible forms of `b`.
+- In a proof, `destruct b` proves the current goal by considering all possible forms of `b`.
+
+Since `bool` has exactly two constructors, `destruct b` creates two subgoals: one for `b = true` and one for `b = false`.
+
+```{coq}
+Theorem negb_inv (b : bool) : negb (negb b) = b.
+Proof.
+  destruct b.
+```
+
+After `destruct b`, the goal has been modified. In the first case, `b` has been replaced by `true`; in the second case, `b` has been replaced by `false`.
+
+We use focusing dashes to separate the two subgoals.
+
+```{coq}
+  - simpl. reflexivity.
+```
+
+The second case can be solved by `reflexivity` alone.
+
+```coq
+  - reflexivity.
+```
+
+Instead of using `reflexivity`, we can also reuse a previous proof with the `exact` tactic. The theorem `negb_negb_false_eq_false` has exactly the type needed for the second goal.
+
+```{coq}
+  - exact negb_negb_false_eq_false.
+Qed.
+```
+
+One may observe that `negb_inv true` is a proof of the equality
+
+```coq
+negb (negb true) = true
+```
+
+and that `negb_inv` itself is a proof of the universally quantified proposition
+
+```coq
+forall b : bool, negb (negb b) = b
+```
+
+```{coq}
+Check negb_inv true.
+Check negb_inv.
+```
+
+::: {.callout-note}
+A theorem with a variable, such as `Theorem negb_inv (b : bool) : ...`, behaves like a function that takes an argument `b : bool` and returns a proof of the corresponding statement.
+:::
+
+### Equivalent Definitions of Implication
+
+Recall the formulas from classical logic:
+
+```text
+(P ⇒ Q) ⇔ ¬P ∨ Q
+(P ⇒ Q) ⇔ ¬(P ∧ ¬Q)
+```
+
+The first formula is often taken as a definition of implication in classical logic.
+
+In this section, we interpret the logical connectives as Boolean functions:
+
+| Logical notation | Boolean function |
+|---|---|
+| `P ⇒ Q` | `implb b b'` |
+| `¬P` | `negb b` |
+| `P ∨ Q` | `orb b b'` |
+| `P ∧ Q` | `andb b b'` |
+
+Since we are working with Boolean-valued functions, saying that two Boolean formulas are equivalent means saying that they compute to the same Boolean value for all inputs. Therefore, we express equivalence here using equality of Booleans.
+
+Later, when working directly with propositions in `Prop`, logical equivalence will be expressed differently, for example using `<->`.
+
+We first prove the Boolean version of
+
+```text
+(P ⇒ Q) ⇔ ¬P ∨ Q
+```
+
+This exercise also shows how to structure a proof with pattern matching on several variables. First, we present a nested version: we destruct `b`, and then destruct `b'` in each branch. This gives two cases corresponding to the possible values of `b`, with two subcases corresponding to the possible values of `b'`.
+
+```{coq}
+Theorem implb_eq_orb_negb (b b' : bool) :
+    implb b b' = orb (negb b) b'.
+Proof.
+  destruct b.
+  - destruct b'.
+    + reflexivity.
+    + reflexivity.
+  - destruct b'.
+    all: reflexivity.
+Qed.
+```
+
+The tactic `all: reflexivity` applies `reflexivity` to all remaining subgoals. Here, after destructing `b'`, both remaining cases can be solved in the same way.
+
+Next, we prove the Boolean version of
+
+```text
+(P ⇒ Q) ⇔ ¬(P ∧ ¬Q)
+```
+
+Here we destruct `b` and `b'` simultaneously. This immediately creates four cases, much like the simultaneous pattern matching used in the definition of `andb`.
+
+```{coq}
+Theorem implb_eq_negb_andb_negb (b b' : bool) :
+    implb b b' = negb (andb b (negb b')).
+Proof.
+  destruct b, b'.
+  all: reflexivity.
+Qed.
+```
+
+Notice that we used explicit parameters `(b b' : bool)` rather than implicit parameters `{b b' : bool}`. Braces introduce implicit arguments, which Rocq tries to infer from context. This is useful later, but explicit parameters are clearer at this introductory stage.
+
+```{coq}
+End BooleanValues.
+```
+
+## Summary
+
+In this lecture, we saw the following ideas:
+
+- `true` and `false` are the two canonical values of type `bool`.
+- `bool` is classified by the universe `Set`.
+- Boolean functions can be defined by pattern matching.
+- Functions of several arguments are usually curried in Rocq.
+- The wildcard pattern `_` means that the value is irrelevant in that branch.
+- `if ... then ... else ...` is a convenient notation for pattern matching on Booleans.
+- Theorems are types, and proofs are terms inhabiting those types.
+- `simpl` computes in the goal, while `reflexivity` proves equalities whose two sides reduce to the same expression.
+- `destruct` performs case distinction in proofs, analogous to `match` in programs.
+- Boolean equivalence of Boolean-valued expressions can be expressed as equality of Booleans.

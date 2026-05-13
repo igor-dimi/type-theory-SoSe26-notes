@@ -16,7 +16,8 @@ book:
       chapters: 
         - 01.qmd
         - 02.qmd
-        - 03.qmd
+        # - 03.qmd
+        - BooleanValues.qmd
     - references.qmd
     - resources.qmd
 

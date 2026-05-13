@@ -1,24 +1,8 @@
 ---
-title: lecture 3
+title: lecture 3 - Basics of Rocq Syntax
 ---
 
-```{coq}
-Check nat.
-```
+## Boolean Values and Pattern Matching
 
-```{coq}
-Theorem test : forall n : nat, n = n.
-Proof.
-  intro n.
-  reflexivity.
-Qed.
-```
+Boolean values are available without any import in Rocq. 
 
-```{python}
-print(1)
-```
-
-
-```{coq}
-Check 1 + 1.
-```
