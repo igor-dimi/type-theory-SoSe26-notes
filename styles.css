@@ -1,0 +1,31 @@
+/* Normal source code blocks */
+div.sourceCode {
+  background-color: #f7f7f7;
+  border-radius: 6px;
+  padding: 0.5em;
+}
+
+/* Executable cell input blocks */
+.cell-code {
+  background-color: #f7f7f7;
+  border-left: 3px solid #cccccc;
+  border-radius: 6px;
+  padding: 0.5em;
+}
+
+/* Code inside executable cells */
+.cell-code pre {
+  background-color: transparent;
+  margin-bottom: 0;
+}
+
+/* Executable cell output blocks */
+.cell-output,
+.cell-output-stdout,
+.cell-output-stderr {
+  background-color: #fafafa;
+  padding: 0.5em 0.75em;
+  margin-top: 0.25em;
+  margin-bottom: 1em;
+  border-radius: 4px;
+}

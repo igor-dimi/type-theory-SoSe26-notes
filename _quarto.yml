@@ -33,9 +33,14 @@ format:
       - brand
     include-in-header: 
       - mathjax-macros.html
+    css: styles.css
+    code-block-bg: true
+    code-copy: true
+    code-overflow: wrap
   pdf:
     documentclass: scrreprt
     include-in-header: preamble.tex
+    syntax-highlighting: github
 
 
 
