@@ -1,0 +1,2216 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Boolean Values and Pattern Matching – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./02.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-bf132de45b538d253cd2e2da5fec6016.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    macros: {
+      Nat: "\\mathbb{N}",
+      WFF: "\\mathrm{WFF}",
+
+      F: ["\\mathcal{F}_{#1}", 1],
+      Fof: ["\\mathcal{F}(#1)", 1],
+
+      Set: ["\\{\\, #1 \\;\\mid\\; #2 \\,\\}", 2],
+
+      Height: ["\\mathrm{ht}(#1)", 1],
+      Subf: ["\\mathrm{sf}_{#1}", 1],
+      sfn: ["\\mathrm{sf}(#1)", 1],
+
+      Pow: ["\\mathcal{P{}(#1)}", 1],
+
+      concat: "\\mathbin{+\\!\\!+}"
+    }
+  }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Boolean Values and Pattern Matching</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</a> 
+        <div class="sidebar-tools-main">
+    <a href="./SoSe-26-Type-Theory---Logic---Functional-Programming-Notes.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Logic</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 1 - Propositional Logic: Syntax</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 2 - Height and Subformulas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./BooleanValues.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Boolean Values and Pattern Matching</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Resources</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#booleans-in-rocqs-core-library" id="toc-booleans-in-rocqs-core-library" class="nav-link active" data-scroll-target="#booleans-in-rocqs-core-library">Booleans in Rocq’s Core Library</a>
+  <ul class="collapse">
+  <li><a href="#curried-notation" id="toc-curried-notation" class="nav-link" data-scroll-target="#curried-notation">Curried Notation</a></li>
+  </ul></li>
+  <li><a href="#basic-pattern-matching" id="toc-basic-pattern-matching" class="nav-link" data-scroll-target="#basic-pattern-matching">Basic Pattern Matching</a>
+  <ul class="collapse">
+  <li><a href="#boolean-negation" id="toc-boolean-negation" class="nav-link" data-scroll-target="#boolean-negation">Boolean Negation</a></li>
+  <li><a href="#boolean-conjunction" id="toc-boolean-conjunction" class="nav-link" data-scroll-target="#boolean-conjunction">Boolean Conjunction</a></li>
+  <li><a href="#boolean-disjunction" id="toc-boolean-disjunction" class="nav-link" data-scroll-target="#boolean-disjunction">Boolean Disjunction</a></li>
+  <li><a href="#boolean-implication" id="toc-boolean-implication" class="nav-link" data-scroll-target="#boolean-implication">Boolean Implication</a></li>
+  </ul></li>
+  <li><a href="#theorem-proving" id="toc-theorem-proving" class="nav-link" data-scroll-target="#theorem-proving">Theorem Proving</a>
+  <ul class="collapse">
+  <li><a href="#negation-is-involutive" id="toc-negation-is-involutive" class="nav-link" data-scroll-target="#negation-is-involutive">Negation Is Involutive</a></li>
+  <li><a href="#equivalent-definitions-of-implication" id="toc-equivalent-definitions-of-implication" class="nav-link" data-scroll-target="#equivalent-definitions-of-implication">Equivalent Definitions of Implication</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Boolean Values and Pattern Matching</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Boolean Values and Pattern Matching</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><em>Logic and Functional Programming</em><br>
+<em>Florent Schaffhauser</em><br>
+<em>Heidelberg University</em><br>
+<em>(Summer 2026)</em></p>
+<p>This note introduces Boolean values in Rocq, basic pattern matching, curried functions, and the first small proofs about Boolean functions. The original lecture file was a Rocq source file; here the surrounding comments have been turned into prose, and Rocq commands are placed in executable Quarto code blocks.</p>
+<section id="booleans-in-rocqs-core-library" class="level2">
+<h2 class="anchored" data-anchor-id="booleans-in-rocqs-core-library">Booleans in Rocq’s Core Library</h2>
+<p>Boolean values are available without any imports in Rocq. There are two canonical Boolean values:</p>
+<ul>
+<li><code>true</code></li>
+<li><code>false</code></li>
+</ul>
+<p>Both are values of type <code>bool</code>.</p>
+<div id="ecd28f23" class="cell" data-execution_count="1">
+<pre class="coq cell-code"><code>Check true.
+Check false.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="3">
+
+<div class="coq_kernel_output_area">
+    <pre>true
+     : bool
+
+false
+     : bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>In Rocq, every expression has a type. The expressions <code>true</code> and <code>false</code> have type <code>bool</code>. The type <code>bool</code> itself also has a type: Rocq classifies it as <code>Set</code>.</p>
+<p>Roughly speaking, <code>Set</code> is the universe of computational data types, such as Booleans, natural numbers, lists, and other datatypes. More generally, <code>Set</code> itself lives in a larger universe called <code>Type</code>.</p>
+<div id="fa9adee6" class="cell" data-execution_count="2">
+<pre class="coq cell-code"><code>Check bool.
+About bool.
+Check Set.
+Check Type.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="7">
+
+<div class="coq_kernel_output_area">
+    <pre>bool
+     : Set
+
+bool : Set
+
+bool is not universe polymorphic
+Expands to: Inductive Corelib.Init.Datatypes.bool
+Declared in library Corelib.Init.Datatypes, line 39, characters 10-14
+
+Set
+     : Type
+
+Type
+     : Type</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>A useful first picture is:</p>
+<pre class="text"><code>true  : bool
+false : bool
+bool  : Set
+Set   : Type</code></pre>
+<p>So the hierarchy starts with ordinary values, then their types, and then universes classifying those types.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In type theory, types are themselves objects that can be checked and classified. This is why commands like <code>Check bool</code>, <code>Check Set</code>, and <code>Check Type</code> are meaningful.</p>
+</div>
+</div>
+<p>Certain pre-defined functions are also available out of the box and can be used to compute expressions. For example, <code>negb</code> is Boolean negation.</p>
+<div id="766f3593" class="cell" data-execution_count="3">
+<pre class="coq cell-code"><code>Check negb.
+About negb.
+
+Check negb false.
+Compute negb false.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="11">
+
+<div class="coq_kernel_output_area">
+    <pre>negb
+     : bool -&gt; bool
+
+negb : bool -&gt; bool
+
+negb is not universe polymorphic
+Arguments negb b%bool_scope
+negb is transparent
+Expands to: Constant Corelib.Init.Datatypes.negb
+Declared in library Corelib.Init.Datatypes, line 84, characters 11-15
+
+negb false
+     : bool
+
+     = true
+     : bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<section id="curried-notation" class="level3">
+<h3 class="anchored" data-anchor-id="curried-notation">Curried Notation</h3>
+<p>A function of two variables like <code>orb</code> is written in curried notation. This means that the value of <code>orb</code> on two Boolean arguments is written as</p>
+<pre class="coq"><code>orb true false</code></pre>
+<p>not as</p>
+<pre class="coq"><code>orb (true, false)</code></pre>
+<p>The second expression would suggest that <code>orb</code> takes a pair as input. But Rocq’s <code>orb</code> takes one Boolean argument first, and then returns a new function waiting for the second Boolean argument.</p>
+<div id="ce3ba7e7" class="cell" data-execution_count="4">
+<pre class="coq cell-code"><code>Check orb true false.
+Check orb.
+Check bool -&gt; (bool -&gt; bool).
+Check orb true.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="15">
+
+<div class="coq_kernel_output_area">
+    <pre>(true || false)%bool
+     : bool
+
+orb
+     : bool -&gt; bool -&gt; bool
+
+bool -&gt; bool -&gt; bool
+     : Set
+
+orb true
+     : bool -&gt; bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>The type</p>
+<pre class="coq"><code>bool -&gt; bool -&gt; bool</code></pre>
+<p>should be read as</p>
+<pre class="coq"><code>bool -&gt; (bool -&gt; bool)</code></pre>
+<p>because arrow types associate to the right. Therefore, <code>orb true</code> is a function of type <code>bool -&gt; bool</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A function type <code>A -&gt; B -&gt; C</code> means <code>A -&gt; (B -&gt; C)</code>. A function of two arguments is therefore a function that takes one argument and returns another function.</p>
+</div>
+</div>
+<p>We can compute using this syntax.</p>
+<div id="5ac4d1a5" class="cell" data-execution_count="5">
+<pre class="coq cell-code"><code>Compute negb (orb true false).</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="16">
+
+<div class="coq_kernel_output_area">
+    <pre>     = false
+     : bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>In the rest of the file, we construct basic functions from <code>bool</code> to <code>bool</code> and from <code>bool</code> to <code>bool -&gt; bool</code>. Most of them are already contained in Rocq’s core library, but redefining them is a good way to learn pattern matching.</p>
+</section>
+</section>
+<section id="basic-pattern-matching" class="level2">
+<h2 class="anchored" data-anchor-id="basic-pattern-matching">Basic Pattern Matching</h2>
+<p>To avoid conflicts with Rocq’s core library, we wrap everything in a module called <code>BooleanValues</code>. This is optional here, since we do not intend to use the current file as a library later on.</p>
+<div id="a1016054" class="cell" data-execution_count="6">
+<pre class="coq cell-code"><code>Module BooleanValues.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="17">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>Inside the module, our own definitions can have the same names as functions from Rocq’s core library. For example, when we define our own <code>negb</code>, it shadows the library function of the same name inside this module. The original library function still exists, but the unqualified name <code>negb</code> will refer to our local definition.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A module gives us a local namespace. This lets us experiment with names like <code>negb</code>, <code>andb</code>, and <code>orb</code> without permanently overwriting Rocq’s library definitions.</p>
+</div>
+</div>
+<section id="boolean-negation" class="level3">
+<h3 class="anchored" data-anchor-id="boolean-negation">Boolean Negation</h3>
+<p>Let us start with the definition of the <code>negb</code> function, which sends <code>true</code> to <code>false</code> and <code>false</code> to <code>true</code>. We define it by pattern matching on Boolean values.</p>
+<div id="fb267df2" class="cell" data-execution_count="7">
+<pre class="coq cell-code"><code>Definition negb (b : bool) : bool :=
+  match b with
+  | true  =&gt; false
+  | false =&gt; true
+  end.
+
+Check negb.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="19">
+
+<div class="coq_kernel_output_area">
+    <pre>negb
+     : bool -&gt; bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>The definition says: to compute <code>negb b</code>, inspect the possible forms of <code>b</code>.</p>
+<ul>
+<li>If <code>b</code> is <code>true</code>, return <code>false</code>.</li>
+<li>If <code>b</code> is <code>false</code>, return <code>true</code>.</li>
+</ul>
+<p>Since <code>bool</code> has exactly two constructors, <code>true</code> and <code>false</code>, these two cases are exhaustive.</p>
+<div id="fbd5a73a" class="cell" data-execution_count="8">
+<pre class="coq cell-code"><code>About negb.
+Compute negb false.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="21">
+
+<div class="coq_kernel_output_area">
+    <pre>negb : bool -&gt; bool
+
+negb is not universe polymorphic
+Arguments negb b%bool_scope
+negb is transparent
+Expands to: Constant Top.BooleanValues.negb
+Declared in toplevel input, characters 11-15
+
+     = true
+     : bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>We can also give expressions a name and then use that name in later computations.</p>
+<div id="8a85a786" class="cell" data-execution_count="9">
+<pre class="coq cell-code"><code>Compute negb (negb false).
+
+Definition example_bool := negb false.
+
+Compute negb example_bool.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="24">
+
+<div class="coq_kernel_output_area">
+    <pre>     = false
+     : bool
+
+     = false
+     : bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pattern matching is Rocq’s way of defining functions by cases. For <code>bool</code>, there are exactly two cases: <code>true</code> and <code>false</code>.</p>
+</div>
+</div>
+</section>
+<section id="boolean-conjunction" class="level3">
+<h3 class="anchored" data-anchor-id="boolean-conjunction">Boolean Conjunction</h3>
+<p>Now we define an <code>andb</code> function. It takes two Booleans <code>b</code> and <code>b'</code>, and returns their Boolean conjunction.</p>
+<p>The truth table for Boolean conjunction is:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>b</code></th>
+<th><code>b'</code></th>
+<th><code>andb b b'</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+</tr>
+<tr class="even">
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+</tr>
+<tr class="odd">
+<td><code>false</code></td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+</tr>
+<tr class="even">
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p>This truth table can be translated directly into a pattern match with four cases.</p>
+<div id="3a16fced" class="cell" data-execution_count="10">
+<pre class="coq cell-code"><code>Definition andb (b b' : bool) : bool :=
+  match b, b' with
+  | true,  true  =&gt; true
+  | true,  false =&gt; false
+  | false, true  =&gt; false
+  | false, false =&gt; false
+  end.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="25">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>In fact, some simplifications are possible. If the first Boolean is <code>true</code>, then the result is just the second Boolean. If the first Boolean is <code>false</code>, then the result is always <code>false</code>, regardless of the second Boolean.</p>
+<pre class="coq"><code>match b, b' with
+| true,  b' =&gt; b'
+| false, _  =&gt; false
+end</code></pre>
+<p>The symbol <code>_</code> is a wildcard pattern. It means: there is some value here, but we do not need to name it because the result does not depend on it.</p>
+<p>Another possible, but less readable, way is to pattern match first on <code>b</code> and then on <code>b'</code>. This produces a nested program. It typechecks, but it is more verbose. Note that only the final <code>end</code> is followed by a period.</p>
+<pre class="coq"><code>match b with
+| true =&gt;
+  match b' with
+  | true  =&gt; true
+  | false =&gt; false
+  end
+| false =&gt;
+  match b' with
+  | true  =&gt; false
+  | false =&gt; false
+  end
+end.</code></pre>
+<p>As with <code>negb</code>, we can use <code>andb</code> to compute Boolean values.</p>
+<div id="ddc5d366" class="cell" data-execution_count="11">
+<pre class="coq cell-code"><code>Compute andb true false.
+Compute andb true (negb example_bool).</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="27">
+
+<div class="coq_kernel_output_area">
+    <pre>     = false
+     : bool
+
+     = false
+     : bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>Recall that <code>andb</code> is a function of two variables, but it is written in curried notation. If we ask Rocq to check its type, we get <code>bool -&gt; bool -&gt; bool</code>, not a function type from pairs.</p>
+<div id="47746655" class="cell" data-execution_count="12">
+<pre class="coq cell-code"><code>Check andb.
+Check andb true.
+Compute andb true.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="30">
+
+<div class="coq_kernel_output_area">
+    <pre>andb
+     : bool -&gt; bool -&gt; bool
+
+andb true
+     : bool -&gt; bool
+
+     = fun b' : bool =&gt; if b' then true else false
+     : bool -&gt; bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>The expression <code>andb true</code> is a partially applied function. It is the function that takes a Boolean <code>b'</code> and returns <code>andb true b'</code>, which is just <code>b'</code>.</p>
+<p>We see in particular that arrow types associate to the right:</p>
+<pre class="text"><code>bool -&gt; bool -&gt; bool
+=
+bool -&gt; (bool -&gt; bool)</code></pre>
+<p>This means that an expression like</p>
+<pre class="coq"><code>andb b b'</code></pre>
+<p>is parsed as</p>
+<pre class="coq"><code>(andb b) b'</code></pre>
+<p>In contrast, the arrow type <code>(bool -&gt; bool) -&gt; bool</code> describes a function which takes a Boolean function as input and returns a Boolean value. We can define an example by evaluating a function <code>f : bool -&gt; bool</code> at a given Boolean value.</p>
+<div id="cb9e8c99" class="cell" data-execution_count="13">
+<pre class="coq cell-code"><code>Definition eval_at_true : (bool -&gt; bool) -&gt; bool :=
+  fun f =&gt; f true.
+
+Compute eval_at_true negb.
+Compute eval_at_true (andb true).
+
+Definition eval_at (b : bool) : (bool -&gt; bool) -&gt; bool :=
+  fun f =&gt; f b.
+
+Compute eval_at false negb.
+Compute eval_at false (andb true).</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="36">
+
+<div class="coq_kernel_output_area">
+    <pre>     = false
+     : bool
+
+     = true
+     : bool
+
+     = true
+     : bool
+
+     = false
+     : bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+</section>
+<section id="boolean-disjunction" class="level3">
+<h3 class="anchored" data-anchor-id="boolean-disjunction">Boolean Disjunction</h3>
+<p>Let us define an <code>orb</code> function on Booleans.</p>
+<p>The truth table for Boolean disjunction is:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>b</code></th>
+<th><code>b'</code></th>
+<th><code>orb b b'</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+</tr>
+<tr class="even">
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>true</code></td>
+</tr>
+<tr class="odd">
+<td><code>false</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+</tr>
+<tr class="even">
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p>If the first Boolean is <code>true</code>, then the result is always <code>true</code>. If the first Boolean is <code>false</code>, then the result is the second Boolean.</p>
+<div id="36e30d17" class="cell" data-execution_count="14">
+<pre class="coq cell-code"><code>Definition orb (b b' : bool) : bool :=
+  match b, b' with
+  | true,  _  =&gt; true
+  | false, b' =&gt; b'
+  end.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="37">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>Since the first branch does not actually use <code>b'</code>, and the second branch only returns <code>b'</code>, we can also write the same idea as a match on <code>b</code> alone.</p>
+<pre class="coq"><code>match b with
+| true  =&gt; true
+| false =&gt; b'
+end</code></pre>
+<div id="fd64af24" class="cell" data-execution_count="15">
+<pre class="coq cell-code"><code>Compute orb false false.
+Compute orb false (negb false).</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="39">
+
+<div class="coq_kernel_output_area">
+    <pre>     = false
+     : bool
+
+     = true
+     : bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+</section>
+<section id="boolean-implication" class="level3">
+<h3 class="anchored" data-anchor-id="boolean-implication">Boolean Implication</h3>
+<p>Let us define Boolean implication. The intended truth table is:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>b</code></th>
+<th><code>b'</code></th>
+<th><code>implb b b'</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+</tr>
+<tr class="even">
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+</tr>
+<tr class="odd">
+<td><code>false</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+</tr>
+<tr class="even">
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+<p>This corresponds to the classical idea that <code>P -&gt; Q</code> is false only when <code>P</code> is true and <code>Q</code> is false.</p>
+<p>For this one, we use Rocq’s <code>if ... then ... else ...</code> syntax.</p>
+<div id="b3cc4d01" class="cell" data-execution_count="16">
+<pre class="coq cell-code"><code>Definition implb (b b' : bool) : bool :=
+  if b then b' else true.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="40">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>Here</p>
+<pre class="coq"><code>if b then b' else true</code></pre>
+<p>is essentially shorthand for the following pattern match:</p>
+<pre class="coq"><code>match b with
+| true  =&gt; b'
+| false =&gt; true
+end</code></pre>
+<p>So <code>if ... then ... else ...</code> is not a separate mysterious mechanism. For Booleans, it is a convenient notation for pattern matching on a Boolean condition.</p>
+<p>Exercise: implement the function <code>implb</code> using pattern matching. The result of the following computation should be the Boolean <code>true</code>.</p>
+<div id="274aa697" class="cell" data-execution_count="17">
+<pre class="coq cell-code"><code>Compute implb false true.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="41">
+
+<div class="coq_kernel_output_area">
+    <pre>     = true
+     : bool</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>Exercise: implement the Boolean if-then-else function as a function with type signature</p>
+<pre class="coq"><code>bool -&gt; bool -&gt; bool -&gt; bool</code></pre>
+<p>It should take three Boolean arguments:</p>
+<pre class="text"><code>condition -&gt; then_branch -&gt; else_branch -&gt; result</code></pre>
+<p>One possible implementation is:</p>
+<pre class="coq"><code>Definition ifb (b x y : bool) : bool :=
+  match b with
+  | true  =&gt; x
+  | false =&gt; y
+  end.</code></pre>
+</section>
+</section>
+<section id="theorem-proving" class="level2">
+<h2 class="anchored" data-anchor-id="theorem-proving">Theorem Proving</h2>
+<p>Next, we start using Rocq as a tool for proving properties of the functions we have defined. The syntax looks different at first, but in type theory stating a theorem is closely related to declaring a type, and proving a theorem is closely related to constructing a term of that type.</p>
+<p>For example, the statement</p>
+<pre class="coq"><code>negb (negb true) = true</code></pre>
+<p>is an equality proposition. To prove it means to construct a proof object inhabiting that proposition.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In Rocq, a theorem statement is a type. Proving the theorem means constructing a term whose type is the theorem statement.</p>
+</div>
+</div>
+<section id="negation-is-involutive" class="level3">
+<h3 class="anchored" data-anchor-id="negation-is-involutive">Negation Is Involutive</h3>
+<p>The first property that we prove is that, for every Boolean value <code>b</code>, we have</p>
+<pre class="coq"><code>negb (negb b) = b</code></pre>
+<p>In ordinary language: applying Boolean negation twice gives us back the original Boolean value.</p>
+<p>Let us start with some special cases, in which we prove our equality by direct computation. When using an interactive Rocq editor, the tactic state shows the current goal and helps guide the proof.</p>
+<div id="93b30ed7" class="cell" data-execution_count="18">
+<pre class="coq cell-code"><code>Theorem negb_negb_true_eq_true : negb (negb true) = true.
+Proof.
+  simpl.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="44">
+
+<div class="coq_kernel_output_area">
+    <pre>Proving: negb_negb_true_eq_true
+
+1 subgoal
+
+-------------- (1/1)
+true = true</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>The <code>simpl</code> tactic simplifies the goal by computation. In this case, <code>negb (negb true)</code> computes to <code>true</code>.</p>
+<div id="518ae000" class="cell" data-execution_count="19">
+<pre class="coq cell-code"><code>  reflexivity.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="45">
+
+<div class="coq_kernel_output_area">
+    <pre>Proving: negb_negb_true_eq_true
+
+No more subgoals</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>The <code>reflexivity</code> tactic proves goals where the two sides of an equality reduce to the same expression. It is stronger than a purely textual check: it can unfold definitions and compute enough to see that both sides are definitionally equal.</p>
+<div id="5b3404a2" class="cell" data-execution_count="20">
+<pre class="coq cell-code"><code>Qed.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="46">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>If you are just getting started with theorem provers, focus here on the block that starts with <code>Proof</code> and ends with <code>Qed</code>. This is a Rocq proof script. It is written in the tactic language, while function definitions like <code>negb</code> and <code>andb</code> are written in the core term language, called Gallina.</p>
+<p>In this simple example, <code>simpl</code> is not actually necessary, because <code>reflexivity</code> can perform the needed computation itself.</p>
+<div id="49a0a170" class="cell" data-execution_count="21">
+<pre class="coq cell-code"><code>Theorem negb_negb_false_eq_false : negb (negb false) = false.
+Proof.
+  reflexivity.
+Qed.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="50">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>Here is the same proof written directly as a Gallina term. Note that we use <code>Definition</code> rather than <code>Theorem</code>.</p>
+<div id="5474078b" class="cell" data-execution_count="22">
+<pre class="coq cell-code"><code>Definition negb_negb_false_eq_false' :
+    negb (negb false) = false :=
+  eq_refl.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="51">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>The term <code>eq_refl</code> is the canonical proof that an expression is equal to itself. Since both sides reduce to the same Boolean, <code>eq_refl</code> is accepted.</p>
+<p>You can check that the theorem and the definition produce essentially the same proof object using the <code>Print</code> command.</p>
+<div id="94ec936c" class="cell" data-execution_count="23">
+<pre class="coq cell-code"><code>Print negb_negb_false_eq_false.
+Print negb_negb_false_eq_false'.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="53">
+
+<div class="coq_kernel_output_area">
+    <pre>negb_negb_false_eq_false = eq_refl
+     : negb (negb false) = false
+
+negb_negb_false_eq_false' = eq_refl
+     : negb (negb false) = false</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>If you try to prove something incorrect, the prover will let you know.</p>
+<div id="c9477871" class="cell" data-execution_count="24">
+<pre class="coq cell-code"><code>Theorem fail_to_unify : negb (negb false) = true.
+Proof.
+  Fail reflexivity.
+Admitted.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="57">
+
+<div class="coq_kernel_output_area">
+    <pre>The command has indeed failed with message:
+Unable to unify "true" with "negb (negb false)".</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>The command <code>Fail reflexivity.</code> asks Rocq to check that <code>reflexivity</code> fails. This is useful for experimentation. The theorem is then closed with <code>Admitted</code>, which means that the statement is accepted without proof.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>Admitted</code> is not a real proof. It is useful while experimenting or developing a file, but admitted theorems should not be treated as established results in finished work.</p>
+</div>
+</div>
+<p>Now let us prove the general theorem. We need to prove the statement for an arbitrary Boolean <code>b</code>. Since <code>b</code> can only be <code>true</code> or <code>false</code>, it is natural to split the proof into two cases.</p>
+<p>The <code>destruct</code> tactic plays the same role in proofs that the <code>match</code> keyword plays in function definitions.</p>
+<ul>
+<li>In a function definition, <code>match b with ... end</code> defines a result by considering all possible forms of <code>b</code>.</li>
+<li>In a proof, <code>destruct b</code> proves the current goal by considering all possible forms of <code>b</code>.</li>
+</ul>
+<p>Since <code>bool</code> has exactly two constructors, <code>destruct b</code> creates two subgoals: one for <code>b = true</code> and one for <code>b = false</code>.</p>
+<div id="d92c9962" class="cell" data-execution_count="25">
+<pre class="coq cell-code"><code>Theorem negb_inv (b : bool) : negb (negb b) = b.
+Proof.
+  destruct b.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="60">
+
+<div class="coq_kernel_output_area">
+    <pre>Proving: negb_inv
+
+2 subgoals
+
+-------------- (1/2)
+negb (negb true) = true
+-------------- (2/2)
+negb (negb false) = false</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>After <code>destruct b</code>, the goal has been modified. In the first case, <code>b</code> has been replaced by <code>true</code>; in the second case, <code>b</code> has been replaced by <code>false</code>.</p>
+<p>We use focusing dashes to separate the two subgoals.</p>
+<div id="f76db782" class="cell" data-execution_count="26">
+<pre class="coq cell-code"><code>  - simpl. reflexivity.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="63">
+
+<div class="coq_kernel_output_area">
+    <pre>Proving: negb_inv
+
+This subproof is complete, but there are some unfocused goals:
+
+-------------- (1/1)
+negb (negb false) = false</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>The second case can be solved by <code>reflexivity</code> alone.</p>
+<pre class="coq"><code>  - reflexivity.</code></pre>
+<p>Instead of using <code>reflexivity</code>, we can also reuse a previous proof with the <code>exact</code> tactic. The theorem <code>negb_negb_false_eq_false</code> has exactly the type needed for the second goal.</p>
+<div id="3141ba5d" class="cell" data-execution_count="27">
+<pre class="coq cell-code"><code>  - exact negb_negb_false_eq_false.
+Qed.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="66">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>One may observe that <code>negb_inv true</code> is a proof of the equality</p>
+<pre class="coq"><code>negb (negb true) = true</code></pre>
+<p>and that <code>negb_inv</code> itself is a proof of the universally quantified proposition</p>
+<pre class="coq"><code>forall b : bool, negb (negb b) = b</code></pre>
+<div id="ad0a6d51" class="cell" data-execution_count="28">
+<pre class="coq cell-code"><code>Check negb_inv true.
+Check negb_inv.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="68">
+
+<div class="coq_kernel_output_area">
+    <pre>negb_inv true
+     : negb (negb true) = true
+
+negb_inv
+     : forall b : bool, negb (negb b) = b</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A theorem with a variable, such as <code>Theorem negb_inv (b : bool) : ...</code>, behaves like a function that takes an argument <code>b : bool</code> and returns a proof of the corresponding statement.</p>
+</div>
+</div>
+</section>
+<section id="equivalent-definitions-of-implication" class="level3">
+<h3 class="anchored" data-anchor-id="equivalent-definitions-of-implication">Equivalent Definitions of Implication</h3>
+<p>Recall the formulas from classical logic:</p>
+<pre class="text"><code>(P ⇒ Q) ⇔ ¬P ∨ Q
+(P ⇒ Q) ⇔ ¬(P ∧ ¬Q)</code></pre>
+<p>The first formula is often taken as a definition of implication in classical logic.</p>
+<p>In this section, we interpret the logical connectives as Boolean functions:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Logical notation</th>
+<th>Boolean function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>P ⇒ Q</code></td>
+<td><code>implb b b'</code></td>
+</tr>
+<tr class="even">
+<td><code>¬P</code></td>
+<td><code>negb b</code></td>
+</tr>
+<tr class="odd">
+<td><code>P ∨ Q</code></td>
+<td><code>orb b b'</code></td>
+</tr>
+<tr class="even">
+<td><code>P ∧ Q</code></td>
+<td><code>andb b b'</code></td>
+</tr>
+</tbody>
+</table>
+<p>Since we are working with Boolean-valued functions, saying that two Boolean formulas are equivalent means saying that they compute to the same Boolean value for all inputs. Therefore, we express equivalence here using equality of Booleans.</p>
+<p>Later, when working directly with propositions in <code>Prop</code>, logical equivalence will be expressed differently, for example using <code>&lt;-&gt;</code>.</p>
+<p>We first prove the Boolean version of</p>
+<pre class="text"><code>(P ⇒ Q) ⇔ ¬P ∨ Q</code></pre>
+<p>This exercise also shows how to structure a proof with pattern matching on several variables. First, we present a nested version: we destruct <code>b</code>, and then destruct <code>b'</code> in each branch. This gives two cases corresponding to the possible values of <code>b</code>, with two subcases corresponding to the possible values of <code>b'</code>.</p>
+<div id="07bb5b88" class="cell" data-execution_count="29">
+<pre class="coq cell-code"><code>Theorem implb_eq_orb_negb (b b' : bool) :
+    implb b b' = orb (negb b) b'.
+Proof.
+  destruct b.
+  - destruct b'.
+    + reflexivity.
+    + reflexivity.
+  - destruct b'.
+    all: reflexivity.
+Qed.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="81">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>The tactic <code>all: reflexivity</code> applies <code>reflexivity</code> to all remaining subgoals. Here, after destructing <code>b'</code>, both remaining cases can be solved in the same way.</p>
+<p>Next, we prove the Boolean version of</p>
+<pre class="text"><code>(P ⇒ Q) ⇔ ¬(P ∧ ¬Q)</code></pre>
+<p>Here we destruct <code>b</code> and <code>b'</code> simultaneously. This immediately creates four cases, much like the simultaneous pattern matching used in the definition of <code>andb</code>.</p>
+<div id="10955f71" class="cell" data-execution_count="30">
+<pre class="coq cell-code"><code>Theorem implb_eq_negb_andb_negb (b b' : bool) :
+    implb b b' = negb (andb b (negb b')).
+Proof.
+  destruct b, b'.
+  all: reflexivity.
+Qed.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="86">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>Notice that we used explicit parameters <code>(b b' : bool)</code> rather than implicit parameters <code>{b b' : bool}</code>. Braces introduce implicit arguments, which Rocq tries to infer from context. This is useful later, but explicit parameters are clearer at this introductory stage.</p>
+<div id="611d27e4" class="cell" data-execution_count="31">
+<pre class="coq cell-code"><code>End BooleanValues.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="87">
+
+<div class="coq_kernel_output_area">
+    <pre></pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In this lecture, we saw the following ideas:</p>
+<ul>
+<li><code>true</code> and <code>false</code> are the two canonical values of type <code>bool</code>.</li>
+<li><code>bool</code> is classified by the universe <code>Set</code>.</li>
+<li>Boolean functions can be defined by pattern matching.</li>
+<li>Functions of several arguments are usually curried in Rocq.</li>
+<li>The wildcard pattern <code>_</code> means that the value is irrelevant in that branch.</li>
+<li><code>if ... then ... else ...</code> is a convenient notation for pattern matching on Booleans.</li>
+<li>Theorems are types, and proofs are terms inhabiting those types.</li>
+<li><code>simpl</code> computes in the goal, while <code>reflexivity</code> proves equalities whose two sides reduce to the same expression.</li>
+<li><code>destruct</code> performs case distinction in proofs, analogous to <code>match</code> in programs.</li>
+<li>Boolean equivalence of Boolean-valued expressions can be expressed as equality of Booleans.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./02.html" class="pagination-link" aria-label="Lecture 2 - Height and Subformulas">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 2 - Height and Subformulas</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
