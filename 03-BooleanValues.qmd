@@ -1,11 +1,354 @@
-# Boolean Values and Pattern Matching
+# Basics of Rocq
 
 *Logic and Functional Programming*  
 *Florent Schaffhauser*  
 *Heidelberg University*  
 *(Summer 2026)*
 
-This note introduces Boolean values in Rocq, basic pattern matching, curried functions, and the first small proofs about Boolean functions. The original lecture file was a Rocq source file; here the surrounding comments have been turned into prose, and Rocq commands are placed in executable Quarto code blocks.
+This note introduces Lambda Calculus, basics of Rocq function definitions, Boolean values in Rocq, basic pattern matching, curried functions, and the first small proofs about Boolean functions. The original lecture file was a Rocq source file; here the surrounding comments have been turned into prose, and Rocq commands are placed in executable Quarto code blocks.
+
+
+## Basics of Lambda Calculus 
+
+In lambda calculus, the basic syntactic forms are:
+
+- variables: $x, y, f, \dots$. These are **atomic terms**
+- lambda abstractions: $\lambda x. t$. These **create functions** by binding a variable
+- Applicaitons: $t\, u$: **Uses** a function by applying it to an argument. 
+
+So the two central operations are:
+
+- abstraction: $\lambda x. t$. ($t$ is called the function **body**)
+- application: $t\, u$.
+
+These can be seen as **complementary** operations. For example:
+
+$$
+\labs{x}{x\cdot 2 + 1}
+$$
+
+is the function $x \to x \cdot 2 + 1$, and applying it to 3 gives:
+
+$$
+\begin{aligned}
+\lapp{(\labs{x}{x\cdot 2 + 1})}{3} &\to 3 \cdot 2 + 1  &&\text{($\to$ denotes reduction)}\\
+                         &\to 7
+\end{aligned}
+$$
+
+
+This reduction rule is called $\beta$-reduction:
+
+::: {#def-beta-reduction}
+## $\beta$-reduction
+$$
+\lapp{\labs{x}{t}}{a} \betared t[x := a]
+$$
+:::
+
+It says: applying a lambda abstraction to an argument means substituting the argument for
+the bound variable in the body.
+
+
+::: {.callout-note}
+## Why is it called *abstraction*? 
+
+* abstraction: *generalize* an expression into a function
+* application: *specialize* a function to a concrete argument
+
+:::
+
+### Bound and Free Variables
+
+In a term like:
+
+$$
+\labs{x}{x\cdot 2 + 1}
+$$
+
+The variable $x$ is bound the $\lambda$. Its **scope** is the **body** $x\cdot 2 + 1$.
+
+In constrast consider:
+
+$$
+\labs{x}{x\cdot y + 1}
+$$
+
+Here $x$ is bound and $y$ is not. The variable $y$ is **free**. Nevertheless this term is still syntactically meaningful.
+It represents a function of $x$, but one that depends on an external parameter $y$. For example, consider the
+reduction:
+
+$$
+\lapp{(\labs{x}{x\cdot y + 1})}{3} \betared 3\cdot y + 1
+$$
+
+The result still contains the free variable $y$, and this term is not automatically interpreted as a function of
+two variables. For a function with $x$ and $y$, we must bind both variables explicitly:
+
+$$
+\labs{x}{\labs{y}{x \cdot y + 1}}
+$$
+
+This is a **curried** two argument function: It first takes $x$, then returns a function that takes $y$. Consider
+the following reduction:
+
+$$
+\begin{aligned}
+\lapp{(\lapp{(\labs{x}{\labs{y}{x\cdot y + 1}})}{3})}{4} &\betared \lapp{(\labs{y}{3\cdot y + 1})}{4} \\
+                                                    &\betared 3 \cdot 4 + 1 \\
+                                                    &\betared 13
+\end{aligned}
+$$
+
+
+
+### Typed Lambda Calculus
+
+In typed lambda calculus, variables and functions have types.
+
+$$
+\tlabs{x}{\Nat}{x \cdot 2 + 1} : \Nat \to \Nat
+$$
+
+A two-argument function can be written as:
+
+$$
+\tlabs{x}{\Nat}{\tlabs{y}{\Nat}{x\cdot y + 1}} : \Nat \to \Nat \to \Nat
+$$
+
+By convention, arrow types associate to the right, so
+
+$$
+\Nat \to \Nat \to \Nat
+$$
+
+means:
+
+$$
+\Nat \to (\Nat \to \Nat)
+$$
+
+So a two-argument function is really a function that takes one argument and returns another function.
+(**Curried** function notation)
+
+
+### Open Terms and Contexts
+
+The term
+
+$$
+\tlabs{x}{\Nat}{x \cdot y + 1}
+$$
+
+contains the free variable $y$. In typed lambda calculus, this term is not typeable in the empty context,
+because the type of $y$ is unknown. But it is typeable in a context where $y : \Nat$ is assumed.
+
+We can write this as
+
+$$
+y : \Nat \vdash \tlabs{x}{\Nat}{x \cdot y + 1} : \Nat \to \Nat
+$$
+
+This means:
+
+$$
+\text{Assuming $y$ is a natural number} \\
+\tlabs{x}{\Nat}{x \cdot y + 1} \, \text{is a function from $\Nat$ to $\Nat$}
+$$
+
+By contrast,
+
+$$
+\vdash \tlabs{x}{\Nat}{x \cdot 2 + 1} : \Nat \to \Nat
+$$
+
+has no assumptions. It is a **closed term**.
+
+
+### Lambda Abstraction and Application as Introduction and Elimination
+
+In type theory, abstraction and application can be understood as the introduction and elimination forms for function
+types, analogous to introduction and elimination of implication symbol in natural deduction calculus.
+
+Fur a function type $A \to B$ consider:
+
+#### Introduction
+
+Consider the following:
+
+$$
+\Gamma, x : A \vdash t : B
+$$
+
+This judgment means: 
+
+> Assuming the variables declared in $\Gamma$ (the context) and the additional variable $x : A$, 
+> the term $t$ has the type $B$. 
+
+The lambda-introduction rule says:
+
+$$
+\infrule{
+  \Gamma, x : A \vdash t : B
+}{
+  \Gamma \vdash \labs{x}{t} : A \to B
+}
+$$
+
+Meaning:
+
+> if $t$ has type $B$ under temporary assumptions $x : A$, then $\labs{x}{t}$ has type $A \to B$
+> under the original context $\Gamma$.
+
+#### Elimination
+
+The elimination rule for the function type $A \to B$ (also called function application and implication elimination):
+
+With context, the rule is written as
+
+$$
+\infrule{
+  \Gamma \vdash f : A \to B \qquad \Gamma \vdash a : A
+}{
+  \Gamma \vdash \lapp{f}{a} : B
+}
+$$
+
+The first premise
+
+$$
+\Gamma \vdash f : A \to B
+$$
+
+says:
+
+> Under the assumptions $\Gamma$, $f$ is a function that takes input $A$ and produces output of type $B$. 
+
+The second premise 
+
+$$
+\Gamma \vdash a : A
+$$
+
+says:
+
+> Under the same assumptions in $\Gamma$, $a$ is a term of type $A$.
+
+The conclusion
+
+$$
+\Gamma \vdash \lapp{f}{a} : B
+$$
+
+says:
+
+> Applying $f$ to $a$ gives a term of type $B$.
+
+
+### Lambda Abstraction in Rocq
+
+Rocq uses they keyword `fun` for $\lambda$. So the lambda term:
+
+$$
+\tlabs{x}{\Nat}{x \cdot 2 + 1}
+$$
+
+is written in Rocq as:
+
+```{.coq}
+fun x : nat => x * 2 + 1
+```
+
+
+So in general
+
+$$
+\tlabs{x}{A}{t}
+$$
+
+corresponds to
+
+```{.coq .sourceCode}
+fun x : A => t
+```
+#### Lambda Abstraction in Rocq Function Definitions
+
+Rocq lets us define fucntions in two equivalent styles. For example, Boolean negation can be written in
+the familiar argument style:
+
+```{.coq .sourceCode}
+Definition negb(b : bool) : bool :=
+  match b with
+  | true => false
+  | false => true
+  end.
+```
+
+But it also can be written by explicitly giving a function value:
+
+```{.coq .sourceCode}
+Definition negb : bool -> bool :=
+  fun b : bool =>
+    match b with
+    | true => false
+    | false => true
+    end.
+```
+
+These two definitions are equivalent. So in general
+
+
+```{.coq}
+Definition f (x : A) : B :=
+  body.
+```
+
+
+```{.coq}
+Definition f : A -> B :=
+  fun x : A => body.
+```
+
+are equivalent.
+
+#### Multiple Arguments
+
+Same idea applies. For example:
+
+
+```{.coq}
+Definition g (x y : nat) : nat := 
+  x * y + 1.
+```
+
+is shorthand for
+
+
+```{.coq}
+Definition g : nat -> nat -> nat :=
+  fun x y : nat => x * y + 1
+```
+
+where `fun x y : nat => x * y + 1` is itself a shorthand for:
+
+
+```{.coq}
+fun x : nat => fun y : nat => x * y + 1.
+```
+
+Or in lambda calculus notation:
+
+$$
+\labs{x\, y}{x * y + 1}
+$$
+
+is a shorthand for:
+
+$$
+\labs{x}{\labs{y}{x * y + 1}}
+$$
+
+
 
 ## Booleans in Rocq's Core Library
 
@@ -104,11 +447,15 @@ We can compute using this syntax.
 Compute negb (orb true false).
 ```
 
-## Function Defnition Syntax
 
 
 
 
+
+
+
+
+### 
 
 In the rest of the file, we construct basic functions from `bool` to `bool` and from `bool` to `bool -> bool`. Most of them are already contained in Rocq's core library, but redefining them is a good way to learn pattern matching.
 
