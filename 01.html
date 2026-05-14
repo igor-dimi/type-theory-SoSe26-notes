@@ -87,7 +87,17 @@ window.MathJax = {
 
       Pow: ["\\mathcal{P{}(#1)}", 1],
 
-      concat: "\\mathbin{+\\!\\!+}"
+      concat: "\\mathbin{+\\!\\!+}",
+
+      // Lambda calculus and reduction notation
+      labs: ["\\lambda #1.\\,#2", 2],
+      tlabs: ["\\lambda #1 : #2.\\,#3", 3],
+      lapp: ["#1\\,#2", 2],
+
+      red: "\\to\\,",
+      betared: "\\to_\\beta\\,",
+      mred: "\\to^*\\,",
+      infrule: ["\\frac{#1}{#2}", 2]
     }
   }
 };
@@ -192,8 +202,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./BooleanValues.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Boolean Values and Pattern Matching</span></span></a>
+  <a href="./03-BooleanValues.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basics of Rocq</span></span></a>
   </div>
 </li>
       </ul>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Boolean Values and Pattern Matching – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
+<title>3&nbsp; Basics of Rocq – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -87,7 +87,17 @@ window.MathJax = {
 
       Pow: ["\\mathcal{P{}(#1)}", 1],
 
-      concat: "\\mathbin{+\\!\\!+}"
+      concat: "\\mathbin{+\\!\\!+}",
+
+      // Lambda calculus and reduction notation
+      labs: ["\\lambda #1.\\,#2", 2],
+      tlabs: ["\\lambda #1 : #2.\\,#3", 3],
+      lapp: ["#1\\,#2", 2],
+
+      red: "\\to\\,",
+      betared: "\\to_\\beta\\,",
+      mred: "\\to^*\\,",
+      infrule: ["\\frac{#1}{#2}", 2]
     }
   }
 };
@@ -96,6 +106,35 @@ window.MathJax = {
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -109,7 +148,7 @@ window.MathJax = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Boolean Values and Pattern Matching</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./03-BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basics of Rocq</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -166,8 +205,8 @@ window.MathJax = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./BooleanValues.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Boolean Values and Pattern Matching</span></span></a>
+  <a href="./03-BooleanValues.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basics of Rocq</span></span></a>
   </div>
 </li>
       </ul>
@@ -194,9 +233,18 @@ window.MathJax = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#booleans-in-rocqs-core-library" id="toc-booleans-in-rocqs-core-library" class="nav-link active" data-scroll-target="#booleans-in-rocqs-core-library">Booleans in Rocq’s Core Library</a>
+  <li><a href="#basics-of-lambda-calculus" id="toc-basics-of-lambda-calculus" class="nav-link active" data-scroll-target="#basics-of-lambda-calculus">Basics of Lambda Calculus</a>
+  <ul class="collapse">
+  <li><a href="#bound-and-free-variables" id="toc-bound-and-free-variables" class="nav-link" data-scroll-target="#bound-and-free-variables">Bound and Free Variables</a></li>
+  <li><a href="#typed-lambda-calculus" id="toc-typed-lambda-calculus" class="nav-link" data-scroll-target="#typed-lambda-calculus">Typed Lambda Calculus</a></li>
+  <li><a href="#open-terms-and-contexts" id="toc-open-terms-and-contexts" class="nav-link" data-scroll-target="#open-terms-and-contexts">Open Terms and Contexts</a></li>
+  <li><a href="#lambda-abstraction-and-application-as-introduction-and-elimination" id="toc-lambda-abstraction-and-application-as-introduction-and-elimination" class="nav-link" data-scroll-target="#lambda-abstraction-and-application-as-introduction-and-elimination">Lambda Abstraction and Application as Introduction and Elimination</a></li>
+  <li><a href="#lambda-abstraction-in-rocq" id="toc-lambda-abstraction-in-rocq" class="nav-link" data-scroll-target="#lambda-abstraction-in-rocq">Lambda Abstraction in Rocq</a></li>
+  </ul></li>
+  <li><a href="#booleans-in-rocqs-core-library" id="toc-booleans-in-rocqs-core-library" class="nav-link" data-scroll-target="#booleans-in-rocqs-core-library">Booleans in Rocq’s Core Library</a>
   <ul class="collapse">
   <li><a href="#curried-notation" id="toc-curried-notation" class="nav-link" data-scroll-target="#curried-notation">Curried Notation</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   </ul></li>
   <li><a href="#basic-pattern-matching" id="toc-basic-pattern-matching" class="nav-link" data-scroll-target="#basic-pattern-matching">Basic Pattern Matching</a>
   <ul class="collapse">
@@ -209,6 +257,9 @@ window.MathJax = {
   <ul class="collapse">
   <li><a href="#negation-is-involutive" id="toc-negation-is-involutive" class="nav-link" data-scroll-target="#negation-is-involutive">Negation Is Involutive</a></li>
   <li><a href="#equivalent-definitions-of-implication" id="toc-equivalent-definitions-of-implication" class="nav-link" data-scroll-target="#equivalent-definitions-of-implication">Equivalent Definitions of Implication</a></li>
+  <li><a href="#curry-howard-correspondence" id="toc-curry-howard-correspondence" class="nav-link" data-scroll-target="#curry-howard-correspondence">Curry-Howard Correspondence</a></li>
+  <li><a href="#set-vs-type" id="toc-set-vs-type" class="nav-link" data-scroll-target="#set-vs-type">Set vs Type</a></li>
+  <li><a href="#meaning-of-destruct" id="toc-meaning-of-destruct" class="nav-link" data-scroll-target="#meaning-of-destruct">Meaning of <code>Destruct</code></a></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
@@ -217,9 +268,9 @@ window.MathJax = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Boolean Values and Pattern Matching</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./03-BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basics of Rocq</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Boolean Values and Pattern Matching</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basics of Rocq</span></h1>
 </div>
 
 
@@ -240,7 +291,246 @@ window.MathJax = {
 <em>Florent Schaffhauser</em><br>
 <em>Heidelberg University</em><br>
 <em>(Summer 2026)</em></p>
-<p>This note introduces Boolean values in Rocq, basic pattern matching, curried functions, and the first small proofs about Boolean functions. The original lecture file was a Rocq source file; here the surrounding comments have been turned into prose, and Rocq commands are placed in executable Quarto code blocks.</p>
+<p>This note introduces Lambda Calculus, basics of Rocq function definitions, Boolean values in Rocq, basic pattern matching, curried functions, and the first small proofs about Boolean functions. The original lecture file was a Rocq source file; here the surrounding comments have been turned into prose, and Rocq commands are placed in executable Quarto code blocks.</p>
+<section id="basics-of-lambda-calculus" class="level2">
+<h2 class="anchored" data-anchor-id="basics-of-lambda-calculus">Basics of Lambda Calculus</h2>
+<p>In lambda calculus, the basic syntactic forms are:</p>
+<ul>
+<li>variables: <span class="math inline">\(x, y, f, \dots\)</span>. These are <strong>atomic terms</strong></li>
+<li>lambda abstractions: <span class="math inline">\(\lambda x. t\)</span>. These <strong>create functions</strong> by binding a variable</li>
+<li>Applicaitons: <span class="math inline">\(t\, u\)</span>: <strong>Uses</strong> a function by applying it to an argument.</li>
+</ul>
+<p>So the two central operations are:</p>
+<ul>
+<li>abstraction: <span class="math inline">\(\lambda x. t\)</span>. (<span class="math inline">\(t\)</span> is called the function <strong>body</strong>)</li>
+<li>application: <span class="math inline">\(t\, u\)</span>.</li>
+</ul>
+<p>These can be seen as <strong>complementary</strong> operations. For example:</p>
+<p><span class="math display">\[
+\labs{x}{x\cdot 2 + 1}
+\]</span></p>
+<p>is the function <span class="math inline">\(x \to x \cdot 2 + 1\)</span>, and applying it to 3 gives:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\lapp{(\labs{x}{x\cdot 2 + 1})}{3} &amp;\to 3 \cdot 2 + 1  &amp;&amp;\text{($\to$ denotes reduction)}\\
+                         &amp;\to 7
+\end{aligned}
+\]</span></p>
+<p>This reduction rule is called <span class="math inline">\(\beta\)</span>-reduction:</p>
+<div id="def-beta-reduction" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.1 (<span class="math inline">\(\beta\)</span>-reduction)</strong></span> <span class="math display">\[
+\lapp{\labs{x}{t}}{a} \betared t[x := a]
+\]</span></p>
+</div>
+<p>It says: applying a lambda abstraction to an argument means substituting the argument for the bound variable in the body.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Why is it called <em>abstraction</em>?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>abstraction: <em>generalize</em> an expression into a function</li>
+<li>application: <em>specialize</em> a function to a concrete argument</li>
+</ul>
+</div>
+</div>
+<section id="bound-and-free-variables" class="level3">
+<h3 class="anchored" data-anchor-id="bound-and-free-variables">Bound and Free Variables</h3>
+<p>In a term like:</p>
+<p><span class="math display">\[
+\labs{x}{x\cdot 2 + 1}
+\]</span></p>
+<p>The variable <span class="math inline">\(x\)</span> is bound the <span class="math inline">\(\lambda\)</span>. Its <strong>scope</strong> is the <strong>body</strong> <span class="math inline">\(x\cdot 2 + 1\)</span>.</p>
+<p>In constrast consider:</p>
+<p><span class="math display">\[
+\labs{x}{x\cdot y + 1}
+\]</span></p>
+<p>Here <span class="math inline">\(x\)</span> is bound and <span class="math inline">\(y\)</span> is not. The variable <span class="math inline">\(y\)</span> is <strong>free</strong>. Nevertheless this term is still syntactically meaningful. It represents a function of <span class="math inline">\(x\)</span>, but one that depends on an external parameter <span class="math inline">\(y\)</span>. For example, consider the reduction:</p>
+<p><span class="math display">\[
+\lapp{(\labs{x}{x\cdot y + 1})}{3} \betared 3\cdot y + 1
+\]</span></p>
+<p>The result still contains the free variable <span class="math inline">\(y\)</span>, and this term is not automatically interpreted as a function of two variables. For a function with <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, we must bind both variables explicitly:</p>
+<p><span class="math display">\[
+\labs{x}{\labs{y}{x \cdot y + 1}}
+\]</span></p>
+<p>This is a <strong>curried</strong> two argument function: It first takes <span class="math inline">\(x\)</span>, then returns a function that takes <span class="math inline">\(y\)</span>. Consider the following reduction:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\lapp{(\lapp{(\labs{x}{\labs{y}{x\cdot y + 1}})}{3})}{4} &amp;\betared \lapp{(\labs{y}{3\cdot y + 1})}{4} \\
+                                                    &amp;\betared 3 \cdot 4 + 1 \\
+                                                    &amp;\betared 13
+\end{aligned}
+\]</span></p>
+</section>
+<section id="typed-lambda-calculus" class="level3">
+<h3 class="anchored" data-anchor-id="typed-lambda-calculus">Typed Lambda Calculus</h3>
+<p>In typed lambda calculus, variables and functions have types.</p>
+<p><span class="math display">\[
+\tlabs{x}{\Nat}{x \cdot 2 + 1} : \Nat \to \Nat
+\]</span></p>
+<p>A two-argument function can be written as:</p>
+<p><span class="math display">\[
+\tlabs{x}{\Nat}{\tlabs{y}{\Nat}{x\cdot y + 1}} : \Nat \to \Nat \to \Nat
+\]</span></p>
+<p>By convention, arrow types associate to the right, so</p>
+<p><span class="math display">\[
+\Nat \to \Nat \to \Nat
+\]</span></p>
+<p>means:</p>
+<p><span class="math display">\[
+\Nat \to (\Nat \to \Nat)
+\]</span></p>
+<p>So a two-argument function is really a function that takes one argument and returns another function. (<strong>Curried</strong> function notation)</p>
+</section>
+<section id="open-terms-and-contexts" class="level3">
+<h3 class="anchored" data-anchor-id="open-terms-and-contexts">Open Terms and Contexts</h3>
+<p>The term</p>
+<p><span class="math display">\[
+\tlabs{x}{\Nat}{x \cdot y + 1}
+\]</span></p>
+<p>contains the free variable <span class="math inline">\(y\)</span>. In typed lambda calculus, this term is not typeable in the empty context, because the type of <span class="math inline">\(y\)</span> is unknown. But it is typeable in a context where <span class="math inline">\(y : \Nat\)</span> is assumed.</p>
+<p>We can write this as</p>
+<p><span class="math display">\[
+y : \Nat \vdash \tlabs{x}{\Nat}{x \cdot y + 1} : \Nat \to \Nat
+\]</span></p>
+<p>This means:</p>
+<p><span class="math display">\[
+\text{Assuming $y$ is a natural number} \\
+\tlabs{x}{\Nat}{x \cdot y + 1} \, \text{is a function from $\Nat$ to $\Nat$}
+\]</span></p>
+<p>By contrast,</p>
+<p><span class="math display">\[
+\vdash \tlabs{x}{\Nat}{x \cdot 2 + 1} : \Nat \to \Nat
+\]</span></p>
+<p>has no assumptions. It is a <strong>closed term</strong>.</p>
+</section>
+<section id="lambda-abstraction-and-application-as-introduction-and-elimination" class="level3">
+<h3 class="anchored" data-anchor-id="lambda-abstraction-and-application-as-introduction-and-elimination">Lambda Abstraction and Application as Introduction and Elimination</h3>
+<p>In type theory, abstraction and application can be understood as the introduction and elimination forms for function types, analogous to introduction and elimination of implication symbol in natural deduction calculus.</p>
+<p>These should be understood as type judgment rules.</p>
+<p>Fur a function type <span class="math inline">\(A \to B\)</span> consider:</p>
+<section id="introduction" class="level4">
+<h4 class="anchored" data-anchor-id="introduction">Introduction</h4>
+<p>Consider the following:</p>
+<p><span class="math display">\[
+\Gamma, x : A \vdash t : B
+\]</span></p>
+<p>This judgment means:</p>
+<blockquote class="blockquote">
+<p>Assuming the type judgments in <span class="math inline">\(\Gamma\)</span> (the context) and that the additional variable <span class="math inline">\(x\)</span> has type <span class="math inline">\(A\)</span>, then the term <span class="math inline">\(t\)</span> has the type <span class="math inline">\(B\)</span> in the same context <span class="math inline">\(\Gamma\)</span>.</p>
+</blockquote>
+<p>The lambda-introduction rule says:</p>
+<p><span class="math display">\[
+\infrule{
+  \Gamma, x : A \vdash t : B
+}{
+  \Gamma \vdash \labs{x}{t} : A \to B
+}
+\]</span></p>
+<p>Meaning:</p>
+<blockquote class="blockquote">
+<p>if <span class="math inline">\(t\)</span> has type <span class="math inline">\(B\)</span> under temporary assumptions <span class="math inline">\(x : A\)</span> and context <span class="math inline">\(\Gamma\)</span>, then <span class="math inline">\(\labs{x}{t}\)</span> has type <span class="math inline">\(A \to B\)</span> under the original context <span class="math inline">\(\Gamma\)</span>.</p>
+</blockquote>
+</section>
+<section id="elimination" class="level4">
+<h4 class="anchored" data-anchor-id="elimination">Elimination</h4>
+<p>The elimination rule for the function type <span class="math inline">\(A \to B\)</span> (also called function application and implication elimination):</p>
+<p>With context, the rule is written as</p>
+<p><span class="math display">\[
+\infrule{
+  \Gamma \vdash f : A \to B \qquad \Gamma \vdash a : A
+}{
+  \Gamma \vdash \lapp{f}{a} : B
+}
+\]</span></p>
+<p>The first premise</p>
+<p><span class="math display">\[
+\Gamma \vdash f : A \to B
+\]</span></p>
+<p>says:</p>
+<blockquote class="blockquote">
+<p>Under the assumptions <span class="math inline">\(\Gamma\)</span>, <span class="math inline">\(f\)</span> is a function that takes input <span class="math inline">\(A\)</span> and produces output of type <span class="math inline">\(B\)</span>.</p>
+</blockquote>
+<p>The second premise</p>
+<p><span class="math display">\[
+\Gamma \vdash a : A
+\]</span></p>
+<p>says:</p>
+<blockquote class="blockquote">
+<p>Under the same assumptions in <span class="math inline">\(\Gamma\)</span>, <span class="math inline">\(a\)</span> is a term of type <span class="math inline">\(A\)</span>.</p>
+</blockquote>
+<p>The conclusion</p>
+<p><span class="math display">\[
+\Gamma \vdash \lapp{f}{a} : B
+\]</span></p>
+<p>says:</p>
+<blockquote class="blockquote">
+<p>Applying <span class="math inline">\(f\)</span> to <span class="math inline">\(a\)</span> gives a term of type <span class="math inline">\(B\)</span>.</p>
+</blockquote>
+</section>
+</section>
+<section id="lambda-abstraction-in-rocq" class="level3">
+<h3 class="anchored" data-anchor-id="lambda-abstraction-in-rocq">Lambda Abstraction in Rocq</h3>
+<p>Rocq uses they keyword <code>fun</code> for <span class="math inline">\(\lambda\)</span>. So the lambda term:</p>
+<p><span class="math display">\[
+\tlabs{x}{\Nat}{x \cdot 2 + 1}
+\]</span></p>
+<p>is written in Rocq as:</p>
+<pre class="coq"><code>fun x : nat =&gt; x * 2 + 1</code></pre>
+<p>So in general</p>
+<p><span class="math display">\[
+\tlabs{x}{A}{t}
+\]</span></p>
+<p>corresponds to</p>
+<pre class="coq sourceCode code-with-copy"><code>fun x : A =&gt; t</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre>
+<section id="lambda-abstraction-in-rocq-function-definitions" class="level4">
+<h4 class="anchored" data-anchor-id="lambda-abstraction-in-rocq-function-definitions">Lambda Abstraction in Rocq Function Definitions</h4>
+<p>Rocq lets us define fucntions in two equivalent styles. For example, Boolean negation can be written in the familiar argument style:</p>
+<pre class="coq sourceCode code-with-copy"><code>Definition negb(b : bool) : bool :=
+  match b with
+  | true =&gt; false
+  | false =&gt; true
+  end.</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre>
+<p>But it also can be written by explicitly giving a function value:</p>
+<pre class="coq sourceCode code-with-copy"><code>Definition negb : bool -&gt; bool :=
+  fun b : bool =&gt;
+    match b with
+    | true =&gt; false
+    | false =&gt; true
+    end.</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre>
+<p>These two definitions are equivalent. So in general</p>
+<pre class="coq"><code>Definition f (x : A) : B :=
+  body.</code></pre>
+<pre class="coq"><code>Definition f : A -&gt; B :=
+  fun x : A =&gt; body.</code></pre>
+<p>are equivalent.</p>
+</section>
+<section id="multiple-arguments" class="level4">
+<h4 class="anchored" data-anchor-id="multiple-arguments">Multiple Arguments</h4>
+<p>Same idea applies. For example:</p>
+<pre class="coq"><code>Definition g (x y : nat) : nat := 
+  x * y + 1.</code></pre>
+<p>is shorthand for</p>
+<pre class="coq"><code>Definition g : nat -&gt; nat -&gt; nat :=
+  fun x y : nat =&gt; x * y + 1</code></pre>
+<p>where <code>fun x y : nat =&gt; x * y + 1</code> is itself a shorthand for:</p>
+<pre class="coq"><code>fun x : nat =&gt; fun y : nat =&gt; x * y + 1.</code></pre>
+<p>Or in lambda calculus notation:</p>
+<p><span class="math display">\[
+\labs{x\, y}{x * y + 1}
+\]</span></p>
+<p>is a shorthand for:</p>
+<p><span class="math display">\[
+\labs{x}{\labs{y}{x * y + 1}}
+\]</span></p>
+</section>
+</section>
+</section>
 <section id="booleans-in-rocqs-core-library" class="level2">
 <h2 class="anchored" data-anchor-id="booleans-in-rocqs-core-library">Booleans in Rocq’s Core Library</h2>
 <p>Boolean values are available without any imports in Rocq. There are two canonical Boolean values:</p>
@@ -249,7 +539,7 @@ window.MathJax = {
 <li><code>false</code></li>
 </ul>
 <p>Both are values of type <code>bool</code>.</p>
-<div id="485623b1" class="cell" data-execution_count="1">
+<div id="2539a716" class="cell" data-execution_count="2">
 <pre class="coq cell-code"><code>Check true.
 Check false.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="3">
@@ -287,7 +577,7 @@ false
 </div>
 <p>In Rocq, every expression has a type. The expressions <code>true</code> and <code>false</code> have type <code>bool</code>. The type <code>bool</code> itself also has a type: Rocq classifies it as <code>Set</code>.</p>
 <p>Roughly speaking, <code>Set</code> is the universe of computational data types, such as Booleans, natural numbers, lists, and other datatypes. More generally, <code>Set</code> itself lives in a larger universe called <code>Type</code>.</p>
-<div id="f1ee6709" class="cell" data-execution_count="2">
+<div id="4554007c" class="cell" data-execution_count="3">
 <pre class="coq cell-code"><code>Check bool.
 About bool.
 Check Set.
@@ -354,7 +644,7 @@ Note
 </div>
 </div>
 <p>Certain pre-defined functions are also available out of the box and can be used to compute expressions. For example, <code>negb</code> is Boolean negation.</p>
-<div id="66b07b4d" class="cell" data-execution_count="3">
+<div id="60dfe168" class="cell" data-execution_count="4">
 <pre class="coq cell-code"><code>Check negb.
 About negb.
 
@@ -411,7 +701,7 @@ negb false
 <p>not as</p>
 <pre class="coq"><code>orb (true, false)</code></pre>
 <p>The second expression would suggest that <code>orb</code> takes a pair as input. But Rocq’s <code>orb</code> takes one Boolean argument first, and then returns a new function waiting for the second Boolean argument.</p>
-<div id="3395aa69" class="cell" data-execution_count="4">
+<div id="b379674e" class="cell" data-execution_count="5">
 <pre class="coq cell-code"><code>Check orb true false.
 Check orb.
 Check bool -&gt; (bool -&gt; bool).
@@ -474,7 +764,7 @@ Note
 </div>
 </div>
 <p>We can compute using this syntax.</p>
-<div id="680905a8" class="cell" data-execution_count="5">
+<div id="ce488e53" class="cell" data-execution_count="6">
 <pre class="coq cell-code"><code>Compute negb (orb true false).</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="16">
 
@@ -506,13 +796,16 @@ Note
 </div>
 </div>
 </div>
+</section>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
 <p>In the rest of the file, we construct basic functions from <code>bool</code> to <code>bool</code> and from <code>bool</code> to <code>bool -&gt; bool</code>. Most of them are already contained in Rocq’s core library, but redefining them is a good way to learn pattern matching.</p>
 </section>
 </section>
 <section id="basic-pattern-matching" class="level2">
 <h2 class="anchored" data-anchor-id="basic-pattern-matching">Basic Pattern Matching</h2>
 <p>To avoid conflicts with Rocq’s core library, we wrap everything in a module called <code>BooleanValues</code>. This is optional here, since we do not intend to use the current file as a library later on.</p>
-<div id="4a0da9cd" class="cell" data-execution_count="6">
+<div id="51df310a" class="cell" data-execution_count="7">
 <pre class="coq cell-code"><code>Module BooleanValues.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="17">
 
@@ -560,7 +853,7 @@ Note
 <section id="boolean-negation" class="level3">
 <h3 class="anchored" data-anchor-id="boolean-negation">Boolean Negation</h3>
 <p>Let us start with the definition of the <code>negb</code> function, which sends <code>true</code> to <code>false</code> and <code>false</code> to <code>true</code>. We define it by pattern matching on Boolean values.</p>
-<div id="63f7a1a6" class="cell" data-execution_count="7">
+<div id="deae53e9" class="cell" data-execution_count="8">
 <pre class="coq cell-code"><code>Definition negb (b : bool) : bool :=
   match b with
   | true  =&gt; false
@@ -604,7 +897,7 @@ Check negb.</code></pre>
 <li>If <code>b</code> is <code>false</code>, return <code>true</code>.</li>
 </ul>
 <p>Since <code>bool</code> has exactly two constructors, <code>true</code> and <code>false</code>, these two cases are exhaustive.</p>
-<div id="9b860ae6" class="cell" data-execution_count="8">
+<div id="360db132" class="cell" data-execution_count="9">
 <pre class="coq cell-code"><code>About negb.
 Compute negb false.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="21">
@@ -646,7 +939,7 @@ Declared in toplevel input, characters 11-15
 </div>
 </div>
 <p>We can also give expressions a name and then use that name in later computations.</p>
-<div id="37e0bed3" class="cell" data-execution_count="9">
+<div id="7e6b015c" class="cell" data-execution_count="10">
 <pre class="coq cell-code"><code>Compute negb (negb false).
 
 Definition example_bool := negb false.
@@ -735,7 +1028,7 @@ Note
 </tbody>
 </table>
 <p>This truth table can be translated directly into a pattern match with four cases.</p>
-<div id="9fd25895" class="cell" data-execution_count="10">
+<div id="49533574" class="cell" data-execution_count="11">
 <pre class="coq cell-code"><code>Definition andb (b b' : bool) : bool :=
   match b, b' with
   | true,  true  =&gt; true
@@ -792,7 +1085,7 @@ end</code></pre>
   end
 end.</code></pre>
 <p>As with <code>negb</code>, we can use <code>andb</code> to compute Boolean values.</p>
-<div id="6855d277" class="cell" data-execution_count="11">
+<div id="2c73c385" class="cell" data-execution_count="12">
 <pre class="coq cell-code"><code>Compute andb true false.
 Compute andb true (negb example_bool).</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="27">
@@ -829,7 +1122,7 @@ Compute andb true (negb example_bool).</code></pre>
 </div>
 </div>
 <p>Recall that <code>andb</code> is a function of two variables, but it is written in curried notation. If we ask Rocq to check its type, we get <code>bool -&gt; bool -&gt; bool</code>, not a function type from pairs.</p>
-<div id="f5320dd9" class="cell" data-execution_count="12">
+<div id="edb918f2" class="cell" data-execution_count="13">
 <pre class="coq cell-code"><code>Check andb.
 Check andb true.
 Compute andb true.</code></pre>
@@ -879,7 +1172,7 @@ bool -&gt; (bool -&gt; bool)</code></pre>
 <p>is parsed as</p>
 <pre class="coq"><code>(andb b) b'</code></pre>
 <p>In contrast, the arrow type <code>(bool -&gt; bool) -&gt; bool</code> describes a function which takes a Boolean function as input and returns a Boolean value. We can define an example by evaluating a function <code>f : bool -&gt; bool</code> at a given Boolean value.</p>
-<div id="72922b27" class="cell" data-execution_count="13">
+<div id="29527466" class="cell" data-execution_count="14">
 <pre class="coq cell-code"><code>Definition eval_at_true : (bool -&gt; bool) -&gt; bool :=
   fun f =&gt; f true.
 
@@ -967,7 +1260,7 @@ Compute eval_at false (andb true).</code></pre>
 </tbody>
 </table>
 <p>If the first Boolean is <code>true</code>, then the result is always <code>true</code>. If the first Boolean is <code>false</code>, then the result is the second Boolean.</p>
-<div id="9c209cdf" class="cell" data-execution_count="14">
+<div id="d967b23c" class="cell" data-execution_count="15">
 <pre class="coq cell-code"><code>Definition orb (b b' : bool) : bool :=
   match b, b' with
   | true,  _  =&gt; true
@@ -1007,7 +1300,7 @@ Compute eval_at false (andb true).</code></pre>
 | true  =&gt; true
 | false =&gt; b'
 end</code></pre>
-<div id="604c40cb" class="cell" data-execution_count="15">
+<div id="3bdc7846" class="cell" data-execution_count="16">
 <pre class="coq cell-code"><code>Compute orb false false.
 Compute orb false (negb false).</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="39">
@@ -1080,7 +1373,7 @@ Compute orb false (negb false).</code></pre>
 </table>
 <p>This corresponds to the classical idea that <code>P -&gt; Q</code> is false only when <code>P</code> is true and <code>Q</code> is false.</p>
 <p>For this one, we use Rocq’s <code>if ... then ... else ...</code> syntax.</p>
-<div id="158ab119" class="cell" data-execution_count="16">
+<div id="deeee4a8" class="cell" data-execution_count="17">
 <pre class="coq cell-code"><code>Definition implb (b b' : bool) : bool :=
   if b then b' else true.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="40">
@@ -1121,7 +1414,7 @@ Compute orb false (negb false).</code></pre>
 end</code></pre>
 <p>So <code>if ... then ... else ...</code> is not a separate mysterious mechanism. For Booleans, it is a convenient notation for pattern matching on a Boolean condition.</p>
 <p>Exercise: implement the function <code>implb</code> using pattern matching. The result of the following computation should be the Boolean <code>true</code>.</p>
-<div id="328457c4" class="cell" data-execution_count="17">
+<div id="200746d6" class="cell" data-execution_count="18">
 <pre class="coq cell-code"><code>Compute implb false true.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="41">
 
@@ -1190,7 +1483,7 @@ Note
 <pre class="coq"><code>negb (negb b) = b</code></pre>
 <p>In ordinary language: applying Boolean negation twice gives us back the original Boolean value.</p>
 <p>Let us start with some special cases, in which we prove our equality by direct computation. When using an interactive Rocq editor, the tactic state shows the current goal and helps guide the proof.</p>
-<div id="a45a3eee" class="cell" data-execution_count="18">
+<div id="b205486d" class="cell" data-execution_count="19">
 <pre class="coq cell-code"><code>Theorem negb_negb_true_eq_true : negb (negb true) = true.
 Proof.
   simpl.</code></pre>
@@ -1229,7 +1522,7 @@ true = true</pre>
 </div>
 </div>
 <p>The <code>simpl</code> tactic simplifies the goal by computation. In this case, <code>negb (negb true)</code> computes to <code>true</code>.</p>
-<div id="ff10dec1" class="cell" data-execution_count="19">
+<div id="3f958342" class="cell" data-execution_count="20">
 <pre class="coq cell-code"><code>  reflexivity.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="45">
 
@@ -1263,7 +1556,7 @@ No more subgoals</pre>
 </div>
 </div>
 <p>The <code>reflexivity</code> tactic proves goals where the two sides of an equality reduce to the same expression. It is stronger than a purely textual check: it can unfold definitions and compute enough to see that both sides are definitionally equal.</p>
-<div id="dd7f14a6" class="cell" data-execution_count="20">
+<div id="171ed576" class="cell" data-execution_count="21">
 <pre class="coq cell-code"><code>Qed.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="46">
 
@@ -1296,7 +1589,7 @@ No more subgoals</pre>
 </div>
 <p>If you are just getting started with theorem provers, focus here on the block that starts with <code>Proof</code> and ends with <code>Qed</code>. This is a Rocq proof script. It is written in the tactic language, while function definitions like <code>negb</code> and <code>andb</code> are written in the core term language, called Gallina.</p>
 <p>In this simple example, <code>simpl</code> is not actually necessary, because <code>reflexivity</code> can perform the needed computation itself.</p>
-<div id="61a0c2f3" class="cell" data-execution_count="21">
+<div id="9501d531" class="cell" data-execution_count="22">
 <pre class="coq cell-code"><code>Theorem negb_negb_false_eq_false : negb (negb false) = false.
 Proof.
   reflexivity.
@@ -1331,7 +1624,7 @@ Qed.</code></pre>
 </div>
 </div>
 <p>Here is the same proof written directly as a Gallina term. Note that we use <code>Definition</code> rather than <code>Theorem</code>.</p>
-<div id="d7cb70fb" class="cell" data-execution_count="22">
+<div id="1e1d129c" class="cell" data-execution_count="23">
 <pre class="coq cell-code"><code>Definition negb_negb_false_eq_false' :
     negb (negb false) = false :=
   eq_refl.</code></pre>
@@ -1366,7 +1659,7 @@ Qed.</code></pre>
 </div>
 <p>The term <code>eq_refl</code> is the canonical proof that an expression is equal to itself. Since both sides reduce to the same Boolean, <code>eq_refl</code> is accepted.</p>
 <p>You can check that the theorem and the definition produce essentially the same proof object using the <code>Print</code> command.</p>
-<div id="b5b1b849" class="cell" data-execution_count="23">
+<div id="28148c8f" class="cell" data-execution_count="24">
 <pre class="coq cell-code"><code>Print negb_negb_false_eq_false.
 Print negb_negb_false_eq_false'.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="53">
@@ -1403,7 +1696,7 @@ negb_negb_false_eq_false' = eq_refl
 </div>
 </div>
 <p>If you try to prove something incorrect, the prover will let you know.</p>
-<div id="a8c2a8da" class="cell" data-execution_count="24">
+<div id="6d70333e" class="cell" data-execution_count="25">
 <pre class="coq cell-code"><code>Theorem fail_to_unify : negb (negb false) = true.
 Proof.
   Fail reflexivity.
@@ -1459,7 +1752,7 @@ Warning
 <li>In a proof, <code>destruct b</code> proves the current goal by considering all possible forms of <code>b</code>.</li>
 </ul>
 <p>Since <code>bool</code> has exactly two constructors, <code>destruct b</code> creates two subgoals: one for <code>b = true</code> and one for <code>b = false</code>.</p>
-<div id="4b562296" class="cell" data-execution_count="25">
+<div id="ebc8d27b" class="cell" data-execution_count="26">
 <pre class="coq cell-code"><code>Theorem negb_inv (b : bool) : negb (negb b) = b.
 Proof.
   destruct b.</code></pre>
@@ -1501,7 +1794,7 @@ negb (negb false) = false</pre>
 </div>
 <p>After <code>destruct b</code>, the goal has been modified. In the first case, <code>b</code> has been replaced by <code>true</code>; in the second case, <code>b</code> has been replaced by <code>false</code>.</p>
 <p>We use focusing dashes to separate the two subgoals.</p>
-<div id="79fc167c" class="cell" data-execution_count="26">
+<div id="0e2b0f21" class="cell" data-execution_count="27">
 <pre class="coq cell-code"><code>  - simpl. reflexivity.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="63">
 
@@ -1540,7 +1833,7 @@ negb (negb false) = false</pre>
 <p>The second case can be solved by <code>reflexivity</code> alone.</p>
 <pre class="coq"><code>  - reflexivity.</code></pre>
 <p>Instead of using <code>reflexivity</code>, we can also reuse a previous proof with the <code>exact</code> tactic. The theorem <code>negb_negb_false_eq_false</code> has exactly the type needed for the second goal.</p>
-<div id="d0cda6f7" class="cell" data-execution_count="27">
+<div id="109339fc" class="cell" data-execution_count="28">
 <pre class="coq cell-code"><code>  - exact negb_negb_false_eq_false.
 Qed.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="66">
@@ -1576,7 +1869,7 @@ Qed.</code></pre>
 <pre class="coq"><code>negb (negb true) = true</code></pre>
 <p>and that <code>negb_inv</code> itself is a proof of the universally quantified proposition</p>
 <pre class="coq"><code>forall b : bool, negb (negb b) = b</code></pre>
-<div id="f79824d6" class="cell" data-execution_count="28">
+<div id="eec13c3f" class="cell" data-execution_count="29">
 <pre class="coq cell-code"><code>Check negb_inv true.
 Check negb_inv.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="68">
@@ -1664,7 +1957,7 @@ Note
 <p>We first prove the Boolean version of</p>
 <pre class="text"><code>(P ⇒ Q) ⇔ ¬P ∨ Q</code></pre>
 <p>This exercise also shows how to structure a proof with pattern matching on several variables. First, we present a nested version: we destruct <code>b</code>, and then destruct <code>b'</code> in each branch. This gives two cases corresponding to the possible values of <code>b</code>, with two subcases corresponding to the possible values of <code>b'</code>.</p>
-<div id="1fcfd4fd" class="cell" data-execution_count="29">
+<div id="45f380a6" class="cell" data-execution_count="30">
 <pre class="coq cell-code"><code>Theorem implb_eq_orb_negb (b b' : bool) :
     implb b b' = orb (negb b) b'.
 Proof.
@@ -1708,7 +2001,7 @@ Qed.</code></pre>
 <p>Next, we prove the Boolean version of</p>
 <pre class="text"><code>(P ⇒ Q) ⇔ ¬(P ∧ ¬Q)</code></pre>
 <p>Here we destruct <code>b</code> and <code>b'</code> simultaneously. This immediately creates four cases, much like the simultaneous pattern matching used in the definition of <code>andb</code>.</p>
-<div id="a419c884" class="cell" data-execution_count="30">
+<div id="86d799fa" class="cell" data-execution_count="31">
 <pre class="coq cell-code"><code>Theorem implb_eq_negb_andb_negb (b b' : bool) :
     implb b b' = negb (andb b (negb b')).
 Proof.
@@ -1745,7 +2038,7 @@ Qed.</code></pre>
 </div>
 </div>
 <p>Notice that we used explicit parameters <code>(b b' : bool)</code> rather than implicit parameters <code>{b b' : bool}</code>. Braces introduce implicit arguments, which Rocq tries to infer from context. This is useful later, but explicit parameters are clearer at this introductory stage.</p>
-<div id="2c1c2669" class="cell" data-execution_count="31">
+<div id="d61ae723" class="cell" data-execution_count="32">
 <pre class="coq cell-code"><code>End BooleanValues.</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="87">
 
@@ -1776,6 +2069,192 @@ Qed.</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="curry-howard-correspondence" class="level3">
+<h3 class="anchored" data-anchor-id="curry-howard-correspondence">Curry-Howard Correspondence</h3>
+<p>In Rocq, there is a deep analogy between ordinary functions and theorem with parameters. This is an instance of the Curry-Howard correspondence:</p>
+<blockquote class="blockquote">
+<p>Propositions behave like types Proofs behave like terms/values inhabiting those types</p>
+</blockquote>
+<p>For example <code>bool</code> is a type, and its inhabitants are the Boolean values:</p>
+<pre class="coq"><code>true : bool
+false : bool</code></pre>
+<p>Similarly, a proposition such as</p>
+<pre class="coq"><code>neg (neg b) = b</code></pre>
+<p>can be understood as a type. Its inhabitants are proofs of that proposition. So if we have</p>
+<pre class="coq"><code>p : negb (negb b) = b</code></pre>
+<p>Then <code>p</code> is a proof object whose type is the proposition</p>
+<pre class="coq"><code>negb (negb b) = b</code></pre>
+<section id="analogy-between-ordinary-functions-and-theorems" class="level4">
+<h4 class="anchored" data-anchor-id="analogy-between-ordinary-functions-and-theorems">Analogy between Ordinary Functions and Theorems</h4>
+<p>Consider the ordinary boolean function:</p>
+<pre class="coq"><code>Definition f (b : bool) : bool :=
+  negb b.</code></pre>
+<p>This says:</p>
+<blockquote class="blockquote">
+<p><code>f</code> takes an input <code>b : bool</code> and returns an output of type <code>bool</code></p>
+</blockquote>
+<p>it’s type is</p>
+<pre class="coq"><code>f : bool -&gt; bool</code></pre>
+<p>And compare with the theorem:</p>
+<pre class="coq"><code>Theorem negb_inv (b : bool) : negb (negb b) = b.</code></pre>
+<p>This can be understood as saying:</p>
+<blockquote class="blockquote">
+<p><code>negb_inv</code> takes <code>b : bool</code> and returns a proof of <code>negb (negb b) = b</code>.</p>
+</blockquote>
+<p>After the theorem is proved, Rocq gives it the type:</p>
+<pre class="coq"><code>negb_inv : forall b : bool, negb (negb b) = b</code></pre>
+<p>This is a dependent function type. It is called dependent becaus the result type depends on the input <code>b</code>. For example, if we apply <code>negb_inv</code> to <code>true</code>, we get:</p>
+<pre class="coq"><code>negb_inv true : negb (negb true) = true</code></pre>
+<p>If we apply it to <code>false</code>, we get:</p>
+<p><code>negb_inv false : negb (negb false) = false.</code></p>
+<p>The important point is that <code>negb_inv true</code> is <strong>not</strong> a Boolean value. It is a proof object. More precisely, it s a proof of the proposition.</p>
+<pre class="coq"><code>negb (negb true) = true</code></pre>
+<p>We can compare theorems and functions as follows:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>f</code></td>
+<td><code>b : bool</code></td>
+<td><code>negb b : bool</code></td>
+</tr>
+<tr class="even">
+<td><code>negb_inv</code></td>
+<td><code>b : bool</code></td>
+<td>proof of <code>negb (negb b) = b</code></td>
+</tr>
+</tbody>
+</table>
+<p>The theorem</p>
+<pre class="coq"><code>Theorem negb_inv (b : bool) : negb (negb b) = b.
+Proof.
+  destruct b.
+  - reflexivity.
+  - reflexivity.
+Qed.</code></pre>
+<p>is conceptually similar to:</p>
+<pre class="coq"><code>Definition negb_inv : forall b : bool, negb (negb b) = b :=
+  fun b =&gt;
+    match b with
+    | true =&gt; eq_refl
+    | false =&gt; eq_refl
+    end.</code></pre>
+</section>
+</section>
+<section id="set-vs-type" class="level3">
+<h3 class="anchored" data-anchor-id="set-vs-type">Set vs Type</h3>
+<p>The type <code>bool</code> lives in the universe <code>Set</code>:</p>
+<div id="877a7a5c" class="cell" data-execution_count="33">
+<pre class="coq cell-code"><code>Check bool.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="88">
+
+<div class="coq_kernel_output_area">
+    <pre>bool
+     : Set</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>whereas propositions such as equalities live in Prop:</p>
+<div id="c1018312" class="cell" data-execution_count="34">
+<pre class="coq cell-code"><code>Check negb (negb true) = true.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="89">
+
+<div class="coq_kernel_output_area">
+    <pre>negb (negb true) = true
+     : Prop</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
+<p>Both are type-like objects, but they have different roles:</p>
+<blockquote class="blockquote">
+<p>Set: computational objects<br>
+Prop: logical propositions / proof types</p>
+</blockquote>
+</section>
+<section id="meaning-of-destruct" class="level3">
+<h3 class="anchored" data-anchor-id="meaning-of-destruct">Meaning of <code>Destruct</code></h3>
+<p>The tactic <code>destruct</code> performs case analysis on an object according to the possible ways that object could have been constructed.</p>
+<p>For example, if</p>
+<pre class="coq"><code>b : bool</code></pre>
+<p>then <code>b</code> has only two possible constructors:</p>
+<pre class="coq"><code>true : bool
+false : bool</code></pre>
+<p>So when we write</p>
+<pre class="coq"><code>destruct b.</code></pre>
+<p>Rocq splits the proof into two cases:</p>
+<blockquote class="blockquote">
+<p>Case 1: <code>b = true</code><br>
+Case 2: <code>b = false</code></p>
+</blockquote>
+<p>The word <code>destruct</code> is therefore connected to the idea of deconstructing a value: we inspect its outermost constructor and split into the corresponding cases.</p>
+<p>The same idea applies to other inductive types. For natural numbers, a value of type <code>nat</code> is constructed either as <code>0</code> or as the successor of antoher natural nubmer. Therefore <code>destruct n.</code> splits the proof into the cases</p>
+<blockquote class="blockquote">
+<p>Case 1: n = 0<br>
+Case 2: n = S n’</p>
+</blockquote>
+<p>This is closely related to pattern matching. In a function definition, we write:</p>
+<pre class="coq"><code>match b with
+| true =&gt; ...
+| false =&gt; ...
+end.</code></pre>
+<p>In a proof, we write:</p>
+<pre class="coq"><code>destruct b.</code></pre>
+<p>The difference is:</p>
+<blockquote class="blockquote">
+<p>match: case-splits inside a term/program<br>
+destruct: case-splits inside an interactive proof</p>
+</blockquote>
 </section>
 </section>
 <section id="summary" class="level2">
