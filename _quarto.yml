@@ -2,6 +2,8 @@ project:
   type: book
 
 jupyter: coq
+execute: 
+  cache: true
 book:
   downloads: pdf
   title: "SoSe 26 Type Theory & Logic & Functional Programming Notes"
@@ -17,7 +19,7 @@ book:
         - 01.qmd
         - 02.qmd
         # - 03.qmd
-        - BooleanValues.qmd
+        - 03-BooleanValues.qmd
     - references.qmd
     - resources.qmd
 

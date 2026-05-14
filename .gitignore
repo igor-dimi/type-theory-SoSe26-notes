@@ -1,5 +1,6 @@
 /.quarto/
 /_book/
+/.jupyter_cache/
 
 # ignore the files generate by rocq compiler
 *.vo

@@ -1,8 +1,42 @@
+/* General code block fallback */
+pre:not(.sourceCode) {
+  background-color: #f7f7f7;
+  border-radius: 6px;
+  padding: 0.5em;
+  margin: 1em 0;
+}
+
+/* Inline code and code inside blocks */
+pre:not(.sourceCode) code {
+  background-color: transparent;
+}
+
+
 /* Normal source code blocks */
 div.sourceCode {
   background-color: #f7f7f7;
   border-radius: 6px;
   padding: 0.5em;
+  margin: 1em 0;
+}
+
+/* The actual visible code area inside normal source blocks */
+div.sourceCode pre.sourceCode {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fallback: some code blocks may be rendered directly as pre.sourceCode */
+pre.sourceCode {
+  background-color: #f7f7f7;
+  border-radius: 6px;
+  padding: 0.5em;
+}
+
+/* Code inside source blocks */
+pre.sourceCode code {
+  background-color: transparent;
 }
 
 /* Executable cell input blocks */

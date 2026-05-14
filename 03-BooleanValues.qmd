@@ -170,6 +170,8 @@ has no assumptions. It is a **closed term**.
 In type theory, abstraction and application can be understood as the introduction and elimination forms for function
 types, analogous to introduction and elimination of implication symbol in natural deduction calculus.
 
+These should be understood as type judgment rules.
+
 Fur a function type $A \to B$ consider:
 
 #### Introduction
@@ -182,8 +184,8 @@ $$
 
 This judgment means: 
 
-> Assuming the variables declared in $\Gamma$ (the context) and the additional variable $x : A$, 
-> the term $t$ has the type $B$. 
+> Assuming the type judgments in $\Gamma$ (the context) and that the additional variable $x$ has type $A$, 
+> then the term $t$ has the type $B$ in the same context $\Gamma$. 
 
 The lambda-introduction rule says:
 
@@ -197,7 +199,7 @@ $$
 
 Meaning:
 
-> if $t$ has type $B$ under temporary assumptions $x : A$, then $\labs{x}{t}$ has type $A \to B$
+> if $t$ has type $B$ under temporary assumptions $x : A$ and context $\Gamma$, then $\labs{x}{t}$ has type $A \to B$
 > under the original context $\Gamma$.
 
 #### Elimination
@@ -937,6 +939,231 @@ Notice that we used explicit parameters `(b b' : bool)` rather than implicit par
 ```{coq}
 End BooleanValues.
 ```
+### Curry-Howard Correspondence
+
+In Rocq, there is a deep analogy between ordinary functions and theorem with parameters.
+This is an instance of the Curry-Howard correspondence:
+
+> Propositions behave like types
+> Proofs behave like terms/values inhabiting those types
+
+For example `bool` is a type, and its inhabitants are the Boolean values:
+
+```{.coq}         
+true : bool
+false : bool
+```
+
+Similarly, a proposition such as
+
+```coq
+neg (neg b) = b
+```
+
+can be understood as a type. Its inhabitants are proofs of that proposition.
+So if we have
+
+```{.coq}
+p : negb (negb b) = b
+```
+
+Then `p` is a proof object whose type is the proposition
+
+```{.coq}
+negb (negb b) = b
+```
+
+#### Analogy between Ordinary Functions and Theorems
+
+Consider the ordinary boolean function:
+
+
+```{.coq}
+Definition f (b : bool) : bool :=
+  negb b.
+```
+
+This says:
+
+> `f` takes an input `b : bool` and returns an output of type `bool`
+
+it's type is
+
+
+```{.coq}
+f : bool -> bool
+```
+
+And compare with the theorem:
+
+
+```{.coq}
+Theorem negb_inv (b : bool) : negb (negb b) = b.
+```
+
+This can be understood as saying:
+
+> `negb_inv` takes `b : bool` and returns a  proof of `negb (negb b) = b`.
+
+After the theorem is proved, Rocq gives it the type:
+
+
+```{.coq}
+negb_inv : forall b : bool, negb (negb b) = b
+```
+
+This is a dependent function type. It is called dependent becaus the result type depends on
+the input `b`. 
+For example, if we apply `negb_inv` to `true`, we get:
+
+
+```{.coq}
+negb_inv true : negb (negb true) = true
+```
+
+If we apply it to `false`, we get:
+
+`negb_inv false : negb (negb false) = false.`
+
+The important point is that `negb_inv true` is **not** a Boolean value. It is a proof
+object. More precisely, it s a proof of the proposition.
+
+
+```{.coq}
+negb (negb true) = true
+```
+
+We can compare theorems and functions as follows:
+
+| Expression | Input      | Output                       |
+| ---------- | ---------- | ---------------------------- |
+| `f`        | `b : bool` | `negb b : bool`              |
+| `negb_inv` | `b : bool` | proof of `negb (negb b) = b` |
+
+The theorem
+
+
+```{.coq}
+Theorem negb_inv (b : bool) : negb (negb b) = b.
+Proof.
+  destruct b.
+  - reflexivity.
+  - reflexivity.
+Qed.
+```
+
+is conceptually similar to:
+
+
+```{.coq}
+Definition negb_inv : forall b : bool, negb (negb b) = b :=
+  fun b =>
+    match b with
+    | true => eq_refl
+    | false => eq_refl
+    end.
+```
+
+### Set vs Type
+
+The type `bool` lives in the universe `Set`:
+
+
+```{coq}
+Check bool.
+```
+
+whereas propositions such as equalities live in Prop:
+
+
+```{coq}
+Check negb (negb true) = true.
+```
+
+Both are type-like objects, but they have different roles:
+
+
+> Set: computational objects  
+> Prop: logical propositions / proof types
+
+### Meaning of `Destruct`
+
+The tactic `destruct` performs case analysis on an object according to the possible ways
+that object could have been constructed.
+
+For example, if
+
+
+```{.coq}
+b : bool
+```
+
+then `b` has only two possible constructors:
+
+
+```{.coq}
+true : bool
+false : bool
+```
+
+So when we write
+
+
+```{.coq}
+destruct b.
+```
+
+Rocq splits the proof into two cases:
+
+> Case 1: `b = true`  
+> Case 2: `b = false`
+
+The word `destruct` is therefore connected to the idea of deconstructing a value: we inspect
+its outermost constructor and split into the corresponding cases.
+
+The same idea applies to other inductive types. For natural numbers, a value of type
+`nat` is constructed either as `0` or as the successor of antoher natural nubmer. 
+Therefore `destruct n.` splits the proof into the cases
+
+> Case 1: n = 0  
+> Case 2: n = S n'
+
+This is closely related to pattern matching. In a function definition, we write:
+
+
+```{.coq}
+match b with
+| true => ...
+| false => ...
+end.
+```
+
+In a proof, we write:
+
+
+```{.coq}
+destruct b.
+```
+
+The difference is:
+
+> match: case-splits inside a term/program  
+> destruct: case-splits inside an interactive proof
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Summary
 
