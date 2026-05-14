@@ -104,7 +104,14 @@ We can compute using this syntax.
 Compute negb (orb true false).
 ```
 
+## Function Defnition Syntax
+
+
+
+
+
 In the rest of the file, we construct basic functions from `bool` to `bool` and from `bool` to `bool -> bool`. Most of them are already contained in Rocq's core library, but redefining them is a good way to learn pattern matching.
+
 
 ## Basic Pattern Matching
 
