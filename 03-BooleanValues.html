@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Basics of Rocq – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
+<title>3&nbsp; Lecture 3: Basics of Rocq – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./04-PropFormulas.html" rel="next">
 <link href="./02.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -148,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./03-BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basics of Rocq</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./03-BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 3: Basics of Rocq</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -206,7 +206,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03-BooleanValues.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basics of Rocq</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 3: Basics of Rocq</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-PropFormulas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 3 - Rocq Programming II</span></span></a>
   </div>
 </li>
       </ul>
@@ -220,7 +226,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./resources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Resources</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Resources</span></span></a>
   </div>
 </li>
     </ul>
@@ -234,30 +240,41 @@ window.Quarto = {
    
   <ul>
   <li><a href="#basics-of-lambda-calculus" id="toc-basics-of-lambda-calculus" class="nav-link active" data-scroll-target="#basics-of-lambda-calculus">Basics of Lambda Calculus</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#bound-and-free-variables" id="toc-bound-and-free-variables" class="nav-link" data-scroll-target="#bound-and-free-variables">Bound and Free Variables</a></li>
   <li><a href="#typed-lambda-calculus" id="toc-typed-lambda-calculus" class="nav-link" data-scroll-target="#typed-lambda-calculus">Typed Lambda Calculus</a></li>
   <li><a href="#open-terms-and-contexts" id="toc-open-terms-and-contexts" class="nav-link" data-scroll-target="#open-terms-and-contexts">Open Terms and Contexts</a></li>
-  <li><a href="#lambda-abstraction-and-application-as-introduction-and-elimination" id="toc-lambda-abstraction-and-application-as-introduction-and-elimination" class="nav-link" data-scroll-target="#lambda-abstraction-and-application-as-introduction-and-elimination">Lambda Abstraction and Application as Introduction and Elimination</a></li>
-  <li><a href="#lambda-abstraction-in-rocq" id="toc-lambda-abstraction-in-rocq" class="nav-link" data-scroll-target="#lambda-abstraction-in-rocq">Lambda Abstraction in Rocq</a></li>
+  <li><a href="#lambda-abstraction-and-application-as-introduction-and-elimination" id="toc-lambda-abstraction-and-application-as-introduction-and-elimination" class="nav-link" data-scroll-target="#lambda-abstraction-and-application-as-introduction-and-elimination">Lambda Abstraction and Application as Introduction and Elimination</a>
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#elimination" id="toc-elimination" class="nav-link" data-scroll-target="#elimination">Elimination</a></li>
+  </ul></li>
+  <li><a href="#lambda-abstraction-in-rocq" id="toc-lambda-abstraction-in-rocq" class="nav-link" data-scroll-target="#lambda-abstraction-in-rocq">Lambda Abstraction in Rocq</a>
+  <ul class="collapse">
+  <li><a href="#lambda-abstraction-in-rocq-function-definitions" id="toc-lambda-abstraction-in-rocq-function-definitions" class="nav-link" data-scroll-target="#lambda-abstraction-in-rocq-function-definitions">Lambda Abstraction in Rocq Function Definitions</a></li>
+  <li><a href="#multiple-arguments" id="toc-multiple-arguments" class="nav-link" data-scroll-target="#multiple-arguments">Multiple Arguments</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#booleans-in-rocqs-core-library" id="toc-booleans-in-rocqs-core-library" class="nav-link" data-scroll-target="#booleans-in-rocqs-core-library">Booleans in Rocq’s Core Library</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#curried-notation" id="toc-curried-notation" class="nav-link" data-scroll-target="#curried-notation">Curried Notation</a></li>
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   </ul></li>
   <li><a href="#basic-pattern-matching" id="toc-basic-pattern-matching" class="nav-link" data-scroll-target="#basic-pattern-matching">Basic Pattern Matching</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#boolean-negation" id="toc-boolean-negation" class="nav-link" data-scroll-target="#boolean-negation">Boolean Negation</a></li>
   <li><a href="#boolean-conjunction" id="toc-boolean-conjunction" class="nav-link" data-scroll-target="#boolean-conjunction">Boolean Conjunction</a></li>
   <li><a href="#boolean-disjunction" id="toc-boolean-disjunction" class="nav-link" data-scroll-target="#boolean-disjunction">Boolean Disjunction</a></li>
   <li><a href="#boolean-implication" id="toc-boolean-implication" class="nav-link" data-scroll-target="#boolean-implication">Boolean Implication</a></li>
   </ul></li>
   <li><a href="#theorem-proving" id="toc-theorem-proving" class="nav-link" data-scroll-target="#theorem-proving">Theorem Proving</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#negation-is-involutive" id="toc-negation-is-involutive" class="nav-link" data-scroll-target="#negation-is-involutive">Negation Is Involutive</a></li>
   <li><a href="#equivalent-definitions-of-implication" id="toc-equivalent-definitions-of-implication" class="nav-link" data-scroll-target="#equivalent-definitions-of-implication">Equivalent Definitions of Implication</a></li>
-  <li><a href="#curry-howard-correspondence" id="toc-curry-howard-correspondence" class="nav-link" data-scroll-target="#curry-howard-correspondence">Curry-Howard Correspondence</a></li>
+  <li><a href="#curry-howard-correspondence" id="toc-curry-howard-correspondence" class="nav-link" data-scroll-target="#curry-howard-correspondence">Curry-Howard Correspondence</a>
+  <ul class="collapse">
+  <li><a href="#analogy-between-ordinary-functions-and-theorems" id="toc-analogy-between-ordinary-functions-and-theorems" class="nav-link" data-scroll-target="#analogy-between-ordinary-functions-and-theorems">Analogy between Ordinary Functions and Theorems</a></li>
+  </ul></li>
   <li><a href="#set-vs-type" id="toc-set-vs-type" class="nav-link" data-scroll-target="#set-vs-type">Set vs Type</a></li>
   <li><a href="#meaning-of-destruct" id="toc-meaning-of-destruct" class="nav-link" data-scroll-target="#meaning-of-destruct">Meaning of <code>Destruct</code></a></li>
   </ul></li>
@@ -268,9 +285,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./03-BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basics of Rocq</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./03-BooleanValues.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 3: Basics of Rocq</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basics of Rocq</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lecture 3: Basics of Rocq</span></h1>
 </div>
 
 
@@ -2683,8 +2700,8 @@ destruct: case-splits inside an interactive proof</p>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./04-PropFormulas.html" class="pagination-link" aria-label="Lecture 3 - Rocq Programming II">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 3 - Rocq Programming II</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
