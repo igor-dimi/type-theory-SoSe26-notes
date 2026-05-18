@@ -20,6 +20,7 @@ book:
         - 02.qmd
         # - 03.qmd
         - 03-BooleanValues.qmd
+        - 04-PropFormulas.qmd
     - references.qmd
     - resources.qmd
 
@@ -39,6 +40,7 @@ format:
     code-block-bg: true
     code-copy: true
     code-overflow: wrap
+    toc-depth: 4
   pdf:
     documentclass: scrreprt
     include-in-header: preamble.tex

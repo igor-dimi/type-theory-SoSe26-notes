@@ -1,4 +1,4 @@
-# Basics of Rocq
+# Lecture 3: Basics of Rocq
 
 *Logic and Functional Programming*  
 *Florent Schaffhauser*  

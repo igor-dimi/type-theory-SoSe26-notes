@@ -1,4 +1,4 @@
-Inductive Wff :=
+(* Inductive Wff :=
   P     : nat -> Wff
 | Neg   : Wff -> Wff
 | Impl  : Wff -> Wff -> Wff
@@ -228,4 +228,114 @@ Check G3.
 
 Compute subst_Wff (P 0 \/ P 2026 ==> P 41 /\ P 2025) I G3.
 
+ *)
 
+From Stdlib Require Import Utf8.
+
+
+Definition ℕ := nat.
+Check ℕ.
+
+Inductive Wff := 
+ P      : ℕ → Wff
+|Neg    : Wff → Wff
+|Impl   : Wff → Wff → Wff
+|Conj   : Wff → Wff → Wff
+|Disj  : Wff → Wff → Wff.
+
+Check P 2.
+Check Neg (P 2).
+Check P.
+Check Disj.
+Check Impl.
+
+Check Disj (P 1) (P 2).
+
+Check Disj (P 2).
+
+Section Scratch.
+
+    Variable dummy : Wff.
+    Check Impl dummy.
+
+End Scratch.
+
+Check Wff.
+
+Notation "a ∧ b" := (Conj a b) (at level 80, right associativity).
+Notation "a ∨ b" := (Disj a b) (at level 85, right associativity).
+Notation "a ⇒ b" := (Impl a b) (at level 99, right associativity).
+Notation "¬ a" := (Neg a) (at level 75, format "¬ a").
+
+Check P 1 ∧ P 2 ∧ P 3.
+
+Check P 1 ⇒ P 2 ⇒ P 3.
+
+Check P 1 ∧ P 2 ∨ P 3.
+
+Fixpoint ht (F : Wff) :=
+    match F with
+      P i     => 0 
+    | ¬F      => 1 + ht F
+    | F ∧ F'  
+    | F ∨ F'
+    | F ⇒ F'  => 1 + max (ht F) (ht F')
+    end.
+
+
+Compute ht (P 1).
+Compute ht (P 1 ∧ P 2 ∨ (P 3 ⇒ P 4 ∧ P 5)).
+
+Check ht.
+
+Definition ht0 :=
+    fix ht (F : Wff) : nat := 
+    match F with
+    | P _       => 0
+    | ¬F        => 1 + ht F
+    | F ⇒ F'
+    | F ∧ F'
+    | F ∨ F'    => 1 + max (ht F) (ht F')
+    end.
+
+Goal ht = ht0.
+Proof.
+    reflexivity.
+Qed.
+
+Definition ht1(F : Wff) : ℕ.
+    Proof.
+        induction F.
+        - exact 0.
+        - exact (1 + IHF).
+        - exact (1 + (max IHF1 IHF2)).
+        - exact (1 + (max IHF1 IHF2)).
+        - exact (1 + (max IHF1 IHF2)).
+    Defined.
+
+Goal ht = ht1.
+Proof.
+    reflexivity.
+Qed.
+
+
+
+Check @nil.
+Check nil.
+Check @cons.
+Check cons.
+
+Check list.
+    
+Arguments nil {A}.
+Arguments cons {A} a l.
+
+Compute cons true nil.
+
+Compute nil : list bool.
+
+Check nil.
+Check @nil.
+Check @cons.
+
+Compute @cons bool true nil.
