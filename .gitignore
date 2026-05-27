@@ -9,3 +9,5 @@
 *.vos
 *.aux
 
+
+**/*.quarto_ipynb
