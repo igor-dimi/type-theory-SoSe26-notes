@@ -127,7 +127,11 @@ $$
 \interp{\varphi}{\valuation} = \boolTrue
 $$
 
-Such a $\varphi$ is also called a **tautology**.
+Such a $\varphi$ is also called a **tautology**. A tautology is also denoted as:
+
+$$
+\models \varphi
+$$
 
 
 :::
@@ -163,4 +167,54 @@ $$
 :::
 
 
+::: {#def-entailment}
+## Entailment
+
+For $\varphi, \psi \in \WFF$ we say that $\varphi$ entails $\psi$ if
+
+$$
+\Semantics{\varphi} \subseteq \Semantics{\psi}
+$$
+
+This is denoted as
+
+$$
+\varphi \models \psi
+$$
+
+:::
+
+::: {#exm-implication-entailment}
+## Relation of Implication to Entailment
+
+For $\varphi, \psi \in \WFF$ 
+
+$$
+\varphi \models \psi \iff \models \varphi \Rightarrow \psi 
+$$
+
+:::
+
+Proof is done by case analysis or truth tables.
+
+### Relation to Deductive Reasoning
+
+Deductive reasoning is on over-arching goal of logic, i.e. showing that a conclusion $\psi$ follows
+from the premise $\varphi$. The entailment $\varphi \models \psi$ is such a deductive argument. 
+
+As we've seen above to show $\varphi \models \psi$ we must show $\models \varphi \Rightarrow \psi$.
+But this grows exponentially w.r.t. $\atomsof{\varphi \Rightarrow \psi}$. For example to show that
+
+$$
+A, B, C, A \land B \rightarrow D, C \land D \rightarrow E \models E
+$$
+
+where A, B, C, D, E are atomic formulas, we must evaluate 
+
+$$
+(A \land B \land C \land (A \land B \Rightarrow D \land (C \land D \Rightarrow E) \Rightarrow E
+$$
+
+Since there are 5 atoms we would have to evaluate $2^5 = 32$ different valuations to verify the
+entailment.  
 
