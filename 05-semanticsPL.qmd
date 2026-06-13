@@ -1,5 +1,5 @@
 ---
-title: "Lecture 5 - Semantics of PL"
+title: "Lecture 5 / 6 - Semantics of PL"
 ---
 
 So far we've defined the $\WFF$ type (the language of propositional logic) inductively. This was the **syntax**
@@ -100,6 +100,8 @@ $$
 
 Thus in order to interpret a formula $\varphi$ for a given $\valuation$ it suffices to know $\valuation|_{\varphi}$. 
 This is conventionally done in truth tables and we omit the explicit demonstration here.
+
+## Semantic Concepts
 
 Next we define a few semantic concepts:
 
