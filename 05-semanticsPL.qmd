@@ -17,7 +17,7 @@ $$
 Where $\Bool$ is the usual Boolean algebra structure: 
 
 $$
-\Bool := (\boolfalse, \booltrue, \boolnot, \booland, \boolor, \boolimpl)
+\Bool := (\boolFalse, \boolTrue, \boolnot, \booland, \boolor, \boolimpl)
 $$
 
 Note that syntactical and semantical symbols are clearly distinguished. The boolean operators have
@@ -110,7 +110,7 @@ $\varphi \in \WFF$ is called **satisfiable** if there exists
 a $\valuation$ s.t.
 
 $$
-\interp{\varphi}{\valuation} = \booltrue
+\interp{\varphi}{\valuation} = \boolTrue
 $$
 
 :::
@@ -122,7 +122,7 @@ $\varphi \in \WFF$ is called **valid** if for all
 $\valuation$
 
 $$
-\interp{\varphi}{\valuation} = \booltrue
+\interp{\varphi}{\valuation} = \boolTrue
 $$
 
 Such a $\varphi$ is also called a **tautology**.
@@ -155,7 +155,7 @@ $$
 $\varphi$ is evaluated to true. That is
 
 $$
-\Semantics{\varphi} = \Set{\valuation: \Atoms \to \Bool}{\interp{\varphi}{\valuation} = \booltrue}
+\Semantics{\varphi} = \Set{\valuation: \Atoms \to \Bool}{\interp{\varphi}{\valuation} = \boolTrue}
 $$
 
 :::
