@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5&nbsp; Lecture 5 - Semantics of PL – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
+<title>5&nbsp; Lecture 5 / 6 - Semantics of PL – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -170,7 +170,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./05-semanticsPL.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./05-semanticsPL.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 / 6 - Semantics of PL</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -240,7 +240,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-semanticsPL.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 / 6 - Semantics of PL</span></span></a>
   </div>
 </li>
       </ul>
@@ -262,15 +262,24 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#semantic-concepts" id="toc-semantic-concepts" class="nav-link active" data-scroll-target="#semantic-concepts">Semantic Concepts</a>
+  <ul>
+  <li><a href="#relation-to-deductive-reasoning" id="toc-relation-to-deductive-reasoning" class="nav-link" data-scroll-target="#relation-to-deductive-reasoning">Relation to Deductive Reasoning</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./05-semanticsPL.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./05-semanticsPL.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 / 6 - Semantics of PL</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 / 6 - Semantics of PL</span></h1>
 </div>
 
 
@@ -342,6 +351,8 @@ window.Quarto = {
 \end{aligned}
 \]</span></p>
 <p>Thus in order to interpret a formula <span class="math inline">\(\varphi\)</span> for a given <span class="math inline">\(\valuation\)</span> it suffices to know <span class="math inline">\(\valuation|_{\varphi}\)</span>. This is conventionally done in truth tables and we omit the explicit demonstration here.</p>
+<section id="semantic-concepts" class="level2">
+<h2 class="anchored" data-anchor-id="semantic-concepts">Semantic Concepts</h2>
 <p>Next we define a few semantic concepts:</p>
 <div id="def-satisfiability" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 5.4 (Satisfiability)</strong></span> <span class="math inline">\(\varphi \in \WFF\)</span> is called <strong>satisfiable</strong> if there exists a <span class="math inline">\(\valuation\)</span> s.t.</p>
@@ -354,7 +365,10 @@ window.Quarto = {
 <p><span class="math display">\[
 \interp{\varphi}{\valuation} = \boolTrue
 \]</span></p>
-<p>Such a <span class="math inline">\(\varphi\)</span> is also called a <strong>tautology</strong>.</p>
+<p>Such a <span class="math inline">\(\varphi\)</span> is also called a <strong>tautology</strong>. A tautology is also denoted as:</p>
+<p><span class="math display">\[
+\models \varphi
+\]</span></p>
 </div>
 <div id="def-semantic-equivalence" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 5.6 (Semantic Equivalence)</strong></span> <span class="math inline">\(\varphi, \, \psi \in \WFF\)</span> are called semantically equivalent if for all <span class="math inline">\(\valuation\)</span></p>
@@ -372,8 +386,39 @@ window.Quarto = {
 \Semantics{\varphi} = \Set{\valuation: \Atoms \to \Bool}{\interp{\varphi}{\valuation} = \boolTrue}
 \]</span></p>
 </div>
+<div id="def-entailment" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.8 (Entailment)</strong></span> For <span class="math inline">\(\varphi, \psi \in \WFF\)</span> we say that <span class="math inline">\(\varphi\)</span> entails <span class="math inline">\(\psi\)</span> if</p>
+<p><span class="math display">\[
+\Semantics{\varphi} \subseteq \Semantics{\psi}
+\]</span></p>
+<p>This is denoted as</p>
+<p><span class="math display">\[
+\varphi \models \psi
+\]</span></p>
+</div>
+<div id="exm-implication-entailment" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.1 (Relation of Implication to Entailment)</strong></span> For <span class="math inline">\(\varphi, \psi \in \WFF\)</span></p>
+<p><span class="math display">\[
+\varphi \models \psi \iff \models \varphi \Rightarrow \psi
+\]</span></p>
+</div>
+<p>Proof is done by case analysis or truth tables.</p>
+<section id="relation-to-deductive-reasoning" class="level3">
+<h3 class="anchored" data-anchor-id="relation-to-deductive-reasoning">Relation to Deductive Reasoning</h3>
+<p>Deductive reasoning is on over-arching goal of logic, i.e.&nbsp;showing that a conclusion <span class="math inline">\(\psi\)</span> follows from the premise <span class="math inline">\(\varphi\)</span>. The entailment <span class="math inline">\(\varphi \models \psi\)</span> is such a deductive argument.</p>
+<p>As we’ve seen above to show <span class="math inline">\(\varphi \models \psi\)</span> we must show <span class="math inline">\(\models \varphi \Rightarrow \psi\)</span>. But this grows exponentially w.r.t. <span class="math inline">\(\atomsof{\varphi \Rightarrow \psi}\)</span>. For example to show that</p>
+<p><span class="math display">\[
+A, B, C, A \land B \rightarrow D, C \land D \rightarrow E \models E
+\]</span></p>
+<p>where A, B, C, D, E are atomic formulas, we must evaluate</p>
+<p><span class="math display">\[
+(A \land B \land C \land (A \land B \Rightarrow D \land (C \land D \Rightarrow E) \Rightarrow E
+\]</span></p>
+<p>Since there are 5 atoms we would have to evaluate <span class="math inline">\(2^5 = 32\)</span> different valuations to verify the entailment.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
