@@ -1,0 +1,164 @@
+---
+title: "Lecture 5 - Semantics of PL"
+---
+
+So far we've defined the $\WFF$ type (the language of propositional logic) inductively. This was the **syntax**
+aspect. Now, we'd like to interpret the elements (formulas, sentences) of $\WFF$, i.e. give it a 
+**semantics** aspect. To interpret an element,
+or to associate it with a meaning, is to evaluate it. Since logic is concerned with truth and 
+falsehood, and Boolean algebra defines a calculus for logic, we'd like the formulas of $\WFF$ to
+be evaluated to Boolean values. That is, we want to define the following function:
+
+
+$$
+\sem{\cdot}: \WFF \to \Bool
+$$
+
+Where $\Bool$ is the usual Boolean algebra structure: 
+
+$$
+\Bool := (\boolfalse, \booltrue, \boolnot, \booland, \boolor, \boolimpl)
+$$
+
+Note that syntactical and semantical symbols are clearly distinguished. The boolean operators have
+their usual interpretations known from Boolean algebra and we do not provide the associated tables
+here. 
+
+Since $\WFF$ is defined inductively, $\sem{\cdot}$ can be defined recursively. But first we define the set
+of Atomic formulas $\Atoms \subseteq \WFF$ and a so called valuation function $\valuation$
+
+::: {#def-atoms}
+## Atomic Formulas
+$$\Atoms := \Set{P_i}{i \in \Nat}$$
+
+:::
+
+
+::: {#def-valuation}
+## Valuation Function
+
+$$
+\valuation: \Atoms \to \Bool
+$$
+
+i.e. $\valuation$ maps each atomic formula to a boolean value.
+
+:::
+
+Then for a fixed $\valuation$, $\sem{\cdot}$ can be defined recurively as:
+
+$$
+\begin{aligned}
+&\sem{P_i} = \valuationof{P_i} \\
+&\sem{\neg \varphi} = \boolnot\valuationof{\varphi} \\
+&\sem{\varphi \diamond \psi} = \varphi \overline{\diamond} \psi 
+\quad \text{($\diamond \in \{\neg, \land, \lor, \Rightarrow\}$)}
+\end{aligned}
+$$
+
+It is easy to see that $\valuation$ uniquely defines $\sem{\cdot}$. 
+
+::: {#def-interpretation}
+## Interpretation
+
+For a given $\valuation$, the $\sem{\cdot}$ determined by it is called the **interpretation**,
+and is denoted as:
+
+$$
+\sem{\cdot}_{\valuation}
+$$
+
+:::
+
+Since formulas of $\WFF$ are finite and thus are composed of a finite number of atomic formulas,
+in order to interpret a formula, it suffices to know the values of $\valuation$ on the set of atomic
+formulas that the formula is composed of. To formalize this we define a function 
+$\atoms: \WFF \to \Pow{\Atoms}$ recursively as follows:
+
+$$
+\begin{aligned}
+&\atomsof{P_i} = \{P_i\} \\
+&\atomsof{\neg \varphi} = \atomsof{\varphi} \\
+&\atomsof{\varphi \diamond \psi} = \atomsof{\varphi} \cup \atomsof{\psi}
+\quad \text{($\diamond \in \{\neg, \land, \lor, \Rightarrow\}$)}
+\end{aligned}
+$$
+
+Then it is easy to see that for an arbitrary $\varphi \in \WFF$, and arbitrary valuations
+$\valuation_1, \, \valuation_2$: 
+
+$$
+\begin{aligned}
+\sem{\varphi}_{\valuation_1} = \sem{\varphi}_{\valuation_2}
+\iff 
+\valuation_1|_{\atomsof{\varphi}} 
+\equiv 
+\valuation_2|_{\atomsof{\varphi}} 
+\end{aligned}
+$$
+
+
+Thus in order to interpret a formula $\varphi$ for a given $\valuation$ it suffices to know $\valuation|_{\varphi}$. 
+This is conventionally done in truth tables and we omit the explicit demonstration here.
+
+Next we define a few semantic concepts:
+
+::: {#def-satisfiability}
+## Satisfiability
+
+$\varphi \in \WFF$ is called **satisfiable** if there exists
+a $\valuation$ s.t.
+
+$$
+\interp{\varphi}{\valuation} = \booltrue
+$$
+
+:::
+
+::: {#def-validity}
+## Validity
+
+$\varphi \in \WFF$ is called **valid** if for all
+$\valuation$
+
+$$
+\interp{\varphi}{\valuation} = \booltrue
+$$
+
+Such a $\varphi$ is also called a **tautology**.
+
+
+:::
+
+::: {#def-semantic-equivalence}
+## Semantic Equivalence
+
+$\varphi, \, \psi \in \WFF$ are called semantically equivalent if for all $\valuation$
+
+$$
+\interp{\varphi}{\valuation} = \interp{\psi}{\valuation}
+$$
+
+and is denoted as:
+
+$$
+\varphi \equiv \psi
+$$
+
+:::
+
+
+::: {#def-semantics-of-a-formula}
+## Semantics of a Formula $\varphi$
+
+**semantics** of a formula $\varphi \in \WFF$ is defined as the set of all $\valuation$ s.t.
+$\varphi$ is evaluated to true. That is
+
+$$
+\Semantics{\varphi} = \Set{\valuation: \Atoms \to \Bool}{\interp{\varphi}{\valuation} = \booltrue}
+$$
+
+:::
+
+
+

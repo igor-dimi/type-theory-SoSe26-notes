@@ -1,6 +1,7 @@
 % Basic notation
 \newcommand{\Nat}{\mathbb{N}}
 \newcommand{\WFF}{\mathrm{WFF}}
+\newcommand{\Atoms}{\mathcal{A}}
 
 % Formula constructions
 \newcommand{\F}[1]{\mathcal{F}_{#1}}
@@ -13,6 +14,8 @@
 \newcommand{\Height}[1]{\mathrm{ht}(#1)}
 \newcommand{\Subf}[1]{\mathrm{sf}_{#1}}
 \newcommand{\sfn}[1]{\mathrm{sf}(#1)} % sf without subscript, generates sf(arg)
+\newcommand{\atoms}{\mathrm{atoms}}
+\newcommand{\atomsof}[1]{\atoms(#1)}
 
 % Set Operations
 \newcommand{\Pow}[1]{\mathcal{P}(#1)} % Power set
@@ -30,3 +33,24 @@
 \newcommand{\mred}{\to^*\,}
 
 \newcommand{\infrule}[2]{\frac{#1}{#2}}
+
+% semantics of PL
+\newcommand{\sem}[1]{\left[\!\left[ #1 \right]\!\right]}
+\newcommand{\interp}[2]{\sem{#1}_{#2}}
+\newcommand{\Semantics}[1]{\mathrm{Sem}(#1)}
+
+%% Boolean Domain and Boolean Values
+\newcommand{\Bool}{\mathbb{B}}
+\newcommand{\booltrue}{\overline{1}}
+\newcommand{\boolfalse}{\overline{0}}
+
+%% Boolean operations
+\newcommand{\booland}{\mathbin{\overline{\land}}}
+\newcommand{\boolor}{\mathbin{\overline{\lor}}}
+\newcommand{\boolimpl}{\mathbin{\overline{\Rightarrow}}}
+\newcommand{\boolnot}{\mathop{\overline{\neg}}}
+
+%% valuation function
+\newcommand{\valuation}{\nu}
+\newcommand{\valuationof}[1]{\valuation(#1)}
+

@@ -4,6 +4,7 @@ window.MathJax = {
     macros: {
       Nat: "\\mathbb{N}",
       WFF: "\\mathrm{WFF}",
+      Atoms: "\\mathcal{A}",
 
       F: ["\\mathcal{F}_{#1}", 1],
       Fof: ["\\mathcal{F}(#1)", 1],
@@ -13,8 +14,10 @@ window.MathJax = {
       Height: ["\\mathrm{ht}(#1)", 1],
       Subf: ["\\mathrm{sf}_{#1}", 1],
       sfn: ["\\mathrm{sf}(#1)", 1],
+      atoms: "\\mathrm{atoms}",
+      atomsof: ["\\atoms(#1)", 1],
 
-      Pow: ["\\mathcal{P{}(#1)}", 1],
+      Pow: ["\\mathcal{P(#1)}", 1],
 
       concat: "\\mathbin{+\\!\\!+}",
 
@@ -26,7 +29,29 @@ window.MathJax = {
       red: "\\to\\,",
       betared: "\\to_\\beta\\,",
       mred: "\\to^*\\,",
-      infrule: ["\\frac{#1}{#2}", 2]
+      infrule: ["\\frac{#1}{#2}", 2],
+
+      // semantics of PL
+      sem: ["\\left[\\!\\left[ #1 \\right]\\!\\right]", 1],
+      interp: ["\\sem{#1}_{#2}", 2],
+      Semantics: ["\\mathrm{Sem}(#1)", 1],
+
+      // // Boolean Domain and Boolean Values
+      Bool: "\\mathbb{B}",
+      booltrue: "\\overline{1}",
+      boolfalse: "\\overline{0}",
+
+      // // Boolean Operations
+      booland: "\\mathbin{\\overline{\\land}}",
+      boolor: "\\mathbin{\\overline{\\lor}}",
+      boolimpl: "\\mathbin{\\overline{\\Rightarrow}}",
+      boolnot: "\\mathop{\\overline{\\neg}}",
+
+      // // valuation function
+      valuation: "\\nu",
+      valuationof: ["\\valuation(#1)", 1]
+
+
     }
   }
 };

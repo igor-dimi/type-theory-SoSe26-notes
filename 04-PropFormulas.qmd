@@ -1,5 +1,5 @@
 ---
-title: "Lecture 3 - Rocq Programming II" 
+title: "Lecture 4 - Rocq Programming II" 
 ---
 
 ## Inductive Formulas, Lists, and Substitution
