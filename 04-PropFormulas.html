@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Lecture 3 - Rocq Programming II – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
+<title>4&nbsp; Lecture 4 - Rocq Programming II – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./05-semanticsPL.html" rel="next">
 <link href="./03-BooleanValues.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -110,6 +110,7 @@ window.MathJax = {
     macros: {
       Nat: "\\mathbb{N}",
       WFF: "\\mathrm{WFF}",
+      Atoms: "\\mathcal{A}",
 
       F: ["\\mathcal{F}_{#1}", 1],
       Fof: ["\\mathcal{F}(#1)", 1],
@@ -119,8 +120,10 @@ window.MathJax = {
       Height: ["\\mathrm{ht}(#1)", 1],
       Subf: ["\\mathrm{sf}_{#1}", 1],
       sfn: ["\\mathrm{sf}(#1)", 1],
+      atoms: "\\mathrm{atoms}",
+      atomsof: ["\\atoms(#1)", 1],
 
-      Pow: ["\\mathcal{P{}(#1)}", 1],
+      Pow: ["\\mathcal{P(#1)}", 1],
 
       concat: "\\mathbin{+\\!\\!+}",
 
@@ -132,7 +135,29 @@ window.MathJax = {
       red: "\\to\\,",
       betared: "\\to_\\beta\\,",
       mred: "\\to^*\\,",
-      infrule: ["\\frac{#1}{#2}", 2]
+      infrule: ["\\frac{#1}{#2}", 2],
+
+      // semantics of PL
+      sem: ["\\left[\\!\\left[ #1 \\right]\\!\\right]", 1],
+      interp: ["\\sem{#1}_{#2}", 2],
+      Semantics: ["\\mathrm{Sem}(#1)", 1],
+
+      // // Boolean Domain and Boolean Values
+      Bool: "\\mathbb{B}",
+      booltrue: "\\overline{1}",
+      boolfalse: "\\overline{0}",
+
+      // // Boolean Operations
+      booland: "\\mathbin{\\overline{\\land}}",
+      boolor: "\\mathbin{\\overline{\\lor}}",
+      boolimpl: "\\mathbin{\\overline{\\Rightarrow}}",
+      boolnot: "\\mathop{\\overline{\\neg}}",
+
+      // // valuation function
+      valuation: "\\nu",
+      valuationof: ["\\valuation(#1)", 1]
+
+
     }
   }
 };
@@ -151,7 +176,7 @@ window.MathJax = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./04-PropFormulas.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 3 - Rocq Programming II</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./04-PropFormulas.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 4 - Rocq Programming II</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -215,7 +240,13 @@ window.MathJax = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04-PropFormulas.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 3 - Rocq Programming II</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 4 - Rocq Programming II</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-semanticsPL.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></span></a>
   </div>
 </li>
       </ul>
@@ -229,7 +260,7 @@ window.MathJax = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./resources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Resources</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Resources</span></span></a>
   </div>
 </li>
     </ul>
@@ -302,9 +333,9 @@ window.MathJax = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./04-PropFormulas.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 3 - Rocq Programming II</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./04-PropFormulas.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 4 - Rocq Programming II</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 3 - Rocq Programming II</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 4 - Rocq Programming II</span></h1>
 </div>
 
 
@@ -1524,8 +1555,8 @@ substFamily abstracts the indexed replacement operation.</code></pre>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./05-semanticsPL.html" class="pagination-link" aria-label="Lecture 5 - Semantics of PL">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
+<title>5&nbsp; Lecture 5 - Semantics of PL – SoSe 26 Type Theory &amp; Logic &amp; Functional Programming Notes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,8 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./resources.html" rel="next">
-<link href="./05-semanticsPL.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./04-PropFormulas.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -147,6 +128,35 @@ window.MathJax = {
 };
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -160,7 +170,7 @@ window.MathJax = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./05-semanticsPL.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -229,7 +239,7 @@ window.MathJax = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-semanticsPL.html" class="sidebar-item-text sidebar-link">
+  <a href="./05-semanticsPL.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></span></a>
   </div>
 </li>
@@ -237,7 +247,7 @@ window.MathJax = {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -258,9 +268,9 @@ window.MathJax = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01.html">Logic</a></li><li class="breadcrumb-item"><a href="./05-semanticsPL.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></h1>
 </div>
 
 
@@ -277,8 +287,90 @@ window.MathJax = {
 </header>
 
 
-<div id="refs" role="list" style="display: none">
-
+<p>So far we’ve defined the <span class="math inline">\(\WFF\)</span> type (the language of propositional logic) inductively. This was the <strong>syntax</strong> aspect. Now, we’d like to interpret the elements (formulas, sentences) of <span class="math inline">\(\WFF\)</span>, i.e.&nbsp;give it a <strong>semantics</strong> aspect. To interpret an element, or to associate it with a meaning, is to evaluate it. Since logic is concerned with truth and falsehood, and Boolean algebra defines a calculus for logic, we’d like the formulas of <span class="math inline">\(\WFF\)</span> to be evaluated to Boolean values. That is, we want to define the following function:</p>
+<p><span class="math display">\[
+\sem{\cdot}: \WFF \to \Bool
+\]</span></p>
+<p>Where <span class="math inline">\(\Bool\)</span> is the usual Boolean algebra structure:</p>
+<p><span class="math display">\[
+\Bool := (\boolFalse, \boolTrue, \boolnot, \booland, \boolor, \boolimpl)
+\]</span></p>
+<p>Note that syntactical and semantical symbols are clearly distinguished. The boolean operators have their usual interpretations known from Boolean algebra and we do not provide the associated tables here.</p>
+<p>Since <span class="math inline">\(\WFF\)</span> is defined inductively, <span class="math inline">\(\sem{\cdot}\)</span> can be defined recursively. But first we define the set of Atomic formulas <span class="math inline">\(\Atoms \subseteq \WFF\)</span> and a so called valuation function <span class="math inline">\(\valuation\)</span></p>
+<div id="def-atoms" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.1 (Atomic Formulas)</strong></span> <span class="math display">\[\Atoms := \Set{P_i}{i \in \Nat}\]</span></p>
+</div>
+<div id="def-valuation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.2 (Valuation Function)</strong></span> <span class="math display">\[
+\valuation: \Atoms \to \Bool
+\]</span></p>
+<p>i.e.&nbsp;<span class="math inline">\(\valuation\)</span> maps each atomic formula to a boolean value.</p>
+</div>
+<p>Then for a fixed <span class="math inline">\(\valuation\)</span>, <span class="math inline">\(\sem{\cdot}\)</span> can be defined recurively as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\sem{P_i} = \valuationof{P_i} \\
+&amp;\sem{\neg \varphi} = \boolnot\valuationof{\varphi} \\
+&amp;\sem{\varphi \diamond \psi} = \varphi \overline{\diamond} \psi
+\quad \text{($\diamond \in \{\neg, \land, \lor, \Rightarrow\}$)}
+\end{aligned}
+\]</span></p>
+<p>It is easy to see that <span class="math inline">\(\valuation\)</span> uniquely defines <span class="math inline">\(\sem{\cdot}\)</span>.</p>
+<div id="def-interpretation" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.3 (Interpretation)</strong></span> For a given <span class="math inline">\(\valuation\)</span>, the <span class="math inline">\(\sem{\cdot}\)</span> determined by it is called the <strong>interpretation</strong>, and is denoted as:</p>
+<p><span class="math display">\[
+\sem{\cdot}_{\valuation}
+\]</span></p>
+</div>
+<p>Since formulas of <span class="math inline">\(\WFF\)</span> are finite and thus are composed of a finite number of atomic formulas, in order to interpret a formula, it suffices to know the values of <span class="math inline">\(\valuation\)</span> on the set of atomic formulas that the formula is composed of. To formalize this we define a function <span class="math inline">\(\atoms: \WFF \to \Pow{\Atoms}\)</span> recursively as follows:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\atomsof{P_i} = \{P_i\} \\
+&amp;\atomsof{\neg \varphi} = \atomsof{\varphi} \\
+&amp;\atomsof{\varphi \diamond \psi} = \atomsof{\varphi} \cup \atomsof{\psi}
+\quad \text{($\diamond \in \{\neg, \land, \lor, \Rightarrow\}$)}
+\end{aligned}
+\]</span></p>
+<p>Then it is easy to see that for an arbitrary <span class="math inline">\(\varphi \in \WFF\)</span>, and arbitrary valuations <span class="math inline">\(\valuation_1, \, \valuation_2\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sem{\varphi}_{\valuation_1} = \sem{\varphi}_{\valuation_2}
+\iff
+\valuation_1|_{\atomsof{\varphi}}
+\equiv
+\valuation_2|_{\atomsof{\varphi}}
+\end{aligned}
+\]</span></p>
+<p>Thus in order to interpret a formula <span class="math inline">\(\varphi\)</span> for a given <span class="math inline">\(\valuation\)</span> it suffices to know <span class="math inline">\(\valuation|_{\varphi}\)</span>. This is conventionally done in truth tables and we omit the explicit demonstration here.</p>
+<p>Next we define a few semantic concepts:</p>
+<div id="def-satisfiability" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.4 (Satisfiability)</strong></span> <span class="math inline">\(\varphi \in \WFF\)</span> is called <strong>satisfiable</strong> if there exists a <span class="math inline">\(\valuation\)</span> s.t.</p>
+<p><span class="math display">\[
+\interp{\varphi}{\valuation} = \boolTrue
+\]</span></p>
+</div>
+<div id="def-validity" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.5 (Validity)</strong></span> <span class="math inline">\(\varphi \in \WFF\)</span> is called <strong>valid</strong> if for all <span class="math inline">\(\valuation\)</span></p>
+<p><span class="math display">\[
+\interp{\varphi}{\valuation} = \boolTrue
+\]</span></p>
+<p>Such a <span class="math inline">\(\varphi\)</span> is also called a <strong>tautology</strong>.</p>
+</div>
+<div id="def-semantic-equivalence" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.6 (Semantic Equivalence)</strong></span> <span class="math inline">\(\varphi, \, \psi \in \WFF\)</span> are called semantically equivalent if for all <span class="math inline">\(\valuation\)</span></p>
+<p><span class="math display">\[
+\interp{\varphi}{\valuation} = \interp{\psi}{\valuation}
+\]</span></p>
+<p>and is denoted as:</p>
+<p><span class="math display">\[
+\varphi \equiv \psi
+\]</span></p>
+</div>
+<div id="def-semantics-of-a-formula" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.7 (Semantics of a Formula <span class="math inline">\(\varphi\)</span>)</strong></span> <strong>semantics</strong> of a formula <span class="math inline">\(\varphi \in \WFF\)</span> is defined as the set of all <span class="math inline">\(\valuation\)</span> s.t. <span class="math inline">\(\varphi\)</span> is evaluated to true. That is</p>
+<p><span class="math display">\[
+\Semantics{\varphi} = \Set{\valuation: \Atoms \to \Bool}{\interp{\varphi}{\valuation} = \boolTrue}
+\]</span></p>
 </div>
 
 
@@ -685,13 +777,13 @@ window.MathJax = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./05-semanticsPL.html" class="pagination-link" aria-label="Lecture 5 - Semantics of PL">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 5 - Semantics of PL</span></span>
+      <a href="./04-PropFormulas.html" class="pagination-link" aria-label="Lecture 4 - Rocq Programming II">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lecture 4 - Rocq Programming II</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./resources.html" class="pagination-link" aria-label="Resources">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Resources</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
