@@ -261,6 +261,12 @@ is written in Rocq as:
 fun x : nat => x * 2 + 1
 ```
 
+we can type check this in Rocq to verify that the type of this term is indeed $\Nat \to \Nat$:
+
+```{coq}
+Check fun x : nat => x * 2 + 1.
+```
+
 
 So in general
 
