@@ -93,9 +93,9 @@ window.MathJax = {
       concat: "\\mathbin{+\\!\\!+}",
 
       // Lambda calculus and reduction notation
-      labs: ["\\lambda #1.\\,#2", 2],
+      labs: ["\\lambda #1.\\,(#2)", 2],
       tlabs: ["\\lambda #1 : #2.\\,#3", 3],
-      lapp: ["#1\\,#2", 2],
+      lapp: ["(#1)\\,#2", 2],
 
       red: "\\to\\,",
       betared: "\\to_\\beta\\,",
@@ -360,7 +360,7 @@ window.Quarto = {
 <p>is the function <span class="math inline">\(x \to x \cdot 2 + 1\)</span>, and applying it to 3 gives:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\lapp{(\labs{x}{x\cdot 2 + 1})}{3} &amp;\to 3 \cdot 2 + 1  &amp;&amp;\text{($\to$ denotes reduction)}\\
+\lapp{\labs{x}{x\cdot 2 + 1}}{3} &amp;\to 3 \cdot 2 + 1  &amp;&amp;\text{($\to$ denotes reduction)}\\
                          &amp;\to 7
 \end{aligned}
 \]</span></p>
@@ -400,7 +400,7 @@ Why is it called <em>abstraction</em>?
 \]</span></p>
 <p>Here <span class="math inline">\(x\)</span> is bound and <span class="math inline">\(y\)</span> is not. The variable <span class="math inline">\(y\)</span> is <strong>free</strong>. Nevertheless this term is still syntactically meaningful. It represents a function of <span class="math inline">\(x\)</span>, but one that depends on an external parameter <span class="math inline">\(y\)</span>. For example, consider the reduction:</p>
 <p><span class="math display">\[
-\lapp{(\labs{x}{x\cdot y + 1})}{3} \betared 3\cdot y + 1
+\lapp{\labs{x}{x\cdot y + 1}}{3} \betared 3\cdot y + 1
 \]</span></p>
 <p>The result still contains the free variable <span class="math inline">\(y\)</span>, and this term is not automatically interpreted as a function of two variables. For a function with <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, we must bind both variables explicitly:</p>
 <p><span class="math display">\[
@@ -409,7 +409,7 @@ Why is it called <em>abstraction</em>?
 <p>This is a <strong>curried</strong> two argument function: It first takes <span class="math inline">\(x\)</span>, then returns a function that takes <span class="math inline">\(y\)</span>. Consider the following reduction:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\lapp{(\lapp{(\labs{x}{\labs{y}{x\cdot y + 1}})}{3})}{4} &amp;\betared \lapp{(\labs{y}{3\cdot y + 1})}{4} \\
+\lapp{\lapp{\labs{x}{\labs{y}{x\cdot y + 1}}}{3}}{4} &amp;\betared \lapp{\labs{y}{3\cdot y + 1}}{4} \\
                                                     &amp;\betared 3 \cdot 4 + 1 \\
                                                     &amp;\betared 13
 \end{aligned}
@@ -530,6 +530,39 @@ y : \Nat \vdash \tlabs{x}{\Nat}{x \cdot y + 1} : \Nat \to \Nat
 \]</span></p>
 <p>is written in Rocq as:</p>
 <pre class="coq"><code>fun x : nat =&gt; x * 2 + 1</code></pre>
+<p>we can type check this in Rocq to verify that the type of this term is indeed <span class="math inline">\(\Nat \to \Nat\)</span>:</p>
+<div id="81e5ce39" class="cell" data-execution_count="2">
+<pre class="coq cell-code"><code>Check fun x : nat =&gt; x * 2 + 1.</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="2">
+
+<div class="coq_kernel_output_area">
+    <pre>fun x : nat =&gt; x * 2 + 1
+     : nat -&gt; nat</pre>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area" style="padding: 5px 0px;">
+    <i class="fa-check fa text-success"></i>
+    <span>Cell evaluated.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_status_message_area coq_kernel_rolled_back_status_message" style="padding: 5px 0px; display: none;">
+    <i class="fa-exclamation-circle fa text-info"></i>
+    <span>Cell rolled back.</span>
+</div>
+
+<div class="coq_kernel_rich_cell_output coq_kernel_roll_back_controls_area" style="display: none; position: relative;">
+    <button class="btn btn-default btn-xs coq_kernel_roll_back_button" onclick="CoqKernel.roll_back(this)">
+        <i class="fa-step-backward fa"></i>
+        <span class="toolbar-btn-label">Rollback cell</span>
+    </button>
+
+    <div style="display: inline-block; vertical-align: middle; padding-left: 0; padding-right: 0;">
+      <input class="coq_kernel_auto_roll_back_checkbox" type="checkbox" value="" onchange="CoqKernel.toggle_auto_roll_back(this)" checked="">
+      <label">Auto rollback
+    </label"></div>
+</div>
+</div>
+</div>
 <p>So in general</p>
 <p><span class="math display">\[
 \tlabs{x}{A}{t}
@@ -587,10 +620,10 @@ y : \Nat \vdash \tlabs{x}{\Nat}{x \cdot y + 1} : \Nat \to \Nat
 <li><code>false</code></li>
 </ul>
 <p>Both are values of type <code>bool</code>.</p>
-<div id="2539a716" class="cell" data-execution_count="2">
+<div id="23945086" class="cell" data-execution_count="3">
 <pre class="coq cell-code"><code>Check true.
 Check false.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="4">
 
 <div class="coq_kernel_output_area">
     <pre>true
@@ -625,12 +658,12 @@ false
 </div>
 <p>In Rocq, every expression has a type. The expressions <code>true</code> and <code>false</code> have type <code>bool</code>. The type <code>bool</code> itself also has a type: Rocq classifies it as <code>Set</code>.</p>
 <p>Roughly speaking, <code>Set</code> is the universe of computational data types, such as Booleans, natural numbers, lists, and other datatypes. More generally, <code>Set</code> itself lives in a larger universe called <code>Type</code>.</p>
-<div id="4554007c" class="cell" data-execution_count="3">
+<div id="902cf6f5" class="cell" data-execution_count="4">
 <pre class="coq cell-code"><code>Check bool.
 About bool.
 Check Set.
 Check Type.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="8">
 
 <div class="coq_kernel_output_area">
     <pre>bool
@@ -692,13 +725,13 @@ Note
 </div>
 </div>
 <p>Certain pre-defined functions are also available out of the box and can be used to compute expressions. For example, <code>negb</code> is Boolean negation.</p>
-<div id="60dfe168" class="cell" data-execution_count="4">
+<div id="b7d01510" class="cell" data-execution_count="5">
 <pre class="coq cell-code"><code>Check negb.
 About negb.
 
 Check negb false.
 Compute negb false.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="12">
 
 <div class="coq_kernel_output_area">
     <pre>negb
@@ -749,12 +782,12 @@ negb false
 <p>not as</p>
 <pre class="coq"><code>orb (true, false)</code></pre>
 <p>The second expression would suggest that <code>orb</code> takes a pair as input. But Rocq’s <code>orb</code> takes one Boolean argument first, and then returns a new function waiting for the second Boolean argument.</p>
-<div id="b379674e" class="cell" data-execution_count="5">
+<div id="ea4c9291" class="cell" data-execution_count="6">
 <pre class="coq cell-code"><code>Check orb true false.
 Check orb.
 Check bool -&gt; (bool -&gt; bool).
 Check orb true.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="16">
 
 <div class="coq_kernel_output_area">
     <pre>(true || false)%bool
@@ -812,9 +845,9 @@ Note
 </div>
 </div>
 <p>We can compute using this syntax.</p>
-<div id="ce488e53" class="cell" data-execution_count="6">
+<div id="50c5ba8d" class="cell" data-execution_count="7">
 <pre class="coq cell-code"><code>Compute negb (orb true false).</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="17">
 
 <div class="coq_kernel_output_area">
     <pre>     = false
@@ -853,9 +886,9 @@ Note
 <section id="basic-pattern-matching" class="level2">
 <h2 class="anchored" data-anchor-id="basic-pattern-matching">Basic Pattern Matching</h2>
 <p>To avoid conflicts with Rocq’s core library, we wrap everything in a module called <code>BooleanValues</code>. This is optional here, since we do not intend to use the current file as a library later on.</p>
-<div id="51df310a" class="cell" data-execution_count="7">
+<div id="40b5dcd6" class="cell" data-execution_count="8">
 <pre class="coq cell-code"><code>Module BooleanValues.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div class="cell-output cell-output-display" data-execution_count="18">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -901,7 +934,7 @@ Note
 <section id="boolean-negation" class="level3">
 <h3 class="anchored" data-anchor-id="boolean-negation">Boolean Negation</h3>
 <p>Let us start with the definition of the <code>negb</code> function, which sends <code>true</code> to <code>false</code> and <code>false</code> to <code>true</code>. We define it by pattern matching on Boolean values.</p>
-<div id="deae53e9" class="cell" data-execution_count="8">
+<div id="8102fd03" class="cell" data-execution_count="9">
 <pre class="coq cell-code"><code>Definition negb (b : bool) : bool :=
   match b with
   | true  =&gt; false
@@ -909,7 +942,7 @@ Note
   end.
 
 Check negb.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="20">
 
 <div class="coq_kernel_output_area">
     <pre>negb
@@ -945,10 +978,10 @@ Check negb.</code></pre>
 <li>If <code>b</code> is <code>false</code>, return <code>true</code>.</li>
 </ul>
 <p>Since <code>bool</code> has exactly two constructors, <code>true</code> and <code>false</code>, these two cases are exhaustive.</p>
-<div id="360db132" class="cell" data-execution_count="9">
+<div id="197d05de" class="cell" data-execution_count="10">
 <pre class="coq cell-code"><code>About negb.
 Compute negb false.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="22">
 
 <div class="coq_kernel_output_area">
     <pre>negb : bool -&gt; bool
@@ -987,13 +1020,13 @@ Declared in toplevel input, characters 11-15
 </div>
 </div>
 <p>We can also give expressions a name and then use that name in later computations.</p>
-<div id="7e6b015c" class="cell" data-execution_count="10">
+<div id="cf35a0fd" class="cell" data-execution_count="11">
 <pre class="coq cell-code"><code>Compute negb (negb false).
 
 Definition example_bool := negb false.
 
 Compute negb example_bool.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div class="cell-output cell-output-display" data-execution_count="25">
 
 <div class="coq_kernel_output_area">
     <pre>     = false
@@ -1076,7 +1109,7 @@ Note
 </tbody>
 </table>
 <p>This truth table can be translated directly into a pattern match with four cases.</p>
-<div id="49533574" class="cell" data-execution_count="11">
+<div id="b275ed58" class="cell" data-execution_count="12">
 <pre class="coq cell-code"><code>Definition andb (b b' : bool) : bool :=
   match b, b' with
   | true,  true  =&gt; true
@@ -1084,7 +1117,7 @@ Note
   | false, true  =&gt; false
   | false, false =&gt; false
   end.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div class="cell-output cell-output-display" data-execution_count="26">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -1133,10 +1166,10 @@ end</code></pre>
   end
 end.</code></pre>
 <p>As with <code>negb</code>, we can use <code>andb</code> to compute Boolean values.</p>
-<div id="2c73c385" class="cell" data-execution_count="12">
+<div id="c806ed5b" class="cell" data-execution_count="13">
 <pre class="coq cell-code"><code>Compute andb true false.
 Compute andb true (negb example_bool).</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div class="cell-output cell-output-display" data-execution_count="28">
 
 <div class="coq_kernel_output_area">
     <pre>     = false
@@ -1170,11 +1203,11 @@ Compute andb true (negb example_bool).</code></pre>
 </div>
 </div>
 <p>Recall that <code>andb</code> is a function of two variables, but it is written in curried notation. If we ask Rocq to check its type, we get <code>bool -&gt; bool -&gt; bool</code>, not a function type from pairs.</p>
-<div id="edb918f2" class="cell" data-execution_count="13">
+<div id="c7c1d178" class="cell" data-execution_count="14">
 <pre class="coq cell-code"><code>Check andb.
 Check andb true.
 Compute andb true.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="31">
 
 <div class="coq_kernel_output_area">
     <pre>andb
@@ -1220,7 +1253,7 @@ bool -&gt; (bool -&gt; bool)</code></pre>
 <p>is parsed as</p>
 <pre class="coq"><code>(andb b) b'</code></pre>
 <p>In contrast, the arrow type <code>(bool -&gt; bool) -&gt; bool</code> describes a function which takes a Boolean function as input and returns a Boolean value. We can define an example by evaluating a function <code>f : bool -&gt; bool</code> at a given Boolean value.</p>
-<div id="29527466" class="cell" data-execution_count="14">
+<div id="344c838b" class="cell" data-execution_count="15">
 <pre class="coq cell-code"><code>Definition eval_at_true : (bool -&gt; bool) -&gt; bool :=
   fun f =&gt; f true.
 
@@ -1232,7 +1265,7 @@ Definition eval_at (b : bool) : (bool -&gt; bool) -&gt; bool :=
 
 Compute eval_at false negb.
 Compute eval_at false (andb true).</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="37">
 
 <div class="coq_kernel_output_area">
     <pre>     = false
@@ -1308,13 +1341,13 @@ Compute eval_at false (andb true).</code></pre>
 </tbody>
 </table>
 <p>If the first Boolean is <code>true</code>, then the result is always <code>true</code>. If the first Boolean is <code>false</code>, then the result is the second Boolean.</p>
-<div id="d967b23c" class="cell" data-execution_count="15">
+<div id="cf3af3b3" class="cell" data-execution_count="16">
 <pre class="coq cell-code"><code>Definition orb (b b' : bool) : bool :=
   match b, b' with
   | true,  _  =&gt; true
   | false, b' =&gt; b'
   end.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="37">
+<div class="cell-output cell-output-display" data-execution_count="38">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -1348,10 +1381,10 @@ Compute eval_at false (andb true).</code></pre>
 | true  =&gt; true
 | false =&gt; b'
 end</code></pre>
-<div id="3bdc7846" class="cell" data-execution_count="16">
+<div id="b921599a" class="cell" data-execution_count="17">
 <pre class="coq cell-code"><code>Compute orb false false.
 Compute orb false (negb false).</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="39">
+<div class="cell-output cell-output-display" data-execution_count="40">
 
 <div class="coq_kernel_output_area">
     <pre>     = false
@@ -1421,10 +1454,10 @@ Compute orb false (negb false).</code></pre>
 </table>
 <p>This corresponds to the classical idea that <code>P -&gt; Q</code> is false only when <code>P</code> is true and <code>Q</code> is false.</p>
 <p>For this one, we use Rocq’s <code>if ... then ... else ...</code> syntax.</p>
-<div id="deeee4a8" class="cell" data-execution_count="17">
+<div id="968c566f" class="cell" data-execution_count="18">
 <pre class="coq cell-code"><code>Definition implb (b b' : bool) : bool :=
   if b then b' else true.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="40">
+<div class="cell-output cell-output-display" data-execution_count="41">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -1462,9 +1495,9 @@ Compute orb false (negb false).</code></pre>
 end</code></pre>
 <p>So <code>if ... then ... else ...</code> is not a separate mysterious mechanism. For Booleans, it is a convenient notation for pattern matching on a Boolean condition.</p>
 <p>Exercise: implement the function <code>implb</code> using pattern matching. The result of the following computation should be the Boolean <code>true</code>.</p>
-<div id="200746d6" class="cell" data-execution_count="18">
+<div id="47718b2d" class="cell" data-execution_count="19">
 <pre class="coq cell-code"><code>Compute implb false true.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="41">
+<div class="cell-output cell-output-display" data-execution_count="42">
 
 <div class="coq_kernel_output_area">
     <pre>     = true
@@ -1531,11 +1564,11 @@ Note
 <pre class="coq"><code>negb (negb b) = b</code></pre>
 <p>In ordinary language: applying Boolean negation twice gives us back the original Boolean value.</p>
 <p>Let us start with some special cases, in which we prove our equality by direct computation. When using an interactive Rocq editor, the tactic state shows the current goal and helps guide the proof.</p>
-<div id="b205486d" class="cell" data-execution_count="19">
+<div id="17727a65" class="cell" data-execution_count="20">
 <pre class="coq cell-code"><code>Theorem negb_negb_true_eq_true : negb (negb true) = true.
 Proof.
   simpl.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="44">
+<div class="cell-output cell-output-display" data-execution_count="45">
 
 <div class="coq_kernel_output_area">
     <pre>Proving: negb_negb_true_eq_true
@@ -1570,9 +1603,9 @@ true = true</pre>
 </div>
 </div>
 <p>The <code>simpl</code> tactic simplifies the goal by computation. In this case, <code>negb (negb true)</code> computes to <code>true</code>.</p>
-<div id="3f958342" class="cell" data-execution_count="20">
+<div id="c94d5e30" class="cell" data-execution_count="21">
 <pre class="coq cell-code"><code>  reflexivity.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="45">
+<div class="cell-output cell-output-display" data-execution_count="46">
 
 <div class="coq_kernel_output_area">
     <pre>Proving: negb_negb_true_eq_true
@@ -1604,9 +1637,9 @@ No more subgoals</pre>
 </div>
 </div>
 <p>The <code>reflexivity</code> tactic proves goals where the two sides of an equality reduce to the same expression. It is stronger than a purely textual check: it can unfold definitions and compute enough to see that both sides are definitionally equal.</p>
-<div id="171ed576" class="cell" data-execution_count="21">
+<div id="d24a17d5" class="cell" data-execution_count="22">
 <pre class="coq cell-code"><code>Qed.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="46">
+<div class="cell-output cell-output-display" data-execution_count="47">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -1637,12 +1670,12 @@ No more subgoals</pre>
 </div>
 <p>If you are just getting started with theorem provers, focus here on the block that starts with <code>Proof</code> and ends with <code>Qed</code>. This is a Rocq proof script. It is written in the tactic language, while function definitions like <code>negb</code> and <code>andb</code> are written in the core term language, called Gallina.</p>
 <p>In this simple example, <code>simpl</code> is not actually necessary, because <code>reflexivity</code> can perform the needed computation itself.</p>
-<div id="9501d531" class="cell" data-execution_count="22">
+<div id="dd6d0d4c" class="cell" data-execution_count="23">
 <pre class="coq cell-code"><code>Theorem negb_negb_false_eq_false : negb (negb false) = false.
 Proof.
   reflexivity.
 Qed.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="50">
+<div class="cell-output cell-output-display" data-execution_count="51">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -1672,11 +1705,11 @@ Qed.</code></pre>
 </div>
 </div>
 <p>Here is the same proof written directly as a Gallina term. Note that we use <code>Definition</code> rather than <code>Theorem</code>.</p>
-<div id="1e1d129c" class="cell" data-execution_count="23">
+<div id="3c96ada8" class="cell" data-execution_count="24">
 <pre class="coq cell-code"><code>Definition negb_negb_false_eq_false' :
     negb (negb false) = false :=
   eq_refl.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="51">
+<div class="cell-output cell-output-display" data-execution_count="52">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -1707,10 +1740,10 @@ Qed.</code></pre>
 </div>
 <p>The term <code>eq_refl</code> is the canonical proof that an expression is equal to itself. Since both sides reduce to the same Boolean, <code>eq_refl</code> is accepted.</p>
 <p>You can check that the theorem and the definition produce essentially the same proof object using the <code>Print</code> command.</p>
-<div id="28148c8f" class="cell" data-execution_count="24">
+<div id="9eb0293c" class="cell" data-execution_count="25">
 <pre class="coq cell-code"><code>Print negb_negb_false_eq_false.
 Print negb_negb_false_eq_false'.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="53">
+<div class="cell-output cell-output-display" data-execution_count="54">
 
 <div class="coq_kernel_output_area">
     <pre>negb_negb_false_eq_false = eq_refl
@@ -1744,12 +1777,12 @@ negb_negb_false_eq_false' = eq_refl
 </div>
 </div>
 <p>If you try to prove something incorrect, the prover will let you know.</p>
-<div id="6d70333e" class="cell" data-execution_count="25">
+<div id="b717d97f" class="cell" data-execution_count="26">
 <pre class="coq cell-code"><code>Theorem fail_to_unify : negb (negb false) = true.
 Proof.
   Fail reflexivity.
 Admitted.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="57">
+<div class="cell-output cell-output-display" data-execution_count="58">
 
 <div class="coq_kernel_output_area">
     <pre>The command has indeed failed with message:
@@ -1800,11 +1833,11 @@ Warning
 <li>In a proof, <code>destruct b</code> proves the current goal by considering all possible forms of <code>b</code>.</li>
 </ul>
 <p>Since <code>bool</code> has exactly two constructors, <code>destruct b</code> creates two subgoals: one for <code>b = true</code> and one for <code>b = false</code>.</p>
-<div id="ebc8d27b" class="cell" data-execution_count="26">
+<div id="5538584c" class="cell" data-execution_count="27">
 <pre class="coq cell-code"><code>Theorem negb_inv (b : bool) : negb (negb b) = b.
 Proof.
   destruct b.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="60">
+<div class="cell-output cell-output-display" data-execution_count="61">
 
 <div class="coq_kernel_output_area">
     <pre>Proving: negb_inv
@@ -1842,9 +1875,9 @@ negb (negb false) = false</pre>
 </div>
 <p>After <code>destruct b</code>, the goal has been modified. In the first case, <code>b</code> has been replaced by <code>true</code>; in the second case, <code>b</code> has been replaced by <code>false</code>.</p>
 <p>We use focusing dashes to separate the two subgoals.</p>
-<div id="0e2b0f21" class="cell" data-execution_count="27">
+<div id="9caa6a8b" class="cell" data-execution_count="28">
 <pre class="coq cell-code"><code>  - simpl. reflexivity.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="63">
+<div class="cell-output cell-output-display" data-execution_count="64">
 
 <div class="coq_kernel_output_area">
     <pre>Proving: negb_inv
@@ -1881,10 +1914,10 @@ negb (negb false) = false</pre>
 <p>The second case can be solved by <code>reflexivity</code> alone.</p>
 <pre class="coq"><code>  - reflexivity.</code></pre>
 <p>Instead of using <code>reflexivity</code>, we can also reuse a previous proof with the <code>exact</code> tactic. The theorem <code>negb_negb_false_eq_false</code> has exactly the type needed for the second goal.</p>
-<div id="109339fc" class="cell" data-execution_count="28">
+<div id="88dcdb5c" class="cell" data-execution_count="29">
 <pre class="coq cell-code"><code>  - exact negb_negb_false_eq_false.
 Qed.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="66">
+<div class="cell-output cell-output-display" data-execution_count="67">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -1917,10 +1950,10 @@ Qed.</code></pre>
 <pre class="coq"><code>negb (negb true) = true</code></pre>
 <p>and that <code>negb_inv</code> itself is a proof of the universally quantified proposition</p>
 <pre class="coq"><code>forall b : bool, negb (negb b) = b</code></pre>
-<div id="eec13c3f" class="cell" data-execution_count="29">
+<div id="16263922" class="cell" data-execution_count="30">
 <pre class="coq cell-code"><code>Check negb_inv true.
 Check negb_inv.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="68">
+<div class="cell-output cell-output-display" data-execution_count="69">
 
 <div class="coq_kernel_output_area">
     <pre>negb_inv true
@@ -2005,7 +2038,7 @@ Note
 <p>We first prove the Boolean version of</p>
 <pre class="text"><code>(P ⇒ Q) ⇔ ¬P ∨ Q</code></pre>
 <p>This exercise also shows how to structure a proof with pattern matching on several variables. First, we present a nested version: we destruct <code>b</code>, and then destruct <code>b'</code> in each branch. This gives two cases corresponding to the possible values of <code>b</code>, with two subcases corresponding to the possible values of <code>b'</code>.</p>
-<div id="45f380a6" class="cell" data-execution_count="30">
+<div id="198e18bd" class="cell" data-execution_count="31">
 <pre class="coq cell-code"><code>Theorem implb_eq_orb_negb (b b' : bool) :
     implb b b' = orb (negb b) b'.
 Proof.
@@ -2016,7 +2049,7 @@ Proof.
   - destruct b'.
     all: reflexivity.
 Qed.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="81">
+<div class="cell-output cell-output-display" data-execution_count="82">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -2049,14 +2082,14 @@ Qed.</code></pre>
 <p>Next, we prove the Boolean version of</p>
 <pre class="text"><code>(P ⇒ Q) ⇔ ¬(P ∧ ¬Q)</code></pre>
 <p>Here we destruct <code>b</code> and <code>b'</code> simultaneously. This immediately creates four cases, much like the simultaneous pattern matching used in the definition of <code>andb</code>.</p>
-<div id="86d799fa" class="cell" data-execution_count="31">
+<div id="2dd49f7a" class="cell" data-execution_count="32">
 <pre class="coq cell-code"><code>Theorem implb_eq_negb_andb_negb (b b' : bool) :
     implb b b' = negb (andb b (negb b')).
 Proof.
   destruct b, b'.
   all: reflexivity.
 Qed.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="86">
+<div class="cell-output cell-output-display" data-execution_count="87">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -2086,9 +2119,9 @@ Qed.</code></pre>
 </div>
 </div>
 <p>Notice that we used explicit parameters <code>(b b' : bool)</code> rather than implicit parameters <code>{b b' : bool}</code>. Braces introduce implicit arguments, which Rocq tries to infer from context. This is useful later, but explicit parameters are clearer at this introductory stage.</p>
-<div id="d61ae723" class="cell" data-execution_count="32">
+<div id="27da6b33" class="cell" data-execution_count="33">
 <pre class="coq cell-code"><code>End BooleanValues.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="87">
+<div class="cell-output cell-output-display" data-execution_count="88">
 
 <div class="coq_kernel_output_area">
     <pre></pre>
@@ -2199,9 +2232,9 @@ Qed.</code></pre>
 <section id="set-vs-type" class="level3">
 <h3 class="anchored" data-anchor-id="set-vs-type">Set vs Type</h3>
 <p>The type <code>bool</code> lives in the universe <code>Set</code>:</p>
-<div id="877a7a5c" class="cell" data-execution_count="33">
+<div id="6fc0d0b8" class="cell" data-execution_count="34">
 <pre class="coq cell-code"><code>Check bool.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="88">
+<div class="cell-output cell-output-display" data-execution_count="89">
 
 <div class="coq_kernel_output_area">
     <pre>bool
@@ -2232,9 +2265,9 @@ Qed.</code></pre>
 </div>
 </div>
 <p>whereas propositions such as equalities live in Prop:</p>
-<div id="c1018312" class="cell" data-execution_count="34">
+<div id="467ba745" class="cell" data-execution_count="35">
 <pre class="coq cell-code"><code>Check negb (negb true) = true.</code></pre>
-<div class="cell-output cell-output-display" data-execution_count="89">
+<div class="cell-output cell-output-display" data-execution_count="90">
 
 <div class="coq_kernel_output_area">
     <pre>negb (negb true) = true
@@ -2320,6 +2353,7 @@ destruct: case-splits inside an interactive proof</p>
 <li><code>destruct</code> performs case distinction in proofs, analogous to <code>match</code> in programs.</li>
 <li>Boolean equivalence of Boolean-valued expressions can be expressed as equality of Booleans.</li>
 </ul>
+<p><span class="math inline">\(\lapp{1}{3}\)</span> something else <span class="math inline">\(\labs{a}{b}\)</span></p>
 
 
 </section>

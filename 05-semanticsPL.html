@@ -93,9 +93,9 @@ window.MathJax = {
       concat: "\\mathbin{+\\!\\!+}",
 
       // Lambda calculus and reduction notation
-      labs: ["\\lambda #1.\\,#2", 2],
+      labs: ["\\lambda #1.\\,(#2)", 2],
       tlabs: ["\\lambda #1 : #2.\\,#3", 3],
-      lapp: ["#1\\,#2", 2],
+      lapp: ["(#1)\\,#2", 2],
 
       red: "\\to\\,",
       betared: "\\to_\\beta\\,",
@@ -319,12 +319,12 @@ window.Quarto = {
 <p><span class="math display">\[
 \begin{aligned}
 &amp;\sem{P_i} = \valuationof{P_i} \\
-&amp;\sem{\neg \varphi} = \boolnot\valuationof{\varphi} \\
-&amp;\sem{\varphi \diamond \psi} = \varphi \overline{\diamond} \psi
-\quad \text{($\diamond \in \{\neg, \land, \lor, \Rightarrow\}$)}
+&amp;\sem{\neg \varphi} = \boolnot\sem{\varphi} \\
+&amp;\sem{\varphi \diamond \psi} = \sem{\varphi} \overline{\diamond} \sem{\psi}
+\quad \text{($\diamond \in \{\land, \lor, \Rightarrow\}$)}
 \end{aligned}
 \]</span></p>
-<p>It is easy to see that <span class="math inline">\(\valuation\)</span> uniquely defines <span class="math inline">\(\sem{\cdot}\)</span>.</p>
+<p>It is easy to see that <span class="math inline">\(\valuation\)</span> uniquely defines <span class="math inline">\(\sem{\cdot}\)</span>, and therefore it makese sense to introduce the follownig definition:</p>
 <div id="def-interpretation" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 5.3 (Interpretation)</strong></span> For a given <span class="math inline">\(\valuation\)</span>, the <span class="math inline">\(\sem{\cdot}\)</span> determined by it is called the <strong>interpretation</strong>, and is denoted as:</p>
 <p><span class="math display">\[
@@ -350,7 +350,7 @@ window.Quarto = {
 \valuation_2|_{\atomsof{\varphi}}
 \end{aligned}
 \]</span></p>
-<p>Thus in order to interpret a formula <span class="math inline">\(\varphi\)</span> for a given <span class="math inline">\(\valuation\)</span> it suffices to know <span class="math inline">\(\valuation|_{\varphi}\)</span>. This is conventionally done in truth tables and we omit the explicit demonstration here.</p>
+<p>Thus in order to interpret a formula <span class="math inline">\(\varphi\)</span> for a given <span class="math inline">\(\valuation\)</span> it suffices to know <span class="math inline">\(\valuation|_{\atomsof{\varphi}}\)</span>. This is conventionally done in truth tables and we omit the explicit demonstration here.</p>
 <section id="semantic-concepts" class="level2">
 <h2 class="anchored" data-anchor-id="semantic-concepts">Semantic Concepts</h2>
 <p>Next we define a few semantic concepts:</p>
