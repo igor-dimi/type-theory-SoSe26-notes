@@ -50,13 +50,14 @@ Then for a fixed $\valuation$, $\sem{\cdot}$ can be defined recurively as:
 $$
 \begin{aligned}
 &\sem{P_i} = \valuationof{P_i} \\
-&\sem{\neg \varphi} = \boolnot\valuationof{\varphi} \\
-&\sem{\varphi \diamond \psi} = \varphi \overline{\diamond} \psi 
-\quad \text{($\diamond \in \{\neg, \land, \lor, \Rightarrow\}$)}
+&\sem{\neg \varphi} = \boolnot\sem{\varphi} \\
+&\sem{\varphi \diamond \psi} = \sem{\varphi} \overline{\diamond} \sem{\psi}
+\quad \text{($\diamond \in \{\land, \lor, \Rightarrow\}$)}
 \end{aligned}
 $$
 
-It is easy to see that $\valuation$ uniquely defines $\sem{\cdot}$. 
+It is easy to see that $\valuation$ uniquely defines $\sem{\cdot}$, and therefore it makese sense
+to introduce the follownig definition: 
 
 ::: {#def-interpretation}
 ## Interpretation
@@ -98,7 +99,7 @@ $$
 $$
 
 
-Thus in order to interpret a formula $\varphi$ for a given $\valuation$ it suffices to know $\valuation|_{\varphi}$. 
+Thus in order to interpret a formula $\varphi$ for a given $\valuation$ it suffices to know $\valuation|_{\atomsof{\varphi}}$. 
 This is conventionally done in truth tables and we omit the explicit demonstration here.
 
 ## Semantic Concepts
