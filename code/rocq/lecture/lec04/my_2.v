@@ -133,7 +133,33 @@ Compute atoms (P 0).
 
 Compute atoms (P 0 ∧ (P 1 ⇒ (¬ P 3 ∨ P 0))).
 
+Fixpoint subst_wff (F : Wff) (I : nat -> bool) (G : nat -> Wff) : Wff :=
+    match F with
+    | P j       => if I j then G j else P j
+    | ¬ F       => ¬(subst_wff F I G)
+    | F ⇒ F'    => (subst_wff F I G) ⇒ (subst_wff F' I G)
+    | F ∧ F'    => (subst_wff F I G) ∧ (subst_wff F' I G)
+    | F ∨ F'    => (subst_wff F I G) ∨ (subst_wff F' I G)
+    end.
 
+(* Example characteristic function *)
+
+Definition I :=
+fun n =>
+    match n with
+    | 0     
+    | 2026 
+    | 41
+    | 42    => true
+    | _     => false
+    end.
+
+
+Definition G1 := fun n => P (n + 2) ∧ P (n + 1).
+
+Check G1.
+
+(* General substitution *)
 
 
 
