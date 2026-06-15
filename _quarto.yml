@@ -21,6 +21,7 @@ book:
         # - 03.qmd
         - 03-BooleanValues.qmd
         - 04-PropFormulas.qmd
+        - 05-semanticsPL.qmd
     - references.qmd
     - resources.qmd
 
