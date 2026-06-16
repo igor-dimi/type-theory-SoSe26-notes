@@ -274,5 +274,103 @@ Fixpoint exp (base power : nat) : nat :=
     | S power => mult base (exp base power)
     end.
 
-Compute exp 3 4. 
+Compute exp 3 4.
+
+Compute 2 + 3.
+
+Fixpoint eqnat (n m : nat) : bool :=
+    match n, m with
+    | 0, 0      => true
+    | S n, 0    => false
+    | 0, S m    => false
+    | S n, S m  => eqnat n m
+    end.
+
+Compute eqnat 0 0.
+Compute eqnat 1 0.
+Compute eqnat 3 0.
+Compute eqnat 3 1.
+Compute eqnat 3 3.
+
+Fixpoint leqnat (n m : nat) : bool :=
+    match n, m with
+    | 0, 0      => true
+    | 0, S m    => true
+    | S n, 0    => false
+    | S n, S m  => leqnat n m
+    end.
+
+Compute leqnat 0 0.
+Compute leqnat 0 1.
+Compute leqnat 1 0.
+Compute leqnat 3 2.
+Compute leqnat 2 3.
+Compute leqnat 130 13.
+
+Notation "x =? y"   := (eqnat x y) (at level 70) : nat_scope.
+Notation "x <=? y"  := (leqnat x y) (at level 70) : nat_scope. 
+
+Compute 3 =? 10.
+Compute 3 <=? 10.
+
+Example test_leqnat: (4 <=? 2) = false.
+Proof.
+    simpl. reflexivity.
+Qed.
+
+Definition ltnat (n m : nat) : bool :=
+    negb (m <=? n).
+
+Notation "x <? y" := (ltnat x y) (at level 70) : nat_scope.
+
+Compute 10 <? 3.
+Compute 10 <? 10.
+Compute 10 <? 11.
+Compute 0 <? 0.
+Compute 0 <? 1.
+Compute 0 <? 10.
+
+
+
+
+Example test_ltant1: (2 <? 2) = false.
+Proof.
+    reflexivity.
+Qed.
+
+Example plus_1_1 : 1 + 1 = 2.
+Proof.
+    simpl. reflexivity.
+Qed.
+
+Theorem plus_0_n : forall n : nat, 0 + n = n.
+Proof.
+    intros n.
+    reflexivity.
+Qed.
+
+
+
+Theorem plus_1_l : forall n : nat, 1 + n = S n.
+Proof.
+    intros n. simpl. reflexivity.
+Qed.
+
+Theorem mult_0_l : forall n : nat, 0 * n = 0.
+Proof.
+    intros n. simpl. reflexivity.
+Qed.
+
+Theorem plus_id_example : forall n m : nat, 
+    n = m -> n + n = m + m.
+Proof.
+    intros n m.
+    intros H.
+    rewrite <- H.
+    simpl.
+    reflexivity.
+Qed.
+
+
+
 
