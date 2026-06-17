@@ -366,11 +366,52 @@ Theorem plus_id_example : forall n m : nat,
 Proof.
     intros n m.
     intros H.
-    rewrite <- H.
+    rewrite -> H.
+    simpl.
+    reflexivity.
+Qed.
+
+Theorem plus_id_exercise: forall n1 n2 n3 : nat,
+    n1 = n2 -> n2 = n3 -> n1 + n2 = n2 + n3.
+Proof.
+    intros n1 n2 n3.
+    intros H1.
+    intros H2.
+    rewrite -> H1.
+    rewrite <- H2.
+    reflexivity.
+Qed.
+
+
+Check mult_n_O.
+Check mult_n_Sm.
+
+Theorem mult_n_0_m_0 : forall p q : nat,
+    (p * 0) + (q * 0) = 0.
+Proof.
+    intros p q.
+    rewrite <- mult_n_O.
+    rewrite <- mult_n_O.
+    simpl.
+    reflexivity.
+Qed.
+
+Theorem mult_n_1 : forall p : nat,
+    p * 1 = p.
+Proof.
+    intros p.
+    rewrite <- mult_n_Sm.
+    rewrite <- mult_n_O.
     simpl.
     reflexivity.
 Qed.
 
 
-
-
+Theorem plus_1_neq_0: forall n : nat,
+   (n + 1) =? 0 = false.
+Proof.
+    intro.
+    destruct n as [ | n'] eqn:E.
+    - simpl. reflexivity.
+    - simpl. reflexivity. 
+Qed.
