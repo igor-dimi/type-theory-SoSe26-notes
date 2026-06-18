@@ -412,6 +412,92 @@ Theorem plus_1_neq_0: forall n : nat,
 Proof.
     intro.
     destruct n as [ | n'] eqn:E.
-    - simpl. reflexivity.
-    - simpl. reflexivity. 
+     - simpl. reflexivity.
+     - simpl. reflexivity. 
 Qed.
+
+
+
+Theorem negb_involutive: forall b : bool,
+    negb (negb b) = b.
+Proof.
+    intros b. destruct b eqn:E.
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+
+Theorem andb_commutative : forall a b : bool, andb a b = andb b a.
+Proof.
+    intros a b. destruct a eqn:Ea.
+    - destruct b eqn:Eb.
+        + simpl. reflexivity.
+        + simpl. reflexivity.
+    - destruct b eqn:Eb.
+        + simpl. reflexivity.
+        + simpl. reflexivity.
+Qed.
+
+Theorem andb3_exchange: 
+    forall a b c, andb (andb a b) c = andb (andb b c) a.
+Proof.
+    intros a b c. 
+    destruct a eqn: Ea.
+    - destruct b eqn: Eb.
+        {
+            destruct c eqn:Ec.
+            - simpl. reflexivity.
+            - simpl. reflexivity.
+        }
+        {
+           destruct c eqn:Ec. 
+           - simpl. reflexivity.
+           - simpl. reflexivity.
+        }
+    - destruct b eqn: Eb.
+        {
+            destruct c eqn:Ec.
+            all: reflexivity.
+        }
+        {
+           destruct c eqn:Ec.
+           all: reflexivity. 
+        }
+Qed.
+
+Theorem andb_true_elim2: forall a b : bool,
+    andb a b = true -> b = true.
+Proof.
+    intros a b.
+    intros H. 
+    destruct a eqn: Ea.
+    - simpl in H.
+      destruct b eqn: Eb.
+      + reflexivity.
+      + rewrite <- H. reflexivity.
+    - simpl in H.
+      destruct b eqn:Eb.
+      + reflexivity.
+      + rewrite -> H. reflexivity.
+      
+
+Theorem plus_1_neq_0' : forall n : nat,
+    (n + 1) =? 0 = false.
+    intros [|n].
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+Qed.
+
+Theorem andb_commutative'' : forall b c : bool, andb b c = andb c b.
+Proof.
+    intros [] [].
+    all: simpl. 
+    all: reflexivity.
+Qed.   
+
+Theorem zero_nbeq_plus_1: forall n : nat,
+    0 =? (n + 1) = false.
+Proof.
+    intros [| n'].
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+Qed.
+
