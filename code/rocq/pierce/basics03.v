@@ -347,12 +347,275 @@ Compute ltnat 2 3.
 Compute ltnat 3 3.
 Compute ltnat 3 4.
 
+(* Proof by simplification *)
+
+Example plus_1_1 : 1 + 1 = 2.
+Proof. 
+    simpl. reflexivity.
+Qed.
+
+Theorem plus_0_n : forall n : nat, 0 + n = n.
+Proof.
+    intros n. simpl. reflexivity.
+Qed.
+
+
+Theorem plus_1_n : forall n : nat, 1 + n = S n.
+Proof. 
+    intros n.  reflexivity.
+Qed.
+
+Theorem mult_0_l : forall n : nat, 0 * n = 0.
+Proof.
+    intros n. simpl. reflexivity.
+Qed.
+
+Theorem plus_id_exercise : forall n m : nat,
+    n = m -> n + n = m + m.
+Proof.
+    intros n m. 
+    intros H.
+    rewrite <- H.
+    reflexivity.
+Qed.
+
+Theorem plus_id_exercise' : forall n m o : nat,
+    n = m -> m = o -> n + m = m + o.
+Proof.
+    intros n m o.
+    intros H.
+    intros H'.
+    rewrite -> H.
+    rewrite -> H'.
+    reflexivity.
+Qed.
+
+Check mult_n_O.
+(* ==> forall n : nat, 0 = n * 0 *)
+Check mult_n_Sm.
+(* ==> forall n m : nat, n * m + n = n * S m *)
+
+
+Theorem mult_n_0_m_0 : forall p q : nat,
+    (p * 0) + (q * 0) = 0.
+Proof.
+    intros p q.
+    rewrite <- mult_n_O. 
+    (* since 0 = n * 0 is the theorem rewriting 'turns' n * 0 to 0 *)
+    rewrite <- mult_n_O.
+    simpl.
+    reflexivity.
+Qed.
+
+(* Exercise: mult n 1 *)
+Theorem mult_n_1 : forall p : nat,
+    p * 1 = p.
+Proof.
+    intros p.
+    rewrite <- mult_n_Sm.
+    rewrite <- mult_n_O.
+    simpl. reflexivity.
+Qed.
+
+(* Proof by Case Analysis *)
+
+Theorem plus_1_neq_0_firstry : forall n : nat,
+    (n + 1) =? 0 = false.
+Proof.
+    intros n.
+    destruct n as [ | n'] eqn : E.
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+Qed.
+
+
+(* Fixpoint myadd (n m : nat) : nat :=
+    match n with
+    | 0 => m
+    | S n => S (myadd n m)
+    end.
+
+Check myadd.
+
+Notation "n (+) m" := (myadd n m) (at level 70) : nat_scope.
+
+Compute 13 (+) 12. *)
+
+Theorem negb_involutive : forall b : bool,
+    negb (negb b) = b.
+Proof.
+    intros b.
+    destruct b eqn: E.
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+Qed.
+
+Theorem andb_commutative : forall b c, andb b c = andb c b.
+Proof.
+    intros b c.
+    destruct b eqn:Eb.
+    - destruct c eqn:Ec.
+      + simpl. reflexivity.
+      + simpl. reflexivity.
+    - destruct c eqn:Ec.
+      + simpl. reflexivity.
+      + simpl. reflexivity.
+Qed.
+
+Check andb_commutative.
+
+Compute andb_commutative.
+
+
+Theorem andb3_exchange:
+    forall b c d, andb (andb b c) d = andb (andb b d) c.
+Proof.
+    intros.
+    destruct b, c, d.
+    all: simpl.
+    all: reflexivity.
+Qed.
+
+(* Exercise: 2 stars, standard (andb_true_elim2) *)
+
+Theorem andb_true_elim2 : forall b c : bool,
+    andb b c = true -> c = true.
+Proof.
+    intros b c.
+    intros H.
+    destruct b eqn:Eb.
+    - simpl in H. rewrite -> H. reflexivity.
+    - simpl in H. destruct c eqn:Ec.
+      + reflexivity.
+      + rewrite -> H. reflexivity.
+Qed.
+
+Theorem andb_commutative'' :
+    forall b c, andb b c = andb c b.
+Proof.
+    intros [] [].
+    all: simpl.
+    all: reflexivity.
+Qed.
+
+(* Exercise: 1 star, standard (zero nbez plus 1) *)
+Theorem zero_nbeq_plus_1 : forall n : nat,
+    0 =? (n + 1) = false.
+Proof.
+    intros [ | n'].
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+Qed.
+
+(* More on notation *)
+
+(* Fixpoints and Structural Recursion *)
+
+(* More exercises *)
+
+Theorem identity_fn_applied_twice:
+    forall (f: bool -> bool),
+    (forall (b : bool), f b = b) ->
+    forall (b : bool), f (f b) = b.
+Proof.
+    intros f.
+    intros H.
+    intros b.
+    rewrite -> H. 
+    rewrite -> H. 
+    reflexivity.
+Qed.
+
+Theorem identity_negation_fn_applied_twice:
+    forall (f : bool -> bool),
+    (forall (b : bool), f b = negb b) ->
+    forall (b : bool), f (f b) = b.
+Proof.
+    intros.
+    rewrite -> H. 
+    rewrite -> H.
+    rewrite negb_involutive. reflexivity.
+Qed.
+
+Theorem andb_eq_orb :
+    forall (b c : bool),
+    (andb b c = orb b c) ->
+    b = c.
+Proof.
+    intros.
+    destruct b eqn:Eqb.
+    - simpl in H. rewrite -> H. reflexivity.
+    - simpl in H. rewrite <- H. reflexivity.
+Qed.
+
+(* Course Late Policies *)
+Module LateDays.
+
+Inductive letter := | A | B | C | D | F.
+Inductive modifier := | Plus | Natural | Minus.
+Inductive grade :=
+    Grade (l: letter) (m: modifier).
+
+Inductive comparison :=
+| Eq
+| Lt
+| Gt.
+
+
+Definition letter_comparison (l1 l2 : letter) : comparison :=
+    match l1, l2 with
+    | A, A => Eq
+    | A, _ => Gt
+    | B, A => Lt
+    | B, B => Eq
+    | B, _ => Gt
+    | C, (A | B) => Lt
+    | C, C => Eq
+    | C, _ => Gt
+    | D, F => Gt
+    | D, D => Eq
+    | D, _ => Lt
+    | F, F => Eq
+    | F, _ => Lt
+    end.
+
+Compute letter_comparison B A.
+Compute letter_comparison D D.
+Compute letter_comparison B F.
+Compute letter_comparison D F.
+
+Theorem letter_comparison_eq:
+    forall l, letter_comparison l l = Eq.
+Proof.
+    intros.
+    destruct l eqn:E.
+    all: simpl.
+    all: reflexivity.
+Qed.
+
+Definition modifier_comparison (m1 m2 : modifier) : comparison :=
+    match m1, m2 with
+    | Plus, Plus => Eq
+    | Plus, _ => Gt
+    | Natural, Plus => Lt
+    | Natural, Natural => Eq
+    | Natural, _ => Gt
+    | Minus, Minus => Eq
+    | Minus, _ => Lt
+    end.
+
+Definition grade_comparison (g1 g2 : grade) : comparison :=
+    match g1, g2 with
+    | Grade l1 m1, Grade l2 m2 =>
+        match letter_comparison l1 l2 with
+        | Eq => modifier_comparison m1 m2
+        | other => other
+        end
+    end.
 
 
 
 
 
-
-
-
+     
 
