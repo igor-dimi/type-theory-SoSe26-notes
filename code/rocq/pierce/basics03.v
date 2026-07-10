@@ -613,9 +613,10 @@ Definition grade_comparison (g1 g2 : grade) : comparison :=
         end
     end.
 
+Check grade.
+
 
 
 
 
      
-
