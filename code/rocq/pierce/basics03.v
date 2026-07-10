@@ -502,7 +502,8 @@ Qed.
 Theorem zero_nbeq_plus_1 : forall n : nat,
     0 =? (n + 1) = false.
 Proof.
-    intros [ | n'].
+    intros n.
+    destruct n as [| n'] eqn: E.
     - simpl. reflexivity.
     - simpl. reflexivity.
 Qed.
@@ -616,7 +617,35 @@ Definition grade_comparison (g1 g2 : grade) : comparison :=
 Check grade.
 
 
+Definition lower_letter (l : letter) : letter :=
+    match l with
+    | A => B
+    | B => C
+    | C => D
+    | D => F
+    | F => F
+    end.
 
+Theorem lower_letter_F_is_F:
+    lower_letter F = F.
+Proof.
+    simpl. reflexivity.
+Qed.
+
+Theorem lower_letter_lowers:
+    forall (l : letter), 
+        letter_comparison F l = Lt ->
+        letter_comparison (lower_letter l) l = Lt.
+Proof.
+    intros l.
+    intros H.
+    destruct l.
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+    - rewrite <- H. simpl. reflexivity.
+Qed.
 
 
      
