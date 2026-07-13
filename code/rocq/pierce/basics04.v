@@ -265,5 +265,118 @@ Compute factorial 4.
 Compute factorial 6.
 
 
+Fixpoint eqnat (n m : nat) : bool :=
+    match n, m with
+    | 0, 0 => true
+    | S n, 0 => false
+    | 0, S m => false
+    | S n, S m => eqnat n m
+    end.
+
+Compute eqnat 1 0.
+Compute eqnat 1 1.
+Compute eqnat 1 3.
+Compute eqnat 10 10.
 
 
+Fixpoint leqnat (n m : nat) : bool := 
+    match n, m with
+    | 0, 0 => true
+    | 0, S m => true
+    | S n, 0 => false
+    | S n, S m => leqnat n m
+    end.
+
+Compute leqnat 1 0.
+Compute leqnat 1 1.
+Compute leqnat 1 3.
+Compute leqnat 10 10.
+Compute leqnat 10 3.
+
+
+Notation "x =? y" := (eqnat x y) (at level 70) : nat_scope.
+Notation "x <=? y" := (leqnat x y) (at level 70) : nat_scope.
+
+Definition ltnat (n m : nat) : bool :=
+    negb (leqnat m n).
+
+
+Compute ltnat 1 0.
+Compute ltnat 1 1.
+Compute ltnat 1 3.
+Compute ltnat 10 10.
+Compute ltnat 10 3.
+
+
+(* Proof by Simplification *)
+
+Check plus.
+
+Example plus_1_1 : 1 + 1 = 2.
+Proof.
+    simpl. reflexivity.
+Qed.
+
+
+Theorem plus_0_n : forall n : nat, 0 + n = n.
+Proof.
+    intros n.
+    simpl.
+    reflexivity.
+Qed.
+
+Theorem plus_1_l : forall n : nat, 1 + n = S n.
+Proof.
+    intros n.
+    simpl. reflexivity.
+Qed.
+
+
+Theorem mult_0_l : forall n : nat, 0 * n = 0.
+Proof.
+    intros n.
+    simpl. reflexivity.
+Qed.
+
+
+(* Proofs by rewriting *)
+
+Theorem plus_id_example : forall n m : nat,
+    n = m -> n + n = m + m.
+Proof.
+    intros.
+    rewrite -> H.
+    reflexivity.
+Qed.
+
+Theorem plus_id_exercise : forall n m o : nat, 
+    n = m -> m = o -> n + m = m + o.
+Proof.
+    intros.
+    rewrite -> H.
+    rewrite -> H0.
+    reflexivity.
+Qed.
+
+Check mult_n_O.
+Check mult_n_Sm.
+
+Theorem mult_n_O_m_O : forall p q : nat,
+    (p * 0) + (q * 0) = 0.
+Proof.
+    intros.
+    rewrite <- mult_n_O.
+    rewrite <- mult_n_O.
+    simpl.
+    reflexivity.
+Qed.
+
+
+Theorem mult_n_1 : forall n : nat,
+    n * 1 = n.
+Proof.
+    intros.
+    rewrite <- mult_n_Sm.
+    rewrite <- mult_n_O.
+    simpl.
+    reflexivity.
