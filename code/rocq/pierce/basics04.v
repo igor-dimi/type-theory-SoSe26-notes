@@ -380,3 +380,94 @@ Proof.
     rewrite <- mult_n_O.
     simpl.
     reflexivity.
+
+
+(* Proof by Case Analysis *)
+
+Theorem plus_1_neq_0_firsttry : forall n : nat,
+    (n + 1) =? 0 = false.
+Proof. 
+    intros n.
+    destruct n as [ | n'] eqn: E.
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+Qed.
+
+
+Theorem negb_involutive : forall b : bool,
+    negb (negb b) = b.
+Proof.
+    intros b. destruct b eqn:E.
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+Qed.
+
+
+Theorem andb_commutative : forall b c, 
+    andb b c = andb c b.
+Proof.
+    intros.
+    - destruct b, c.
+    all: reflexivity.
+Qed.
+
+Theorem andb_true_elim2 : forall b c : bool,
+    andb b c = true -> c = true.
+Proof.
+    intros b c.
+    intros H.
+    destruct b eqn:Eb.
+    - simpl in H. exact H.
+    - simpl in H. 
+      destruct c eqn:Ec.
+      + reflexivity.
+      + exact H.
+Qed.
+
+
+Theorem zero_nbeq_plus_1 : forall n m : nat,
+    0 =? (n + S m) = false.
+Proof.
+    intros. 
+    destruct n as [|n'] eqn:E.
+    - simpl. reflexivity.
+    - simpl. reflexivity.
+Qed.
+
+(* More Exercises *)
+
+Theorem identity_fn_applied_twice : 
+    forall (f : bool -> bool),
+        (forall (x : bool), f x = x) -> 
+        forall (x : bool), f (f x) = x.
+Proof.
+    intros.
+    rewrite -> H.
+    rewrite -> H.
+    reflexivity.
+Qed.
+
+
+Theorem negation_fn_applied_twice: 
+    forall (f : bool -> bool),
+        (forall (x : bool), f x = negb x) ->
+        forall (x : bool), f (f x) = x.
+Proof.
+    intros.
+    rewrite -> H.
+    rewrite -> H.
+    rewrite -> negb_involutive.
+    reflexivity.
+Qed.
+   
+
+Theorem andb_eq_orb : 
+    forall ( b c : bool),
+    (andb b c = orb b c) -> b = c.
+Proof.
+    intros.
+    destruct b eqn:Eb.
+    - simpl in H. rewrite -> H. reflexivity.
+    - simpl in H. exact H.
+Qed.
+
