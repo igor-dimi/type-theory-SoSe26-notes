@@ -380,7 +380,7 @@ Proof.
     rewrite <- mult_n_O.
     simpl.
     reflexivity.
-
+Qed.
 
 (* Proof by Case Analysis *)
 
